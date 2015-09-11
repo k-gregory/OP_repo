@@ -17,9 +17,7 @@ String *new_String(int len) {
   return str;
 }
 
-void free_String(String* p){
-  free(p);
-}
+void free_String(String *p) { free(p); }
 
 bool copy_String(String *dest, String *source) {
   if (dest->len < source->len)
