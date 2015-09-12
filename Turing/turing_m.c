@@ -5,7 +5,8 @@
 #define STRIP_LENGTH 1000 * 1000
 #define INITIAL_RULES_NUMBER 100
 
-/*First line defines initial strip state
+/*First line is a number(n) of strip el-ts
+ *Next line defines n strip el-ts
  *Each next  line defines a rule, where
  * first number goes for state id
  * second number goes for matching value
@@ -15,7 +16,7 @@
  *Numbers are separated by " "
  *For example, line  "2 4 0 1 3" goes for
  * 'If state id is 2 and current element is 4,
- *  change it to 0, move left, and set state to 3'
+ *  change it to 0, move right, and set state to 3'
  */
 #define INFILE_RULE_FORMAT "%d %d %d %d %d\n"
 typedef int strip_el;
@@ -39,14 +40,23 @@ struct __rule {
 };
 typedef struct __rule Rule;
 
-strip_el *strip;
+strip_el *strip; /*memory strip*/
 strip_el *current_el;
 int current_state;
 Rule *rules_table;
 
 void init() {
+  strip = malloc(sizeof(strip_el) * STRIP_LENGTH);
+  current_el =
+      strip + STRIP_LENGTH / 2; /*put the pointer on the middle of the strip*/
+
   FILE *f = fopen("rules.txt", "r");
-  int c;
+
+  int n;
+  fscanf(f, "%i\n", &n);
+  for (int i = 0; i < n; i++) {
+    fscanf(f, "%d ", &strip[i]);
+  }
 
   rules_table = malloc(sizeof(Rule) * INITIAL_RULES_NUMBER);
   Rule *current_rule = rules_table;
@@ -67,13 +77,19 @@ void init() {
       break;
     }
     current_rule->op = t_op;
-    current_rule++; // TODO GOING to segfault on >100 rules. Have to realloc rules_table
+    current_rule++; /* TODO GOING to segfault on >100 rules. Have to realloc
+                     rules_table*/
   }
+ fclose(f);
+}
+
+void uninit(){
+  free(strip);
+  free(rules_table);
 }
 
 int main() {
-  strip = malloc(sizeof(strip_el) * STRIP_LENGTH); /*memory strip*/
-  current_el =
-      strip + STRIP_LENGTH / 2; /*put the pointer on the middle of the strip*/
-  free(strip);
+  init();
+  printf("%d:%d",rules_table[1].new_value,strip[3]);
+  uninit();
 }
