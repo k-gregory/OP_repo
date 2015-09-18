@@ -95,6 +95,6 @@ char* ns_convert(char *number, unsigned int sourceBase,
 }
 
 int main(void) {
-  puts(ns_convert("60EA4.54DF",16,24));
+  puts(ns_convert("60EA4.54DF",16,25));
   return 0;
 }
