@@ -1,6 +1,4 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <tgmath.h>
 
 #define MAX_LENGTH 64
@@ -19,11 +17,16 @@ static inline char intToSym(int s) {
     return 'A' + s - 10;
 }
 
-char result[MAX_LENGTH];
+char result[MAX_LENGTH+1];
 char error_ret = '\0';
 char* ns_convert(char *number, unsigned int sourceBase,
                   unsigned int destBase) {
   char *current;
+  int neg = 0;
+  if(*number == '-'){
+    neg = 1;
+    number++;
+  }
 
   if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
       destBase > 32)
@@ -74,39 +77,24 @@ char* ns_convert(char *number, unsigned int sourceBase,
     *e = t;
   }
 
-  if (fpN>0) {*current = '.';current++;};
   *current = '\0';
+
+  if (fpN>0) 
+    *current = '.';
+  else return result;
+  current++;
+ 
+  double integral;
+  for(int i = 0; i<12;i++){
+    numD = modf(numD*destBase,&integral);
+    *(current++) = intToSym(integral);
+    if(numD == 0) break;
+  }
+
   return result;
 }
 
-//int ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
-//  if (*number == '\0')
-//    return '\0';
-//
-//  if (sourceBase > 32 || sourceBase < 2 || destBase > 32 || destBase < 2)
-//    return '\0';
-//
-//  char *result = malloc(sizeof(char) * MAX_LENGTH);
-//
-//  char *current = number;
-//  for (; *current != '\0' && *current != '.'; current++)
-//    ;
-//  current--;
-//
-//  int integer = 0;
-//  int k = 0;
-//  while ((number - 1) != current) {
-//    if (sourceBase < 10 && *current > '9')
-//      return '\0';
-//    if (*current > 'Z')
-//      return '\0';
-//    integer += symToInt(*current--) * pow(sourceBase, k++);
-//  }
-//
-//  return integer;
-//}
-
 int main(void) {
-  puts(ns_convert("605",16,3));
+  puts(ns_convert("60EA4.54DF",16,24));
   return 0;
 }
