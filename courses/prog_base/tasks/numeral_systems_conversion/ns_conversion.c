@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <tgmath.h>
 
 #define MAX_LENGTH 64
@@ -22,11 +23,11 @@ char error_ret = '\0';
 char* ns_convert(char *number, unsigned int sourceBase,
                   unsigned int destBase) {
   char *current;
-  int neg = 0;
-  if(*number == '-'){
-    neg = 1;
-    number++;
-  }
+//  int neg = 0;
+//  if(*number == '-'){
+//    neg = 1;
+//    number++;
+//  }
 
   if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
       destBase > 32)
@@ -90,6 +91,7 @@ char* ns_convert(char *number, unsigned int sourceBase,
     *(current++) = intToSym(integral);
     if(numD == 0) break;
   }
+  *current = '\0';
 
   return result;
 }
