@@ -18,16 +18,16 @@ static inline char intToSym(int s) {
     return 'A' + s - 10;
 }
 
-char result[MAX_LENGTH+1];
+char result[MAX_LENGTH + 1];
 char error_ret = '\0';
-char* ns_convert(char *number, unsigned int sourceBase,
-                  unsigned int destBase) {
+char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   char *current;
-//  int neg = 0;
-//  if(*number == '-'){
-//    neg = 1;
-//    number++;
-//  }
+  char *res = result;
+  if (*number == '-') {
+    res[0] = '-';
+    res++;
+    number++;
+  }
 
   if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
       destBase > 32)
@@ -50,7 +50,6 @@ char* ns_convert(char *number, unsigned int sourceBase,
     (*c)++;
   }
 
-
   current = number;
   int numI = 0;
   double numD = 0;
@@ -60,19 +59,19 @@ char* ns_convert(char *number, unsigned int sourceBase,
 
   current++;
 
-  for(int i = 1; i <= fpN; i++) {
+  for (int i = 1; i <= fpN; i++) {
     numD += symToInt(*current++) * pow(sourceBase, -i);
   }
 
-
-  current = result;
-  while(numI!=0){
-   *(current++) = intToSym(numI % destBase); 
-   numI/=destBase;
+  current = res;
+  while (numI != 0) {
+    *(current++) = intToSym(numI % destBase);
+    numI /= destBase;
   }
 
-  char* b;char* e;
-  for(b=result,e = current -1;b<e;b++,e--){
+  char *b;
+  char *e;
+  for (b = res, e = current - 1; b < e; b++, e--) {
     char t = *b;
     *b = *e;
     *e = t;
@@ -80,16 +79,18 @@ char* ns_convert(char *number, unsigned int sourceBase,
 
   *current = '\0';
 
-  if (fpN>0) 
+  if (fpN > 0)
     *current = '.';
-  else return result;
+  else
+    return result;
   current++;
- 
+
   double integral;
-  for(int i = 0; i<12;i++){
-    numD = modf(numD*destBase,&integral);
+  for (int i = 0; i < 12; i++) {
+    numD = modf(numD * destBase, &integral);
     *(current++) = intToSym(integral);
-    if(numD == 0) break;
+    if (numD == 0)
+      break;
   }
   *current = '\0';
 
@@ -97,6 +98,6 @@ char* ns_convert(char *number, unsigned int sourceBase,
 }
 
 int main(void) {
-  puts(ns_convert("60EA4.54DF",16,25));
+  puts(ns_convert("-60EA4.54DF", 16, 25));
   return 0;
 }
