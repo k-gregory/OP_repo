@@ -3,6 +3,7 @@
 #include <tgmath.h>
 
 #define MAX_LENGTH 64
+#define PRECISION 12
 
 static inline int symToInt(char ch) {
   if (ch < 'A')
@@ -19,7 +20,6 @@ static inline char intToSym(int s) {
 }
 
 char result[MAX_LENGTH + 1];
-char error_ret = '\0';
 char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   char *current;
   char *res = result;
@@ -31,18 +31,16 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
 
   if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
       destBase > 32)
-    return &error_ret;
+    return "\0";
 
   int ipN = 0; //
-  int fpN = 0; // integer/fractional part symbol count
+  int fpN = 0; // integer/fractional part symbols count
 
   int *c = &ipN;
-
+  char maxSource = intToSym(sourceBase);
   for (current = number; *current != '\0'; current++) {
-    if (sourceBase < 10 && *current > '9')
-      return &error_ret;
-    else if (*current > 'Z')
-      return &error_ret;
+    if (*current > maxSource)
+      return "\0";
     if (*current == '.') {
       c = &fpN;
       continue;
@@ -69,8 +67,7 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
     numI /= destBase;
   }
 
-  char *b;
-  char *e;
+  char *b, *e; // Revert string
   for (b = res, e = current - 1; b < e; b++, e--) {
     char t = *b;
     *b = *e;
@@ -86,7 +83,7 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   current++;
 
   double integral;
-  for (int i = 0; i < 12; i++) {
+  for (int i = 0; i < PRECISION; i++) {
     numD = modf(numD * destBase, &integral);
     *(current++) = intToSym(integral);
     if (numD == 0)
