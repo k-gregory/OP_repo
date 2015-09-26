@@ -28,8 +28,13 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
     number++;
   }
 
+<<<<<<< HEAD
   if (*number == '\0' || sourceBase < 2 || sourceBase > 36 || destBase < 2 ||
       destBase > 36)
+=======
+  if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
+      destBase > 32)
+>>>>>>> de4a98c1d4240449e96c8c51340559e92dd0b2cc
     return "\0";
 
   int ipN = 0; //
@@ -38,7 +43,13 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   int *c = &ipN;
   char maxSource = intToSym(sourceBase);
   for (current = number; *current != '\0'; current++) {
+<<<<<<< HEAD
+    if (sourceBase < 10 && *current > '9')
+      return "\0";
+    else if (*current > 'Z')
+=======
     if (*current > maxSource)
+>>>>>>> de4a98c1d4240449e96c8c51340559e92dd0b2cc
       return "\0";
     if (*current == '.') {
       c = &fpN;
@@ -70,10 +81,11 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
     numI /= destBase;
   }
 
+<<<<<<< HEAD
+  char *b, *e;
+=======
   char *b, *e; // Revert string
-  for (b = res, e = current - 1; b < e; b++, e--) {
-    char t = *b;
-    *b = *e;
+>>>>>>> de4a98c1d4240449e96c8c51340559e92dd0b2cc
   for (b = res, e = current - 1; b < e; b++, e--) {
     char t = *b;
     *b = *e;
