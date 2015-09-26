@@ -1,8 +1,10 @@
-ba->d
 ca->d
 cb->d
+ba->d
 ad->d
 bd->d
 cd->d
-dd->
+da->d
+db->d
+dc->d
 d->
