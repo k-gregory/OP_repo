@@ -53,18 +53,18 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   current = number;
   int numI = 0;
   double numD = 0;
-  int Pow = powl(sourceBase,ipN-1);
+  int Pow = powl(sourceBase, ipN - 1);
   for (int i = ipN - 1; i >= 0; i--) {
     numI += symToInt(*current++) * Pow;
     Pow /= sourceBase;
   }
 
   current++;
-  
-  double dPow = pow(sourceBase,-1);
+
+  double dPow = pow(sourceBase, -1);
   for (int i = 1; i <= fpN; i++) {
     numD += symToInt(*current++) * dPow;
-    dPow /=sourceBase;
+    dPow /= sourceBase;
   }
 
   current = res;
