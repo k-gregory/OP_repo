@@ -36,7 +36,7 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   int fpN = 0; // integer/fractional part symbols count
 
   int *c = &ipN;
-  char maxSource = intToSym(sourceBase-1);
+  char maxSource = intToSym(sourceBase - 1);
   for (current = number; *current != '\0'; current++) {
     if (*current > maxSource)
       return "\0";
@@ -71,9 +71,6 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   }
 
   char *b, *e; // Revert string
-  for (b = res, e = current - 1; b < e; b++, e--) {
-    char t = *b;
-    *b = *e;
   for (b = res, e = current - 1; b < e; b++, e--) {
     char t = *b;
     *b = *e;
