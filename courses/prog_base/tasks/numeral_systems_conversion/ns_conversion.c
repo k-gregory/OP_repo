@@ -29,8 +29,8 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
     number++;
   }
 
-  if (*number == '\0' || sourceBase < 2 || sourceBase > 32 || destBase < 2 ||
-      destBase > 32)
+  if (*number == '\0' || sourceBase < 2 || sourceBase > 36 || destBase < 2 ||
+      destBase > 36)
     return &error_ret;
 
   int ipN = 0; //
