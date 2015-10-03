@@ -1,9 +1,6 @@
 #include <stdio.h>
 
-float calc(){
-  int h =5;
-  int m = 42;
-  int code = 692;
+float calc(int h, int m, int code){
   switch(code){
     case 44: return (h*60+m)*0.77;break; //Kiev
     case 62: return (h*60+m)*0.8;break; //Doneck
@@ -19,7 +16,9 @@ float calc(){
 
 int main(){
  float r; 
- if(r=calc()){
+ int h,m,code;
+ scanf("%d %d %d",&h,&m,&code);
+ if((r=calc(h,m,code))>=0){
    printf("Spent %f", r);
  } 
 }
