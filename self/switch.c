@@ -8,7 +8,7 @@ float calc(int h, int m, int code){
     case 697:	     
     case 692: return (h*60+m)*1.5;break;//Simp/Sevast
     default:
-	   if(code>999 | code<10) puts("Error!");return -1;
+	   if(code>999 | code<10){ puts("Error!");return -1;}
 	  puts("Invalid code"); return -2;
 	 break; 
   }
