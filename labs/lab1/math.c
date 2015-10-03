@@ -63,6 +63,19 @@ int satisfies(int a, int b, int c) {
   }
   /*Third case. }}} */
 
-  /*Second case {{{*/
+  /*Second case. Some nums are positive {{{*/
+  int min = min3(a,b,c);
+  int max = max3(a,b,c);
+  int avg = a+b+c - min - max;
+  if(avg<0) return (min+avg)*N0*N1 > -256;
+  return min > -256;
   /*Second case }}}*/
+}
+
+int exec(int op, int a, int b){
+  if(op<0) {
+    int t = a;
+    a=b;
+    b=a;
+  }
 }
