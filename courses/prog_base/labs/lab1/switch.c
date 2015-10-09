@@ -95,5 +95,6 @@ int exec(int op, int a, int b) {
     if (op < 100)
       return (op % abs(a + 1)) + (op % abs(b + 1));
     return -1;
+    break;
   }
 }

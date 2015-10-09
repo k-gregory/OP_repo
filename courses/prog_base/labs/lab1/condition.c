@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-static inline int isPowOf2(int x) { return (x & x - 1) == 0; }
+static inline int isPowerOf2(int x) { return (x & (x - 1)) == 0; }
 
 static inline int min3(int a, int b, int c) {
   if (a > b)
@@ -33,9 +33,9 @@ int satisfies(int a, int b, int c) {
   /*First case. All nums are negative {{{*/
   if (a < 0 && b < 0 && c < 0) {
     int modmin = abs(min3(a, b, c));
-    int sum2 = a + b + c + modmin;
+    int sum2 = a + b + c + modmin; /* sum of biggest and average number */
 
-    if (sum2 < -256 && modmin < 256 && isPowOf2(modmin)) {
+    if (sum2 < -256 && modmin < 256 && isPowerOf2(modmin)) {
       return 1;
     }
 
