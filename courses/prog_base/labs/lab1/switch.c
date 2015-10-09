@@ -83,8 +83,10 @@ int exec(int op, int a, int b) {
     break;
   case 8:
     return max2(a, b);
+    break;
   case 9:
     return min2(a, b);
+    break;
   case 10:
     return sizeOfNum(a, b);
     break;
