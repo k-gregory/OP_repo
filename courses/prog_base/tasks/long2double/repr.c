@@ -1,18 +1,15 @@
+#include "repr.h"
+
 #include <stdio.h>
 #include <assert.h>
 
-double long2double(long long x){
+double hack_long2double(long long x){
   assert(sizeof(double)==sizeof(long long));
   return *((double*)&x);
 }
 
-int main(){
+#define nth_byte(num,n) ((num))&(1<<(n))
 
-  long long a = 20;
-
-  printf("%.30f, %.30f\n",
-      long2double(4620000000000000000),
-      long2double(-4620000000000000000));
-
-  return 0;
+double long2double(long long x){
+  return nth_byte(x,1);
 }
