@@ -7,7 +7,7 @@ START_TEST (long2double_test){
   char buf1[1000];
   char buf2[1000];
 
-  for(long long i = LONG_MIN;i<LONG_MAX;i+=50000){
+  for(long long i = LONG_MIN;i<LONG_MAX-50001;i+=50000){
     double a = hack_long2double(i);
     double b = long2double(i);
     sprintf(buf1,"%f",a);
