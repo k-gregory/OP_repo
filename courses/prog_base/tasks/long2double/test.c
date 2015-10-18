@@ -5,37 +5,25 @@
 
 #include "repr.h"
 
-static void checkl2d(long long x){
-  if(isnan(long2double(x))&&isnan(hack_long2double(x)))
+static void checkl2d(long long x) {
+  if (isnan(long2double(x)) && isnan(hack_long2double(x)))
     return;
   double my_res = long2double(x);
   double right_res = hack_long2double(x);
-  ck_assert(my_res==right_res);
+  ck_assert(my_res == right_res);
 }
 
-START_TEST(long2double_test_fft) {
-  checkl2d(15LL);
-}
+START_TEST(long2double_test_fft) { checkl2d(15LL); }
 END_TEST
-START_TEST(long2double_test_llmin) {
-  checkl2d(LLONG_MIN);
-}
+START_TEST(long2double_test_llmin) { checkl2d(LLONG_MIN); }
 END_TEST
-START_TEST(long2double_test_llmax) {
-  checkl2d(LLONG_MAX);
-}
+START_TEST(long2double_test_llmax) { checkl2d(LLONG_MAX); }
 END_TEST
-START_TEST(long2double_test_zero) {
-  checkl2d(0LL);
-}
+START_TEST(long2double_test_zero) { checkl2d(0LL); }
 END_TEST
-START_TEST(long2double_test_val) {
-  checkl2d(4620000000000000000LL);
-}
+START_TEST(long2double_test_val) { checkl2d(4620000000000000000LL); }
 END_TEST
-START_TEST(long2double_test_neg_val) {
-  checkl2d(-4620000000000000000LL);
-}
+START_TEST(long2double_test_neg_val) { checkl2d(-4620000000000000000LL); }
 END_TEST
 
 #undef checkl2d

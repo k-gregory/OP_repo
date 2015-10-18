@@ -8,24 +8,24 @@ static const int ll_size_equals_double_size_check =
 
 double hack_long2double(long long x) { return *((double *)&x); }
 
-static inline int nth_byte(long long num, int n){
-  return (num&(1LL<<(64-n)))==1LL<<(64-n);
+static inline int nth_bit(long long num, int n) {
+  return (num & (1LL << (64 - n))) == 1LL << (64 - n);
 }
 
 double long2double(long long x) {
-  double sign = nth_byte(x,1) ? -1 : 1;
+  double sign = nth_bit(x, 1) ? -1 : 1;
   double mantissa = 1;
   double exp = 0;
 
   int p = 1;
   for (int i = 12; i > 1; i--) {
-    exp += nth_byte(x, i) * p;
+    exp += nth_bit(x, i) * p;
     p *= 2;
   }
 
   double pw = 0.5;
   for (int i = 13; i <= 64; i++) {
-    mantissa += nth_byte(x, i) * pw;
+    mantissa += nth_bit(x, i) * pw;
     pw /= 2;
   }
   if (exp == 2047) {
