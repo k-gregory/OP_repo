@@ -6,13 +6,19 @@
 #include "repr.h"
 
 static void checkl2d(long long x) {
-  if (isnan(long2double(x)) && isnan(hack_long2double(x)))
-    return;
   double my_res = long2double(x);
   double right_res = hack_long2double(x);
+  if (isnan(my_res) && isnan(right_res))
+    return;
+  printf("Expected: %lf, GOT: %lf\n",right_res,my_res);
   ck_assert(my_res == right_res);
 }
 
+START_TEST(long2double_test_inf){
+ long inf = 0b01111111111100000000000000000000000000000000000000000000000000000;
+ checkl2d(inf);
+}
+END_TEST
 START_TEST(long2double_test_fft) { checkl2d(15LL); }
 END_TEST
 START_TEST(long2double_test_llmin) { checkl2d(LLONG_MIN); }
@@ -32,6 +38,7 @@ int main(void) {
   Suite *suite = suite_create("Long2Double");
   TCase *tcase = tcase_create("Long2Double");
   tcase_set_timeout(tcase, 60 * 10);
+  tcase_add_test(tcase, long2double_test_inf);
   tcase_add_test(tcase, long2double_test_fft);
   tcase_add_test(tcase, long2double_test_llmin);
   tcase_add_test(tcase, long2double_test_llmax);

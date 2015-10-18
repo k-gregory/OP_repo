@@ -9,12 +9,13 @@ static const int ll_size_equals_double_size_check =
 double hack_long2double(long long x) { return *((double *)&x); }
 
 static inline int nth_bit(long long num, int n) {
-  return (num & (1LL << (64 - n))) == 1LL << (64 - n);
+  return (num & (1LL << (64 - n))) != 0;//1LL << (64 - n);
 }
+
 
 double long2double(long long x) {
   double sign = nth_bit(x, 1) ? -1 : 1;
-  double mantissa = 1;
+  double mantissa = 0;
   double exp = 0;
 
   int p = 1;
@@ -28,8 +29,9 @@ double long2double(long long x) {
     mantissa += nth_bit(x, i) * pw;
     pw /= 2;
   }
+
   if (exp == 2047) {
-    if (mantissa != 0)
+    if (mantissa != 0.0)
       return NAN;
     if (sign > 0)
       return INFINITY;
@@ -37,10 +39,10 @@ double long2double(long long x) {
   }
   if (exp == 0) {
     if (mantissa != 0)
-      return sign * pow(2, -1022) * (mantissa - 1);
+      return sign * pow(2, -1022) * mantissa;
     if (sign > 0)
       return 0;
     return -0.0;
   }
-  return sign * pow(2, exp - 1023) * mantissa;
+  return sign * pow(2, exp - 1023) * (mantissa+1);
 }
