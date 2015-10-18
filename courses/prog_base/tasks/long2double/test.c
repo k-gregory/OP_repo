@@ -1,5 +1,4 @@
 #include <check.h>
-#include <stdio.h>
 #include <limits.h>
 #include <math.h>
 
@@ -10,13 +9,22 @@ static void checkl2d(long long x) {
   double right_res = hack_long2double(x);
   if (isnan(my_res) && isnan(right_res))
     return;
-  printf("Expected: %lf, GOT: %lf\n",right_res,my_res);
   ck_assert(my_res == right_res);
 }
 
+START_TEST(long2double_test_some_vals){
+  const unsigned long checks = 50000;
+  for(unsigned long i = 0;i < checks; i++){
+    checkl2d((LLONG_MAX-LLONG_MIN)/checks*i);
+  }
+}
+END_TEST
+
 START_TEST(long2double_test_inf){
- long inf = 0b01111111111100000000000000000000000000000000000000000000000000000;
+ long long  inf = 0b01111111111100000000000000000000000000000000000000000000000000000;
+ long long minf = 0b1111111111100000000000000000000000000000000000000000000000000000LL;
  checkl2d(inf);
+ checkl2d(minf);
 }
 END_TEST
 START_TEST(long2double_test_fft) { checkl2d(15LL); }
@@ -45,6 +53,7 @@ int main(void) {
   tcase_add_test(tcase, long2double_test_zero);
   tcase_add_test(tcase, long2double_test_val);
   tcase_add_test(tcase, long2double_test_neg_val);
+  tcase_add_test(tcase, long2double_test_some_vals);
   suite_add_tcase(suite, tcase);
   SRunner *sr = srunner_create(suite);
   srunner_run_all(sr, CK_VERBOSE);
