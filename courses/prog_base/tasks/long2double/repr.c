@@ -13,7 +13,7 @@ static inline int nth_bit(long long num, int n) {
 }
 
 double long2double(long long x) {
-  char buff[1024];
+  char buff[32];
   double res;
   sprintf(buff, "%lld", x);
   sscanf(buff, "%lld", &res);
