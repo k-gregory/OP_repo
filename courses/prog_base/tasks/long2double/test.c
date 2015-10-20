@@ -12,19 +12,21 @@ static void checkl2d(long long x) {
   ck_assert(my_res == right_res);
 }
 
-START_TEST(long2double_test_some_vals){
+START_TEST(long2double_test_some_vals) {
   const unsigned long checks = 50000;
-  for(unsigned long i = 0;i < checks; i++){
-    checkl2d((LLONG_MAX-LLONG_MIN)/checks*i);
+  for (unsigned long i = 0; i < checks; i++) {
+    checkl2d((LLONG_MAX - LLONG_MIN) / checks * i);
   }
 }
 END_TEST
 
-START_TEST(long2double_test_inf){
- long long  inf = 0b01111111111100000000000000000000000000000000000000000000000000000;
- long long minf = 0b1111111111100000000000000000000000000000000000000000000000000000LL;
- checkl2d(inf);
- checkl2d(minf);
+START_TEST(long2double_test_inf) {
+  long long inf =
+      0b01111111111100000000000000000000000000000000000000000000000000000;
+  long long minf =
+      0b1111111111100000000000000000000000000000000000000000000000000000LL;
+  checkl2d(inf);
+  checkl2d(minf);
 }
 END_TEST
 START_TEST(long2double_test_fft) { checkl2d(15LL); }

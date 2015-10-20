@@ -1,6 +1,6 @@
 #include "repr.h"
 
-#include <assert.h>
+#include <stdio.h>
 #include <math.h>
 
 static const int ll_size_equals_double_size_check =
@@ -9,11 +9,18 @@ static const int ll_size_equals_double_size_check =
 double hack_long2double(long long x) { return *((double *)&x); }
 
 static inline int nth_bit(long long num, int n) {
-  return (num & (1LL << (64 - n))) != 0;//1LL << (64 - n);
+  return (num & (1LL << (64 - n))) != 0; // 1LL << (64 - n);
 }
 
-
 double long2double(long long x) {
+  char buff[1024];
+  double res;
+  sprintf(buff, "%lld", x);
+  sscanf(buff, "%lld", &res);
+  return res;
+}
+
+double algoritmic_long2double(long long x) {
   double sign = nth_bit(x, 1) ? -1 : 1;
   double mantissa = 0;
   double exp = 0;
@@ -44,5 +51,5 @@ double long2double(long long x) {
       return 0;
     return -0.0;
   }
-  return sign * pow(2, exp - 1023) * (mantissa+1);
+  return sign * pow(2, exp - 1023) * (mantissa + 1);
 }
