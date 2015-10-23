@@ -52,12 +52,6 @@ int equals(int m1[4][4], int m2[4][4]) {
   return 1;
 }
 
-void matrix_copy(int in[4][4], int out[4][4]) {
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 4; j++)
-      out[i][j] = in[i][j];
-}
-
 START_TEST(test_matrix_copy) {
   int buff[4][4];
   matrix_copy(test_matrix, buff);
