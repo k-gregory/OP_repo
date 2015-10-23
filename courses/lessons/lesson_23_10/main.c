@@ -108,6 +108,53 @@ long long arr_subdiagonal_sum(int *arr, unsigned int dism,
   return res;
 }
 
+unsigned int neg_nums_in_row(int *arr, int row, unsigned int rows,
+                             unsigned int columns) {
+  int res = 0;
+  for (unsigned int col = 1; col <= columns; col++)
+    if (arr[mat_to_arr(row, col, columns)] < 0)
+      res++;
+  return res;
+}
+
+unsigned int row_with_min_negs(int *arr, unsigned int rows,
+                               unsigned int columns) {
+  int min_num = neg_nums_in_row(arr, 1, rows, columns);
+  int min_index = 1;
+  for (int row = 2; row <= rows; row++)
+    if (neg_nums_in_row(arr, row, rows, columns) < min_num) {
+      min_num = neg_nums_in_row(arr, row, rows, columns);
+      min_index = row;
+    };
+  return min_index;
+}
+
+unsigned int row_with_max_negs(int *arr, unsigned int rows,
+                               unsigned int columns) {
+  int max_num = neg_nums_in_row(arr, 1, rows, columns);
+  int max_index = 1;
+  for (int row = 2; row <= rows; row++)
+    if (neg_nums_in_row(arr, row, rows, columns) > max_num) {
+      max_num = neg_nums_in_row(arr, row, rows, columns);
+      max_index = row;
+    };
+  return max_index;
+}
+
+void swap_rows(int *arr, unsigned int row1, unsigned int row2,
+               unsigned int rows, unsigned int columns) {
+  for (unsigned int col = 0; col <= columns; col++)
+    swap_ints(&arr[mat_to_arr(row1, col, columns)],
+              &arr[mat_to_arr(row2, col, columns)]);
+}
+
+void swap_ext_rows(int* arr,
+    unsigned int rows, unsigned int columns){
+  unsigned int min_r = row_with_min_negs(arr,rows,columns);
+  unsigned int max_r = row_with_max_negs(arr,rows,columns);
+  swap_rows(arr,min_r,max_r,rows,columns);
+}
+
 int main(void) {
   int a1[] = {3, 4, 5, 6, 7, -1, -6, 19, 8, 9, 15, -4, 3, 3, 10, 11, 12};
   int a2[] = {-1, 1,  40, -2, 3, 4, -7, 4, -9, 5, 6,
@@ -120,6 +167,9 @@ int main(void) {
   };
 
   puts("Task 1");
+  for (unsigned int i = 0; i < LEN(a1); i++)
+    printf("%d ", a1[i]);
+  puts("");
   print_n_min(a1, LEN(a1), 5);
   puts("\n");
 
@@ -138,8 +188,20 @@ int main(void) {
   puts("");
 
   puts("Task 3");
-  printf("Min: %d, max: %d, avg: %lf, sum: %lld, mdsum: %lld, sdsum: %lld",
+  printf("Min: %d, max: %d, avg: %lf, sum: %lld, mdsum: %lld, sdsum: %lld\n\n",
          arr_min(m3, LEN(m3)), arr_max(m3, LEN(m3)), arr_avg(m3, LEN(m3)),
          arr_sum(m3, LEN(m3)), arr_diagonal_sum(m3, 4, LEN(m3)),
          arr_subdiagonal_sum(m3, 4, LEN(m3)));
+
+  puts("Task 4");
+  swap_ext_rows(m3,4,4);
+  puts("Matrix:");
+  for (int i = 1; i <= 4; i++) {
+    for (int j = 1; j <= 4; j++)
+      printf("%d\t", m3[mat_to_arr(i, j, 4)]);
+    puts("");
+  }
+  puts("");
+
+  return 0;
 }
