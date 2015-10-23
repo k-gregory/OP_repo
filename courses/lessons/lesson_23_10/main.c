@@ -73,7 +73,7 @@ int arr_max(int *arr, unsigned int length) {
 double arr_avg(int *arr, unsigned int length) {
   double res = 0;
   for (unsigned int i = 0; i < length; i++)
-    res += (arr[i] - res) * (1 / (i + 1));
+    res += (arr[i] - res) / (i + 1);
   return res;
 }
 
@@ -88,12 +88,14 @@ long long arr_sum(int *arr, unsigned int length) {
 
 static inline int mat_to_arr(unsigned int row, unsigned int column,
                              unsigned int row_length) {
+  row = row - 1;
+  column = column - 1;
   return row * row_length + column;
 }
 
 long long arr_diagonal_sum(int *arr, unsigned int dism, unsigned int length) {
   long long res = 0;
-  for (unsigned int i = 0; i < dism; i++)
+  for (unsigned int i = 1; i <= dism; i++)
     res += arr[mat_to_arr(i, i, dism)];
   return res;
 }
@@ -101,8 +103,8 @@ long long arr_diagonal_sum(int *arr, unsigned int dism, unsigned int length) {
 long long arr_subdiagonal_sum(int *arr, unsigned int dism,
                               unsigned int length) {
   long long res = 0;
-  for (unsigned int i = 0; i < dism; i++)
-    res += arr[mat_to_arr(dism - i - 1, i, dism)];
+  for (unsigned int i = 1; i <= dism; i++)
+    res += arr[mat_to_arr(dism - i + 1, i, dism)];
   return res;
 }
 
@@ -127,7 +129,17 @@ int main(void) {
     printf("%d ", a2[i]);
   puts("\n");
 
+  puts("Matrix:");
+  for (int i = 1; i <= 4; i++) {
+    for (int j = 1; j <= 4; j++)
+      printf("%d\t", m3[mat_to_arr(i, j, 4)]);
+    puts("");
+  }
+  puts("");
+
   puts("Task 3");
-  printf("Min: %d, max: %d, avg: %lf, sum: %lld\n, mdsum: %d, sdsum: %d",
-         arr_sum(m3, LEN(m3)));
+  printf("Min: %d, max: %d, avg: %lf, sum: %lld, mdsum: %lld, sdsum: %lld",
+         arr_min(m3, LEN(m3)), arr_max(m3, LEN(m3)), arr_avg(m3, LEN(m3)),
+         arr_sum(m3, LEN(m3)), arr_diagonal_sum(m3, 4, LEN(m3)),
+         arr_subdiagonal_sum(m3, 4, LEN(m3)));
 }
