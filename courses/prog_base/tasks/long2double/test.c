@@ -1,28 +1,64 @@
 #include <check.h>
-#include <stdio.h>
 #include <limits.h>
+#include <math.h>
+
 #include "repr.h"
 
-START_TEST (long2double_test){
-  char buf1[1000];
-  char buf2[1000];
+static void checkl2d(long long x) {
+  double my_res = long2double(x);
+  double right_res = hack_long2double(x);
+  if (isnan(my_res) && isnan(right_res))
+    return;
+  ck_assert(my_res == right_res);
+}
 
-  for(long long i = LONG_MIN;i<LONG_MAX-50001;i+=50000){
-    double a = hack_long2double(i);
-    double b = long2double(i);
-    sprintf(buf1,"%f",a);
-    sprintf(buf2,"%f",b);
-    ck_assert_str_eq(buf1,buf2);
+START_TEST(long2double_test_some_vals) {
+  const unsigned long checks = 50000;
+  for (unsigned long i = 0; i < checks; i++) {
+    checkl2d((LLONG_MAX - LLONG_MIN) / checks * i);
   }
-} END_TEST
+}
+END_TEST
 
-int main(void){
-  Suite* suite = suite_create("Long2Double");
-  TCase* tcase  = tcase_create("Long2Double");
-  tcase_add_test(tcase,long2double_test);
-  suite_add_tcase(suite,tcase);
-  SRunner* sr = srunner_create(suite);
-  srunner_run_all(sr,CK_VERBOSE);
+START_TEST(long2double_test_inf) {
+  long long inf =
+      0b01111111111100000000000000000000000000000000000000000000000000000;
+  long long minf =
+      0b1111111111100000000000000000000000000000000000000000000000000000LL;
+  checkl2d(inf);
+  checkl2d(minf);
+}
+END_TEST
+START_TEST(long2double_test_fft) { checkl2d(15LL); }
+END_TEST
+START_TEST(long2double_test_llmin) { checkl2d(LLONG_MIN); }
+END_TEST
+START_TEST(long2double_test_llmax) { checkl2d(LLONG_MAX); }
+END_TEST
+START_TEST(long2double_test_zero) { checkl2d(0LL); }
+END_TEST
+START_TEST(long2double_test_val) { checkl2d(4620000000000000000LL); }
+END_TEST
+START_TEST(long2double_test_neg_val) { checkl2d(-4620000000000000000LL); }
+END_TEST
+
+#undef checkl2d
+
+int main(void) {
+  Suite *suite = suite_create("Long2Double");
+  TCase *tcase = tcase_create("Long2Double");
+  tcase_set_timeout(tcase, 60 * 10);
+  tcase_add_test(tcase, long2double_test_inf);
+  tcase_add_test(tcase, long2double_test_fft);
+  tcase_add_test(tcase, long2double_test_llmin);
+  tcase_add_test(tcase, long2double_test_llmax);
+  tcase_add_test(tcase, long2double_test_zero);
+  tcase_add_test(tcase, long2double_test_val);
+  tcase_add_test(tcase, long2double_test_neg_val);
+  tcase_add_test(tcase, long2double_test_some_vals);
+  suite_add_tcase(suite, tcase);
+  SRunner *sr = srunner_create(suite);
+  srunner_run_all(sr, CK_VERBOSE);
   int fails = srunner_ntests_failed(sr);
   srunner_free(sr);
   return fails;
