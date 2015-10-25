@@ -143,7 +143,7 @@ unsigned int row_with_max_negs(int *arr, unsigned int rows,
 
 void swap_rows(int *arr, unsigned int row1, unsigned int row2,
                unsigned int rows, unsigned int columns) {
-  for (unsigned int col = 0; col <= columns; col++)
+  for (unsigned int col = 1; col <= columns; col++)
     swap_ints(&arr[mat_to_arr(row1, col, columns)],
               &arr[mat_to_arr(row2, col, columns)]);
 }
