@@ -23,8 +23,8 @@ static inline void swap_ints(int *i1, int *i2) {
 }
 
 void fillRand(int mat[4][4]) {
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 4; j++)
+  for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int j = 0; j < 4; j++)
       mat[i][j] = (rand() % 2 - 1) * (rand() % 1000);
 }
 
@@ -80,7 +80,7 @@ double arr_avg(int *arr, unsigned int length) {
 long long arr_sum(int *arr, unsigned int length) {
   long long res = 0;
 
-  for (int i = 0; i < length; i++)
+  for (unsigned int i = 0; i < length; i++)
     res += arr[i];
 
   return res;
@@ -119,9 +119,9 @@ unsigned int neg_nums_in_row(int *arr, int row, unsigned int rows,
 
 unsigned int row_with_min_negs(int *arr, unsigned int rows,
                                unsigned int columns) {
-  int min_num = neg_nums_in_row(arr, 1, rows, columns);
-  int min_index = 1;
-  for (int row = 2; row <= rows; row++)
+  unsigned int min_num = neg_nums_in_row(arr, 1, rows, columns);
+  unsigned int min_index = 1;
+  for (unsigned int row = 2; row <= rows; row++)
     if (neg_nums_in_row(arr, row, rows, columns) < min_num) {
       min_num = neg_nums_in_row(arr, row, rows, columns);
       min_index = row;
@@ -131,8 +131,8 @@ unsigned int row_with_min_negs(int *arr, unsigned int rows,
 
 unsigned int row_with_max_negs(int *arr, unsigned int rows,
                                unsigned int columns) {
-  int max_num = neg_nums_in_row(arr, 1, rows, columns);
-  int max_index = 1;
+  unsigned int max_num = neg_nums_in_row(arr, 1, rows, columns);
+  unsigned int max_index = 1;
   for (int row = 2; row <= rows; row++)
     if (neg_nums_in_row(arr, row, rows, columns) > max_num) {
       max_num = neg_nums_in_row(arr, row, rows, columns);
