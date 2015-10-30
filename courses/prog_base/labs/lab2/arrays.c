@@ -59,3 +59,20 @@ int maxOccurance(int arr[], size_t sz) {
     }
   return elems[max_index];
 }
+
+int diff(int arr1[], int arr2[], int res[], size_t sz) {
+  for (size_t i = 0; i < sz; i++) {
+    int t = arr1[i] - arr2[i];
+    res[i] = t;
+    if (t != 0) {
+      for (size_t j = i + 1; j < sz; j++)
+        res[j] = arr1[j] - arr2[j];
+      return 0;
+    }
+  }
+  return 1;
+}
+
+void sub(int arr1[], int arr2[], int res[], size_t sz) {
+  diff(arr1, arr2, res, sz);
+}
