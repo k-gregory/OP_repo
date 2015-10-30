@@ -4,12 +4,12 @@
 
 #include <stdlib.h>
 
-typedef enum {
+enum Operation {
   BREAK=-4,
   REPEAT,
   CONTINUE,
   POP
-} Operation;
+};
 
 int run(int moves[], size_t moves_len, int res[], size_t res_len);
 
