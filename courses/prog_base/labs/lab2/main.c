@@ -25,6 +25,8 @@ int main() {
   test_arr[29] = -42;
   print_arr(test_arr, LEN(test_arr));
   printf("Check rand: %d\n", checkRand3(test_arr, LEN(test_arr)));
+  printf("Mean value: %f\n", meanValue(test_arr, LEN(test_arr)));
+  printf("Mean index: %d\n", meanIndex(test_arr, LEN(test_arr)));
   printf("Min value: %d\n", minValue(test_arr, LEN(test_arr)));
   printf("Min index: %d\n", minIndex(test_arr, LEN(test_arr)));
   printf("Max occurances: %d\n", maxOccurance(test_arr, LEN(test_arr)));

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <limits.h>
 
 #include "arrays.h"
@@ -14,6 +15,23 @@ int checkRand3(int arr[], size_t sz) {
       if (arr[i] != 1)
         return 0;
   return 1;
+}
+
+float meanValue(int arr[], size_t sz) {
+  float res = 0;
+  for (size_t i = 0; i < sz; i++) {
+    res += (arr[i] - res) / (1 + i);
+  }
+  return res;
+}
+
+int meanIndex(int arr[], size_t sz) {
+  float mean = meanValue(arr, sz);
+  int *mean_index = &arr[0];
+  for (size_t i = 1; i < sz; i++)
+    if (fabs(mean - *mean_index) > fabs(mean - arr[i]))
+      mean_index = &arr[i];
+  return mean_index - arr;
 }
 
 int minValue(int arr[], size_t sz) {
