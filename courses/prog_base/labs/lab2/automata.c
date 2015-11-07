@@ -42,27 +42,30 @@ struct Rule *match_rule(int state, int input) {
   return NULL;
 }
 
-void step(int moves[], size_t moves_len, int res[], size_t res_len) {
+size_t run(int moves[], size_t moves_len, int res[], size_t res_len) {
   size_t res_n = 0;
   int state = 0;
 
   for (size_t i = 0; i < moves_len; i++) {
     int input = moves[i];
     struct Rule *m_rule = match_rule(state, input);
+    printf("State:%d, move:%d\n", state, input);
     if (m_rule == NULL)
-      return;
+      return res_n;
     if (m_rule->op >= 0) {
       if (res_n < res_len)
         res[res_n++] = m_rule->op;
       else
-        return;
+        return res_n;
     } else {
       switch (m_rule->op) {
       case POP:
+        if (res_n < 1)
+          return 0;
         res_n--;
         break;
       case BREAK:
-        return;
+        return res_n;
         break;
       case REPEAT:
         i--;
@@ -71,10 +74,11 @@ void step(int moves[], size_t moves_len, int res[], size_t res_len) {
         break;
       default:
         assert(1 == 2); /*This shall newar hapen*/
-        return;
+        return res_n;
         break;
       }
     }
     state = m_rule->next_state;
   }
+  return res_n;
 }

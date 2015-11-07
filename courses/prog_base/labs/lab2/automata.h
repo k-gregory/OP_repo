@@ -10,6 +10,6 @@ enum OP_type {
   POP,
 };
 
-int run(int moves[], size_t moves_len, int res[], size_t res_len);
+size_t run(int moves[], size_t moves_len, int res[], size_t res_len);
 
 #endif
