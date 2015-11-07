@@ -4,6 +4,7 @@
 
 #include "arrays.h"
 #include "loops.h"
+#include "automata.h"
 
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -13,12 +14,29 @@ void fillRand(int arr[], size_t sz) {
 }
 
 void print_arr(int arr[], size_t length) {
+  if (length == 0)
+    return;
+
   for (size_t i = 0; i < length - 1; i++)
     printf("%d ", arr[i]);
   printf("%d\n", arr[length - 1]);
 }
 
+void test_automata(int moves[], size_t moves_len, int res[], size_t res_len) {
+  size_t n = run(moves, moves_len, res, res_len);
+  puts("Input:");
+  print_arr(moves, moves_len);
+  puts("Output:");
+  print_arr(res, n);
+  puts("");
+}
+
 int main() {
+  puts("Test loops");
+  printf("%lf \n", calc(2, 1));
+  printf("%lf \n\n", calc(42, 15));
+
+  puts("Test arrays");
   srand(time(0));
   int test_arr[30];
   fillRand3(test_arr, LEN(test_arr));
@@ -46,4 +64,19 @@ int main() {
   print_arr(ta2, LEN(ta2));
   sub(ta1, ta2, ta1, LEN(ta1));
   print_arr(ta1, LEN(ta1));
+
+  /*AUTOMATA*/
+  puts("");
+  puts("Testing automata");
+  int res[1000];
+  int m1[] = {1, 2, 3, 4, 5, 6};
+  int m2[] = {10, 105, 10};
+  int m3[] = {105, 105, 105, 105, 105, 105, 105};
+  int m4[] = {10, 105, 105, 105, 105, 105, 5};
+  test_automata(m1, LEN(m1), res, LEN(res));
+  test_automata(m2, LEN(m2), res, LEN(res));
+  test_automata(m3, LEN(m3), res, LEN(res));
+  test_automata(m3, LEN(m3), res, 3);
+  test_automata(m4, LEN(m4), res, LEN(res));
+  return 0;
 }

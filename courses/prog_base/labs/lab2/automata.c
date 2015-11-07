@@ -49,7 +49,6 @@ size_t run(int moves[], size_t moves_len, int res[], size_t res_len) {
   for (size_t i = 0; i < moves_len; i++) {
     int input = moves[i];
     struct Rule *m_rule = match_rule(state, input);
-    printf("State:%d, move:%d\n", state, input);
     if (m_rule == NULL)
       return res_n;
     if (m_rule->op >= 0) {
