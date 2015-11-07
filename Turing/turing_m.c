@@ -84,7 +84,7 @@ void init() {
   int n;
   fscanf(f, "%i\n", &n);
   for (int i = 0; i < n; i++) {
-    fscanf(f, "%d ", current_el+i);
+    fscanf(f, "%d ", current_el + i);
   }
 
   rules_table = malloc(sizeof(Rule) * INITIAL_RULES_NUMBER);
@@ -109,13 +109,13 @@ void init() {
     current_rule++; /* TODO GOING to segfault on >100 rules. Have to realloc
                      rules_table*/
   }
-  current_rule->matching_state=-1;
+  current_rule->matching_state = -1;
   fclose(f);
 }
 
 bool step() {
   Rule *current_rule = rules_table;
-  while (current_rule->matching_state!=-1) {
+  while (current_rule->matching_state != -1) {
     if (current_rule->matching_state == current_state &
         current_rule->matching_value == *current_el)
       return apply_operation(current_rule);
@@ -131,9 +131,10 @@ void uninit() {
 
 int main() {
   init();
-  while (step());
-  for(int i=0;i<5;i++){
-   printf("%d" ,strip[i+1000*500]);    
-  }  
+  while (step())
+    ;
+  for (int i = 0; i < 5; i++) {
+    printf("%d", strip[i + 1000 * 500]);
+  }
   uninit();
 }

@@ -148,11 +148,10 @@ void swap_rows(int *arr, unsigned int row1, unsigned int row2,
               &arr[mat_to_arr(row2, col, columns)]);
 }
 
-void swap_ext_rows(int* arr,
-    unsigned int rows, unsigned int columns){
-  unsigned int min_r = row_with_min_negs(arr,rows,columns);
-  unsigned int max_r = row_with_max_negs(arr,rows,columns);
-  swap_rows(arr,min_r,max_r,rows,columns);
+void swap_ext_rows(int *arr, unsigned int rows, unsigned int columns) {
+  unsigned int min_r = row_with_min_negs(arr, rows, columns);
+  unsigned int max_r = row_with_max_negs(arr, rows, columns);
+  swap_rows(arr, min_r, max_r, rows, columns);
 }
 
 int main(void) {
@@ -194,7 +193,7 @@ int main(void) {
          arr_subdiagonal_sum(m3, 4, LEN(m3)));
 
   puts("Task 4");
-  swap_ext_rows(m3,4,4);
+  swap_ext_rows(m3, 4, 4);
   puts("Matrix:");
   for (int i = 1; i <= 4; i++) {
     for (int j = 1; j <= 4; j++)

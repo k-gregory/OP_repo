@@ -7,8 +7,8 @@ int main(void){
   return 0;
 }*/
 
-int main(){
-  char a[] = {1,2,5,3};
+int main() {
+  char a[] = {1, 2, 5, 3};
   void (*foo)(void) = a;
   foo();
 }

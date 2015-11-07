@@ -75,6 +75,6 @@ void step(int moves[], size_t moves_len, int res[], size_t res_len) {
         break;
       }
     }
-  state = m_rule->next_state;
+    state = m_rule->next_state;
   }
 }
