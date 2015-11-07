@@ -42,7 +42,8 @@ struct Rule *match_rule(int state, int input) {
   return NULL;
 }
 
-size_t run(int moves[], size_t moves_len, int res[], size_t res_len) {
+static size_t run_nonulls(int moves[], size_t moves_len, int res[],
+                          size_t res_len) {
   size_t res_n = 0;
   int state = 0;
 
@@ -80,4 +81,10 @@ size_t run(int moves[], size_t moves_len, int res[], size_t res_len) {
     state = m_rule->next_state;
   }
   return res_n;
+}
+size_t run(int moves[], size_t moves_len, int res[], size_t res_len) {
+  size_t r = run_nonulls(moves, moves_len, res, res_len);
+  for (size_t i = r; i < res_len; i++)
+    res[i] = 0;
+  return r;
 }
