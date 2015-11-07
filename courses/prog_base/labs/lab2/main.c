@@ -13,7 +13,7 @@ void fillRand(int arr[], size_t sz) {
 }
 
 void print_arr(int arr[], size_t length) {
-  for (int i = 0; i < length - 1; i++)
+  for (size_t i = 0; i < length - 1; i++)
     printf("%d ", arr[i]);
   printf("%d\n", arr[length - 1]);
 }

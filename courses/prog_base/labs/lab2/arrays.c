@@ -53,7 +53,7 @@ int minIndex(int arr[], size_t sz) {
 int maxOccurance(int arr[], size_t sz) {
   int *elems = malloc(sizeof(int) * sz);
   int *occurances = malloc(sizeof(int) * sz);
-  int last_index = 0;
+  size_t last_index = 0;
 
   for (size_t i = 0; i < sz; i++)
     for (size_t j = 0; j < sz; j++) {
@@ -95,14 +95,14 @@ void sub(int arr1[], int arr2[], int res[], size_t sz) {
   diff(arr1, arr2, res, sz);
 }
 
-int eq(int arr1[], int arr2[], size_t sz){
-  for(size_t i = 0; i<sz;i++)
-    if(arr1[i]!=arr2[i])
+int eq(int arr1[], int arr2[], size_t sz) {
+  for (size_t i = 0; i < sz; i++)
+    if (arr1[i] != arr2[i])
       return 0;
   return 1;
 }
 
-void land(int arr1[], int arr2[], int res[], size_t sz){
-  for(size_t i = 0; i<sz;i++)
+void land(int arr1[], int arr2[], int res[], size_t sz) {
+  for (size_t i = 0; i < sz; i++)
     res[i] = arr1[i] & arr2[i];
 }
