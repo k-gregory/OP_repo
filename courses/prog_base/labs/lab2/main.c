@@ -33,12 +33,14 @@ void test_automata(int moves[], size_t moves_len, int res[], size_t res_len) {
 
 int main() {
   puts("Test loops");
-  printf("%lf \n", calc(2, 1));
-  printf("%lf \n\n", calc(42, 15));
+  printf("calc(2,1): %lf \n", calc(2, 1));
+  printf("calc(42,15): %lf \n\n", calc(42, 15));
 
   puts("Test arrays");
   srand(time(0));
   int test_arr[30];
+  fillRand3(test_arr, LEN(test_arr));
+  print_arr(test_arr, LEN(test_arr));
   fillRand3(test_arr, LEN(test_arr));
   test_arr[29] = -42;
   print_arr(test_arr, LEN(test_arr));
@@ -49,6 +51,7 @@ int main() {
   printf("Min index: %d\n", minIndex(test_arr, LEN(test_arr)));
   printf("Max occurances: %d\n", maxOccurance(test_arr, LEN(test_arr)));
 
+  puts("\nOperations on 2 arrays:");
   int ta1[4];
   fillRand(ta1, LEN(ta1));
   print_arr(ta1, LEN(ta1));
