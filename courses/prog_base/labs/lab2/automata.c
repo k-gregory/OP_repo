@@ -1,8 +1,9 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "automata.h"
 
-#define LEN(arr) (sizeof(arr)/sizeof((arr)[0]))
+#define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 struct Rule {
   int state;
@@ -32,9 +33,9 @@ struct Rule rule_table[] = {
     {3, 105, CONTINUE, 3},
 };
 
-struct Rule* match_rule(int state, int input){
-  for(size_t i = 0; i< LEN(rule_table);i++){
-    if(rule_table[i].state == state && rule_table[i].input==input){
+struct Rule *match_rule(int state, int input) {
+  for (size_t i = 0; i < LEN(rule_table); i++) {
+    if (rule_table[i].state == state && rule_table[i].input == input) {
       return &rule_table[i];
     }
   }
@@ -42,18 +43,38 @@ struct Rule* match_rule(int state, int input){
 }
 
 void step(int moves[], size_t moves_len, int res[], size_t res_len) {
-  size_t moves_n, res_n;
+  size_t res_n = 0;
   int state = 0;
-  moves_n = res_n = 0;
 
-  for(size_t i =0; i< moves_len;i++){
-    struct Rule* m_rule = match_rule(state,moves[moves_n]);
-    if(m_rule->op >= 0){
-      if(res_n<res_len)
-	res[res_n++] = m_rule->op;
+  for (size_t i = 0; i < moves_len; i++) {
+    int input = moves[i];
+    struct Rule *m_rule = match_rule(state, input);
+    if (m_rule == NULL)
+      return;
+    if (m_rule->op >= 0) {
+      if (res_n < res_len)
+        res[res_n++] = m_rule->op;
+      else
+        return;
+    } else {
+      switch (m_rule->op) {
+      case POP:
+        res_n--;
+        break;
+      case BREAK:
+        return;
+        break;
+      case REPEAT:
+        i--;
+        break;
+      case CONTINUE:
+        break;
+      default:
+        assert(1 == 2); /*This shall newar hapen*/
+        return;
+        break;
+      }
     }
-    else {
-      
-    }
+  state = m_rule->next_state;
   }
 }
