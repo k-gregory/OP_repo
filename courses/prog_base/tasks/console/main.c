@@ -49,17 +49,20 @@ void draw(int height, int width) {
 }
 
 int main(void) {
+  int x,y;
   initscr();
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
   start_color();
 
+
   init_pair(BLUE_PAIR, COLOR_BLACK, COLOR_BLUE);
   init_pair(CYAN_PAIR, COLOR_BLACK, COLOR_CYAN);
   init_pair(GREEN_PAIR, COLOR_BLACK, COLOR_GREEN);
 
-  draw(45, 45);
+  getmaxyx(stdscr,y,x);
+  draw(y,x);
   getchar();
 
   endwin();
