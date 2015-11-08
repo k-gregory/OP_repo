@@ -34,8 +34,9 @@ static inline int isInRange(int y, int x, int height, int width) {
 }
 
 void draw(int height, int width) {
-  for (int x = -height; x <= width; x++) {
-    for (int y = 0; y <= height; y++) {
+  int x,y;
+  for (x = -height; x <= width; x++) {
+    for (y = 0; y <= height; y++) {
       int dx = x + y;
       int dy = y;
       if (abs(x) % 2 == 0) {
