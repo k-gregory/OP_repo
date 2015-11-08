@@ -1,3 +1,7 @@
+/*BUILDING:
+ * gcc main.c -lcurses -std=gnu99
+*/
+
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
