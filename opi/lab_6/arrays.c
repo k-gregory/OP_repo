@@ -31,15 +31,15 @@ size_t find(int arr[], size_t len) {
   return min + (max - min) / 2;
 }
 
-void print_array(int arr[], size_t len){
-  for(size_t i = 0;i<len-1;i++)
-    printf("%d ",arr[i]);
-  printf("%d\n",arr[len-1]);
+void print_array(int arr[], size_t len) {
+  for (size_t i = 0; i < len - 1; i++)
+    printf("%d ", arr[i]);
+  printf("%d\n", arr[len - 1]);
 }
 
 void initialize_array(int arr[], size_t len) {
   for (size_t i = 0; i < len; i++)
-    arr[i] = 10+ rand()%90;
+    arr[i] = 10 + rand() % 90;
 }
 
 int do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l, size_t r) {
@@ -56,6 +56,6 @@ int copy(int arr1[], int arr2[], size_t arr1_len, size_t arr2_len) {
   return do_copy(arr1, arr2, arr2_len, 1, index);
 }
 
-double sum_avg(int arr[], size_t arr_len){
-  return foldr(0,arr,arr+arr_len,f_sum)/(double)arr_len;
+double sum_avg(int arr[], size_t arr_len) {
+  return foldr(0, arr, arr + arr_len, f_sum) / (double)arr_len;
 }

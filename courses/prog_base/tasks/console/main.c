@@ -34,7 +34,7 @@ static inline int isInRange(int y, int x, int height, int width) {
 }
 
 void draw(int height, int width) {
-  int x,y;
+  int x, y;
   for (x = -height; x <= width; x++) {
     for (y = 0; y <= height; y++) {
       int dx = x + y;
@@ -54,20 +54,19 @@ void draw(int height, int width) {
 }
 
 int main(void) {
-  int x,y;
+  int x, y;
   initscr();
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
   start_color();
 
-
   init_pair(BLUE_PAIR, COLOR_BLACK, COLOR_BLUE);
   init_pair(CYAN_PAIR, COLOR_BLACK, COLOR_CYAN);
   init_pair(GREEN_PAIR, COLOR_BLACK, COLOR_GREEN);
 
-  getmaxyx(stdscr,y,x);
-  draw(y,x);
+  getmaxyx(stdscr, y, x);
+  draw(y, x);
   getchar();
 
   endwin();
