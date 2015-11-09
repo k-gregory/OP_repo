@@ -26,4 +26,5 @@ int main(void) {
   printf("^ found idx: %zu\n", found_idx);
   copy(arr, arr_c, LEN(arr), LEN(arr_c));
   print_array(arr_c, LEN(arr_c));
+  printf("Average val(should be near to 55), %lf", sum_average(arr, LEN(arr)));
 }

@@ -56,6 +56,6 @@ int copy(int arr1[], int arr2[], size_t arr1_len, size_t arr2_len) {
   return do_copy(arr1, arr2, arr2_len, 1, index);
 }
 
-double sum_avg(int arr[], size_t arr_len) {
+double sum_average(int arr[], size_t arr_len) {
   return foldr(0, arr, arr + arr_len, f_sum) / (double)arr_len;
 }
