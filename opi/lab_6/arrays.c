@@ -43,6 +43,8 @@ void initialize_array(int arr[], size_t len) {
 }
 
 int do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l, size_t r) {
+  if (r < l)
+    return -1;
   if ((r - l) > arr1_len)
     return -1;
   memmove(arr2, arr1 + l, sizeof(int) * (r - l + 1));
