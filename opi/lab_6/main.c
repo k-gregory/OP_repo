@@ -1,16 +1,22 @@
+// @todo: author, task
+//
 #include <stdio.h>
+	// printf
 #include <stdlib.h>
+	// srand
 #include <time.h>
-
+	// time
 #include "arrays.h"
 
 int main(void) {
-  srand(time(NULL));
+  // @todo: change to #define ARRSIZE XXX or C99 arrays
   int arr[30];
   int arr_c[30] = {0};
   size_t min_idx, max_idx, found_idx;
+  
+  srand(time(NULL));
+ 
   initialize_array(arr, LEN(arr));
-
   min_idx =
       find_first(foldr(arr[0], arr, arr + LEN(arr), f_min), arr, LEN(arr));
   max_idx =
@@ -30,4 +36,6 @@ int main(void) {
   copy(arr, arr_c, LEN(arr), LEN(arr_c));
   print_array(arr_c, LEN(arr_c));
   printf("Average val(should be near to 55), %lf", sum_average(arr, LEN(arr)));
+
+  return 0;
 }

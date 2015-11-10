@@ -4,10 +4,15 @@
 
 #include "arrays.h"
 
+static int _t_do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l, size_t r);
+
 int foldr(int accum, int *arr_first, int *arr_last, fold_f f) {
+  int new_acc;
+ 
   if (arr_first == arr_last)
     return accum;
-  int new_acc = f(accum, *arr_first);
+  // @todo: track overflow from f_sum
+  new_acc = f(accum, *arr_first);
   arr_first++;
   return foldr(new_acc, arr_first, arr_last, f);
 }
@@ -22,7 +27,7 @@ size_t find_first(int value, int arr[], size_t len) {
   for (size_t i = 0; i < len; i++)
     if (arr[i] == value)
       return i;
-  return 0;
+  return len + 1;
 }
 
 size_t find(int arr[], size_t len) {
@@ -32,9 +37,10 @@ size_t find(int arr[], size_t len) {
 }
 
 void print_array(int arr[], size_t len) {
-  for (size_t i = 0; i < len - 1; i++)
+  size_t i;
+  for (i = 0; i < len - 1; i++)
     printf("%d ", arr[i]);
-  printf("%d\n", arr[len - 1]);
+  printf("%d\n", arr[i]);
 }
 
 void initialize_array(int arr[], size_t len) {
@@ -42,10 +48,10 @@ void initialize_array(int arr[], size_t len) {
     arr[i] = 10 + rand() % 90;
 }
 
-int do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l, size_t r) {
+static int _t_do_copy(int arr1[], int arr2[], size_t arr2_len, size_t l, size_t r) {
   if (r < l)
     return -1;
-  if ((r - l) > arr1_len)
+  if ((r - l) > arr2_len)
     return -1;
   memmove(arr2, arr1 + l, sizeof(int) * (r - l + 1));
   return 0;
@@ -55,7 +61,7 @@ int copy(int arr1[], int arr2[], size_t arr1_len, size_t arr2_len) {
   if (arr1_len < 2)
     return -1;
   int index = find(arr1, arr1_len);
-  return do_copy(arr1, arr2, arr2_len, 1, index);
+  return _t_do_copy(arr1, arr2, arr2_len, 1, index);
 }
 
 double sum_average(int arr[], size_t arr_len) {
