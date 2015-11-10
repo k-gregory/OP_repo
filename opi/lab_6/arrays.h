@@ -2,8 +2,8 @@
 #define __ARRAYS_H__
 
 #include <stdlib.h>
-	// size_t
-	
+// size_t
+
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 typedef int (*fold_f)(int, int);

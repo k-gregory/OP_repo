@@ -1,17 +1,20 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h> //size_t
+#include <errno.h>
+#include <limits.h> //INT_MAX, INT_MIN
+#include <string.h> //memmove()
+#include <stdio.h>  //printf(): print_array
 
 #include "arrays.h"
 
-static int _t_do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l, size_t r);
+static int _t_do_copy(int arr1[], int arr2[], size_t arr1_len, size_t l,
+                      size_t r);
 
 int foldr(int accum, int *arr_first, int *arr_last, fold_f f) {
+  errno = 1;
   int new_acc;
- 
+
   if (arr_first == arr_last)
     return accum;
-  // @todo: track overflow from f_sum
   new_acc = f(accum, *arr_first);
   arr_first++;
   return foldr(new_acc, arr_first, arr_last, f);
@@ -21,7 +24,12 @@ int f_max(int a, int b) { return a > b ? a : b; }
 
 int f_min(int a, int b) { return a < b ? a : b; }
 
-int f_sum(int acc, int next) { return acc + next; }
+int f_sum(int acc, int next) {
+  long t_sum = acc + next;
+  if (t_sum < INT_MIN || t_sum > INT_MAX)
+    errno = EOVERFLOW;
+  return acc + next;
+}
 
 size_t find_first(int value, int arr[], size_t len) {
   for (size_t i = 0; i < len; i++)
@@ -48,7 +56,8 @@ void initialize_array(int arr[], size_t len) {
     arr[i] = 10 + rand() % 90;
 }
 
-static int _t_do_copy(int arr1[], int arr2[], size_t arr2_len, size_t l, size_t r) {
+static int _t_do_copy(int arr1[], int arr2[], size_t arr2_len, size_t l,
+                      size_t r) {
   if (r < l)
     return -1;
   if ((r - l) > arr2_len)
