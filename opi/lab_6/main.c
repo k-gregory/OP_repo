@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "arrays.h"
 
 int main(void) {
+  srand(time(NULL));
   int arr[30];
   int arr_c[30] = {0};
   size_t min_idx, max_idx, found_idx;

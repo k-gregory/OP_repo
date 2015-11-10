@@ -28,7 +28,7 @@ size_t find_first(int value, int arr[], size_t len) {
 size_t find(int arr[], size_t len) {
   size_t min = find_first(foldr(arr[0], arr, arr + len, f_min), arr, len);
   size_t max = find_first(foldr(arr[0], arr, arr + len, f_max), arr, len);
-  return min + (max - min) / 2;
+  return (min + max) / 2;
 }
 
 void print_array(int arr[], size_t len) {
