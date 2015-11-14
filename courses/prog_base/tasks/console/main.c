@@ -10,7 +10,7 @@
 #define CYAN_PAIR 2
 #define GREEN_PAIR 3
 
-static inline int get_pattern(int y, int x) {
+int get_pattern(int y, int x) {
   switch (x % 3) {
   case 0:
     return BLUE_PAIR;
@@ -25,7 +25,7 @@ static inline int get_pattern(int y, int x) {
   return BLUE_PAIR;
 }
 
-static inline int isInRange(int y, int x, int height, int width) {
+int isInRange(int y, int x, int height, int width) {
   if (y < 0 || y >= height)
     return 0;
   if (x < 0 || x >= width)
