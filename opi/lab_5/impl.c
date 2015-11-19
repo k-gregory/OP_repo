@@ -1,10 +1,7 @@
 #include "impl.h"
 #include <stdio.h>
-/*int impl(int a, int b, int c){
 
-}*/
-
-int impl(int a,int b,int c){
+int impl(int a,int b,int c, int* overflow){
   __asm__ __volatile__(
       "imul %0, %1\t\n"
       "sub %2, %1\t\n"
