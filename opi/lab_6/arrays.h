@@ -2,6 +2,7 @@
 #define __ARRAYS_H__
 
 #include <stdlib.h>
+// size_t
 
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -10,7 +11,9 @@ typedef int (*fold_f)(int, int);
 int foldr(int accum, int *arr_first, int *arr_last, fold_f f);
 int f_max(int a, int b);
 int f_min(int a, int b);
+// @todo: check overflow + in foldr function
 int f_sum(int acc, int next);
+
 size_t find_first(int value, int arr[], size_t len);
 size_t find(int arr[], size_t len);
 void print_array(int arr[], size_t len);
