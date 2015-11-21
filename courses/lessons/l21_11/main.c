@@ -12,13 +12,16 @@ int main(int argc, char* argv[]){
   if(argc!=2)
     return EXIT_FAILURE;
   FILE* fd = fopen(argv[1],"r");
+  if(fd==NULL)
+    return EXIT_FAILURE;
 
   fgets(buff,LEN(buff),fd);
   sscanf(buff,"%d %d",&n, &m);
-  printf("Reading %d lines by %d chars\n", n, m);
+  printf("Reading %d lines by %d chars \n\n", n, m);
   for(int  i =0; i< n; i++){
     double d;
     fgets(buff,LEN(buff),fd);
+    printf("%s",buff);
     char* s;
     s=strtok(buff," ");
     while(s!=NULL){
