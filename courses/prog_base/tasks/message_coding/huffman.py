@@ -1,6 +1,7 @@
 import sys
 
 class TE:
+    " " "Huffman tree element" " "
     def __init__(self,val,probability,left,right):
         self.val = val
         self.probability = probability
