@@ -20,14 +20,18 @@ int main(int argc, char* argv[]){
   printf("Reading %d lines by %d chars \n\n", n, m);
   for(int  i =0; i< n; i++){
     double d;
+    unsigned int read_nums = 0;
     fgets(buff,LEN(buff),fd);
     printf("%s",buff);
     char* s;
     s=strtok(buff," ");
     while(s!=NULL){
+      if(read_nums >= m)
+	break;
       int status = sscanf(s,"%lf",&d);
-      if(status!=0)
+      if(status!=1)
 	return EXIT_FAILURE;
+      read_nums++;
       sum+=d;
       s=strtok(NULL," ");
     }
