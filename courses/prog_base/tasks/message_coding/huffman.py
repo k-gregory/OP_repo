@@ -37,8 +37,9 @@ def huffman_encode(message):
                 tree.insert(x,new_el)
                 break
 
-        tree.remove(left)
-        tree.remove(right)
+        tree.pop()
+        tree.pop()
+
     encode_table={}
     def view_tree(root,appendix):
         if root==None:
