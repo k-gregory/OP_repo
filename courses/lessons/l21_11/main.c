@@ -25,7 +25,9 @@ int main(int argc, char* argv[]){
     char* s;
     s=strtok(buff," ");
     while(s!=NULL){
-      sscanf(s,"%lf",&d);
+      int status = sscanf(s,"%lf",&d);
+      if(status!=0)
+	return EXIT_FAILURE;
       sum+=d;
       s=strtok(NULL," ");
     }
