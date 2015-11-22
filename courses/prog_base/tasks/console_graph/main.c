@@ -25,6 +25,8 @@ static inline int get_y(double y) { return max_y - nearbyint(y); }
 void pput_s(int y, int x) { mvaddch(y, x, PLOT_CHAR); }
 
 void connect(int y1, int x1, int y2, int x2) {
+  if (fabs(y1 - y2) > max_x)
+    return;
   pput_s(y1, x1);
   pput_s(y2, x2);
   if (x1 == 0)
