@@ -18,7 +18,7 @@ double step;
 
 typedef double (*p_func)(double);
 
-double f_val(p_func f, double x) { return f((x + mx) / x_coef) * x_coef + my; }
+double f_val(p_func f, double x) { return f((x + mx) / x_coef) * x_coef - my; }
 
 static inline int get_x(double x) { return nearbyint(x); }
 static inline int get_y(double y) { return max_y - nearbyint(y); }
@@ -36,8 +36,7 @@ void draw(p_func f, double l_x, double r_x, int color_pair) {
   refresh();
 }
 
-int main(void) {
-  int x, y;
+void init() {
   initscr();
   cbreak();
   noecho();
@@ -49,15 +48,35 @@ int main(void) {
 
   getmaxyx(stdscr, max_y, max_x);
   mx = -max_x / 2;
-  my = max_y / 2;
+  my = -max_y / 2;
   x_coef = 3;
   step = 0.02;
+}
 
-  draw(sin, 0, max_x, PLOT_COLOR_1);
-  draw(cos, 0, max_x, PLOT_COLOR_2);
-  draw(sqrt, 0, max_x, PLOT_COLOR_1);
+int main(void) {
+  init();
+  int key = 0;
+  do {
+    switch (key) {
+    case KEY_UP:
+      my += 5;
+      break;
+    case KEY_DOWN:
+      my -= 5;
+      break;
+    case KEY_LEFT:
+      mx -= 5;
+      break;
+    case KEY_RIGHT:
+      mx += 5;
+      break;
+    }
+    clear();
+    draw(sin, 0, max_x, PLOT_COLOR_1);
+    draw(cos, 0, max_x, PLOT_COLOR_2);
+    draw(sqrt, 0, max_x, PLOT_COLOR_1);
+  } while ((key = getch()) != 'q');
 
-  getch();
   endwin();
 
   return 0;
