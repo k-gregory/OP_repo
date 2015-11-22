@@ -52,7 +52,7 @@ static inline double dec_x(double x){
   return (x+mx)/x_coef;
 }
 static inline double dec_y(double y){
-  return (y+my)/x_coef;
+  return (max_y-y+my)/x_coef;
 }
 
 void draw_decart() {
@@ -60,11 +60,15 @@ void draw_decart() {
   for (int y = 0; y < max_y; y++) {
     mvaddch(y,max_x/2,'|');
   }
-  for(int y= 0;y<max_y/2;y+=6){
-    mvprintw(y,max_x/2,"  %.2lf",dec_y(y));
+  for(int y= 1;y<max_y;y+=max_y/5){
+    mvprintw(y,max_x/2-2,"%.2lf",dec_y(y));
   }
   for (int x = 0; x < max_x; x++) {
     mvaddch(max_y/2,x,'-');
+  }
+  for(int x = 1; x<max_x;x+=max_x/5){
+    mvprintw(max_y/2+2,x-2,"%.2lf",dec_x(x));
+    mvaddch(max_y/2,x,'*');
   }
 }
 
@@ -86,7 +90,7 @@ void init() {
   getmaxyx(stdscr, max_y, max_x);
   mx = -max_x / 2;
   my = -max_y / 2;
-  x_coef = 3;
+  x_coef = 1;
   step = 0.01;
 }
 
