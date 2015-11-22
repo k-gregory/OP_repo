@@ -48,27 +48,23 @@ void draw(p_func f, double l_x, double r_x, int color_pair) {
   refresh();
 }
 
-static inline double dec_x(double x){
-  return (x+mx)/x_coef;
-}
-static inline double dec_y(double y){
-  return (max_y-y+my)/x_coef;
-}
+static inline double dec_x(double x) { return (x + mx) / x_coef; }
+static inline double dec_y(double y) { return (max_y - y + my) / x_coef; }
 
 void draw_decart() {
   attron(COLOR_PAIR(DECART_COLOR));
   for (int y = 0; y < max_y; y++) {
-    mvaddch(y,max_x/2,'|');
+    mvaddch(y, max_x / 2, '|');
   }
-  for(int y= 1;y<max_y;y+=max_y/5){
-    mvprintw(y,max_x/2-2,"%.2lf",dec_y(y));
+  for (int y = 1; y < max_y; y += max_y / 5) {
+    mvprintw(y, max_x / 2 - 2, "%.2lf", dec_y(y));
   }
   for (int x = 0; x < max_x; x++) {
-    mvaddch(max_y/2,x,'-');
+    mvaddch(max_y / 2, x, '-');
   }
-  for(int x = 1; x<max_x;x+=max_x/5){
-    mvprintw(max_y/2+2,x-2,"%.2lf",dec_x(x));
-    mvaddch(max_y/2,x,'*');
+  for (int x = 1; x < max_x; x += max_x / 5) {
+    mvprintw(max_y / 2 + 2, x - 2, "%.2lf", dec_x(x));
+    mvaddch(max_y / 2, x, '*');
   }
 }
 
@@ -90,7 +86,7 @@ void init() {
   getmaxyx(stdscr, max_y, max_x);
   mx = -max_x / 2;
   my = -max_y / 2;
-  x_coef = 1;
+  x_coef = 4.7;
   step = 0.01;
 }
 
@@ -131,6 +127,10 @@ int main(void) {
     clear();
     draw(f2, 0, max_x, PLOT_COLOR_2);
     draw(f1, 0, max_x, PLOT_COLOR_1);
+    attron(COLOR_PAIR(PLOT_COLOR_2));
+    mvprintw(1, 1, "F(x) = 0.5 * tg(x + 2);");
+    attron(COLOR_PAIR(PLOT_COLOR_1));
+    mvprintw(2, 1, "F(x) = x^2 - 5;");
     draw_decart();
   } while ((key = getch()) != 'q');
 
