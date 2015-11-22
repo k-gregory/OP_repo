@@ -1,16 +1,14 @@
 /*BUILDING:
  * gcc main.c -lcurses -std=gnu99
  */
-
 #include <ncurses.h>
-#include <assert.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <math.h>
+#include <tgmath.h>
 
 #define PLOT_CHAR ' '
 #define PLOT_COLOR_1 1
 #define PLOT_COLOR_2 2
+#define DECART_COLOR 3
 
 double x_coef;
 int mx, my;
@@ -24,31 +22,21 @@ double f_val(p_func f, double x) { return f((x + mx) / x_coef) * x_coef - my; }
 static inline int get_x(double x) { return nearbyint(x); }
 static inline int get_y(double y) { return max_y - nearbyint(y); }
 
-void put_point(double y, double x) { mvaddch(get_y(y), get_x(x), PLOT_CHAR); }
-
+void pput_s(int y, int x) { mvaddch(y, x, PLOT_CHAR); }
 
 void connect(int y1, int x1, int y2, int x2) {
-  mvaddch(y1, x1, PLOT_CHAR);
-  mvaddch(y2, x2, PLOT_CHAR);
-   if(x1==x2){
-     for(int y = y1+1;y<y2;y++)
-       mvaddch(y,x1,PLOT_CHAR);
-     return;
-   }
-  if(y1<y2){
-    for(int y = y1;y<y2;y++)
-      mvaddch(y,x2,PLOT_CHAR);
-  }
-  if (y1 > y2) {
-    for (int y = y2 - 1; y < y1; y++)
-      mvaddch(y, x1, PLOT_CHAR);
-  }
+  pput_s(y1, x1);
+  pput_s(y2, x2);
+  if (x1 == 0)
+    return;
+  for (int y = fmin(y1, y2); y < fmax(y1, y2); y++)
+    pput_s(y, x1);
 }
 
 void draw(p_func f, double l_x, double r_x, int color_pair) {
   attron(COLOR_PAIR(color_pair));
-  int prev_x = get_x(l_x);
-  int prev_y = get_y(f(l_x));
+  double prev_x = l_x;
+  double prev_y = f(l_x);
   for (double x = l_x; x < r_x; x += step) {
     double y = f_val(f, x);
     if (isnan(y))
@@ -60,9 +48,29 @@ void draw(p_func f, double l_x, double r_x, int color_pair) {
   refresh();
 }
 
+static inline double dec_x(double x){
+  return (x+mx)/x_coef;
+}
+static inline double dec_y(double y){
+  return (y+my)/x_coef;
+}
+
+void draw_decart() {
+  attron(COLOR_PAIR(DECART_COLOR));
+  for (int y = 0; y < max_y; y++) {
+    mvaddch(y,max_x/2,'|');
+  }
+  for(int y= 0;y<max_y/2;y+=6){
+    mvprintw(y,max_x/2,"  %.2lf",dec_y(y));
+  }
+  for (int x = 0; x < max_x; x++) {
+    mvaddch(max_y/2,x,'-');
+  }
+}
+
 double f1(double x) { return x * x - 5; }
 
-double f2(double x) { return tan(x * x) + sin(2 * x) * sin(2 * x); }
+double f2(double x) { return 0.5 * tan(x + 2); }
 
 void init() {
   initscr();
@@ -73,16 +81,17 @@ void init() {
   start_color();
   init_pair(PLOT_COLOR_1, COLOR_BLACK, COLOR_YELLOW);
   init_pair(PLOT_COLOR_2, COLOR_BLACK, COLOR_BLUE);
+  init_pair(DECART_COLOR, COLOR_BLACK, COLOR_RED);
 
   getmaxyx(stdscr, max_y, max_x);
   mx = -max_x / 2;
   my = -max_y / 2;
   x_coef = 3;
-  step = 0.02;
+  step = 0.01;
 }
 
 int main(void) {
-  puts("Use arrows to move plot\n Use + or -  and = or _ to scale plot");
+  puts("Use arrows to move plot\nUse + or -  and = or _ to scale plot");
   getchar();
   init();
   int key = 0;
@@ -101,24 +110,24 @@ int main(void) {
       mx += 5;
       break;
     case '=':
-      x_coef *= 1.15;
+      x_coef *= 1.05;
       break;
     case '-':
-      x_coef /= 1.15;
-      break;
-    case '+':
-      x_coef += 1;
+      x_coef /= 1.05;
       break;
     case '_':
-      x_coef -= 1;
+      x_coef *= 0.7;
+      break;
+    case '+':
+      x_coef /= 0.7;
       break;
     }
     if (x_coef <= 0)
       x_coef = 0.01;
     clear();
-
     draw(f2, 0, max_x, PLOT_COLOR_2);
     draw(f1, 0, max_x, PLOT_COLOR_1);
+    draw_decart();
   } while ((key = getch()) != 'q');
 
   endwin();
