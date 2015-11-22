@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-project(ConsoleColors C)
+project(ConsoleGraph C)
 
 find_package(Curses REQUIRED)
 
