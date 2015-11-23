@@ -1,8 +1,6 @@
-/*BUILDING:
- * gcc main.c -lcurses -std=gnu99
-*/
-
 #include <ncurses.h>
+#include <ImgLib.h>
+
 #include <stdlib.h>
 
 int max_y, max_x;
