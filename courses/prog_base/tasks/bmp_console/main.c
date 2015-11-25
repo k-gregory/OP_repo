@@ -1,7 +1,9 @@
 #include <ncurses.h>
-#include <ImgLib.h>
+#include <ImgLib/ImgLib.h>
+#include <ImgLib/IL_BMP.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 int max_y, max_x;
 
@@ -14,10 +16,6 @@ void init(void) {
 }
 
 int main(void) {
-  init();
-
-  getchar();
-  endwin();
-
+  il_load_bmp_fromfile("test.bmp");
   return 0;
 }
