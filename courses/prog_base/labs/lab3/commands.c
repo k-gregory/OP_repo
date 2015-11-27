@@ -9,14 +9,13 @@ int *matrix;
 size_t rows, columns;
 WINDOW *work_wnd, *display_wnd;
 
-void init_matrix(char *cmd, char *res) {
-  size_t nrows, ncols;
-  if (sscanf(cmd, "init %zu %zu", &nrows, &ncols) != 2)
-    if (res != NULL) {
-      strcpy(res, "Usage: init %rows %cols");
-      return;
-    }
-  res[0] = 'S';
+void init_matrix(size_t nrows, size_t ncolumns) {
+  rows = nrows;
+  columns = ncolumns;
+  free(matrix);
+  matrix = malloc(nrows * ncolumns * sizeof(int));
+}
 
-  matrix = malloc(nrows * ncols * sizeof(int));
+void print_help(void){
+  wprintw(display_wnd, "This is some helpfull shit");
 }
