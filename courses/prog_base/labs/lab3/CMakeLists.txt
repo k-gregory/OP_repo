@@ -6,6 +6,7 @@ find_package(Curses REQUIRED)
 
 set(SOURCES
   "main.c"
+  "commands.c"
   )
 
 

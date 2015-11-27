@@ -1,5 +1,9 @@
 #pragma once
 
-inline int mi(int row, int column, int row_length){
-  return row*row_length+column;
+extern int *matrix;
+extern size_t rows, columns;
+extern WINDOW *work_wnd, *display_wnd;
+
+inline int mi(int row, int column, int row_length) {
+  return row * row_length + column;
 }
