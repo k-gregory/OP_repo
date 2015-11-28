@@ -5,7 +5,7 @@
 #include "commands.h"
 #include "util.h"
 
-#define WORK_HEIGHT 20
+#define WORK_HEIGHT 5
 #define MAX_CMD_LENGTH 30
 
 typedef void (*command)(char *, char *);
@@ -16,7 +16,7 @@ void eval(char *cmd) {
   char *af = strchr(cmd, ' ');
   if (af == NULL) {
     if (strcmp(cmd, "help") != 0) {
-      wprintw(work_wnd, "Usage: command [args]");
+      wprintw(work_wnd, "Usage: command [args]\n");
       return;
     } else {
       print_help();
@@ -37,7 +37,7 @@ void init() {
   echo();
   curs_set(0);
   work_wnd = newwin(WORK_HEIGHT, COLS, LINES - WORK_HEIGHT, 0);
-  display_wnd = newwin(LINES - WORK_HEIGHT, COLS, 0, COLS);
+  display_wnd = newwin(LINES - WORK_HEIGHT, COLS, 0, 0);
 }
 
 void finish(void) {
@@ -55,13 +55,13 @@ int main(void) {
     int wy, wx;
     getyx(work_wnd, wy, wx);
     wgetstr(work_wnd, cmd_buff);
-    if (wy > WORK_HEIGHT - 4)
+    wclear(display_wnd);
+    if (wy > WORK_HEIGHT - 2)
       wclear(work_wnd);
     eval(cmd_buff);
-    waddch(work_wnd, '\n');
-    wprintw(work_wnd, "%d %d\n", wy, wx);
-    wrefresh(work_wnd);
+
     wrefresh(display_wnd);
+    wrefresh(work_wnd);
   }
   finish();
   return 0;
