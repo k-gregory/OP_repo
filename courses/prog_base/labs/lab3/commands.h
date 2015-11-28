@@ -4,3 +4,8 @@
 
 void init_matrix(size_t rows, size_t columns);
 void print_help(void);
+void display_matrix();
+void mutate(size_t row, size_t column, int new_value);
+void flipH();
+void transposeSide();
+void sumColumn(size_t column);
