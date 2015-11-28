@@ -16,6 +16,7 @@ void init(void) {
 }
 
 int main(void) {
-  il_load_bmp_fromfile("test.bmp");
+  IL_Image* img = il_load_bmp_fromfile("test.bmp",NULL);
+  free(img);
   return 0;
 }

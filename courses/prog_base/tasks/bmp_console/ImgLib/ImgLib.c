@@ -10,4 +10,4 @@ IL_Image *il_img_alloc(unsigned int width, unsigned int height) {
   return img;
 }
 
-void il_img_free(IL_Image *img) { free(img); }
+inline void il_img_free(IL_Image *img) { free(img); }

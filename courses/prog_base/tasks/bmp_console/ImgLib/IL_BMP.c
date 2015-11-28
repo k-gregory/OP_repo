@@ -1,3 +1,4 @@
+#include <ImgLib/ImgLib.h>
 #include <ImgLib/IL_BMP.h>
 
 #include <stdlib.h>
@@ -7,27 +8,8 @@
 #if !(defined __BYTE_ORDER__ && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 #error big endian peasants are unwelcome
 #endif
-#pragma pack(1)
-typedef struct {
-  uint16_t bfType;
-  uint32_t bfSize;
-  uint16_t bfReserved1;
-  uint16_t bfReserved2;
-  uint32_t bfOffBits;
-} bmp_file_header;
-#pragma pack(0)
 
-#pragma pack(1)
-typedef struct {
-  int32_t bcSize;
-  uint16_t bcWidth;
-  uint16_t bcHeight;
-  int16_t bcPlanes;
-  int16_t bcBitCount;
-} bm_info;
-#pragma pack(0)
-
-IL_Image *il_load_bmp_fromfile(const char *filename) {
+IL_Image *il_load_bmp_fromfile(const char *filename, IL_Image* img) {
 
   uint16_t width;//,height;
   uint16_t height;
@@ -67,4 +49,7 @@ IL_Image *il_load_bmp_fromfile(const char *filename) {
   if(height==0)
     puts("shit");
   fclose(f);
+  if(img==NULL)
+    img = il_img_alloc(width,height);
+  return img;
 }
