@@ -13,7 +13,10 @@ typedef void (*command)(char *, char *);
 
 WINDOW *work_wnd, *display_wnd;
 
+void finish();
 void eval(char *cmd) {
+  if (cmd[0] == '\0')
+    return;
   char *af = strchr(cmd, ' ');
   if (af != NULL)
     *af = '\0';
@@ -28,6 +31,17 @@ void eval(char *cmd) {
     wprintw(work_wnd, "Usage: init nrows ncolumns\n");
     return;
   }
+  if (strcmp(cmd, "randomize") == 0) {
+    int l, h;
+    if (af != NULL)
+      if (sscanf(af + 1, "%d %d", &l, &h) == 2) {
+        randomize(l, h);
+        return;
+      }
+
+    wprintw(work_wnd, "Usage: randomize min max\n");
+    return;
+  }
   if (strcmp(cmd, "mutate") == 0) {
     int r, c, nv;
     if (af != NULL)
@@ -38,8 +52,20 @@ void eval(char *cmd) {
     wprintw(work_wnd, "Usage: mutate row column new_value\n");
     return;
   }
-  if (strcmp(cmd, "transposeSide") == 0) {
+  if (strcmp(cmd, "null") == 0) {
+    tonull();
+    return;
+  }
+  if (strcmp(cmd, "sumDown") == 0) {
+    sumDown();
+    return;
+  }
+  if (strcmp(cmd, "reflectSide") == 0) {
     transposeSide();
+    return;
+  }
+  if (strcmp(cmd, "rotate") == 0) {
+    rotate();
     return;
   }
   if (strcmp(cmd, "flipH") == 0) {
@@ -48,6 +74,23 @@ void eval(char *cmd) {
   }
   if (strcmp(cmd, "avg") == 0) {
     avg();
+    return;
+  }
+  if (strcmp(cmd, "feswap") == 0) {
+    feswap();
+    return;
+  }
+  if (strcmp(cmd, "leswap") == 0) {
+    leswap();
+    return;
+  }
+  if (strcmp(cmd, "ecswap") == 0) {
+    ecswap();
+    return;
+  }
+  if (strcmp(cmd, "q") == 0) {
+    finish();
+    exit(EXIT_SUCCESS);
     return;
   }
   if (strcmp(cmd, "sumC") == 0) {
@@ -89,14 +132,15 @@ int main(void) {
   init();
 
   init_matrix(4, 4);
-  display_matrix();
   print_help();
+  display_matrix();
   wrefresh(display_wnd);
   while (true) {
     int wy, wx;
     getyx(work_wnd, wy, wx);
     wgetstr(work_wnd, cmd_buff);
     wclear(display_wnd);
+    wborder(display_wnd,'|','|','=','=','*','*','*','*');
     if (wy > WORK_HEIGHT - 3)
       wclear(work_wnd);
     eval(cmd_buff);
