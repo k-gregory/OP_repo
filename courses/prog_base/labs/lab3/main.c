@@ -30,12 +30,12 @@ void eval(char *cmd) {
   }
   if (strcmp(cmd, "mutate") == 0) {
     int r, c, nv;
-    if(af!=NULL)
-    if (sscanf(af + 1, "%d %d %d", &r, &c, &nv) == 3) {
-    mutate(r, c, nv);
-      return;
-    }
-      wprintw(work_wnd, "Usage: mutate row column new_value\n");
+    if (af != NULL)
+      if (sscanf(af + 1, "%d %d %d", &r, &c, &nv) == 3) {
+        mutate(r, c, nv);
+        return;
+      }
+    wprintw(work_wnd, "Usage: mutate row column new_value\n");
     return;
   }
   if (strcmp(cmd, "transposeSide") == 0) {
@@ -54,10 +54,10 @@ void eval(char *cmd) {
     size_t column;
     if (af != NULL)
       if (sscanf(af + 1, "%zu", &column) == 1) {
-	sumColumn(column);
-	return;
+        sumColumn(column);
+        return;
       }
-    wprintw(work_wnd,"Usage: sumC column\n");
+    wprintw(work_wnd, "Usage: sumC column\n");
     return;
   }
   print_help();
@@ -69,7 +69,10 @@ void init() {
   srand(time(NULL));
   nocbreak();
   echo();
-  curs_set(0);
+  curs_set(1);
+  start_color();
+  init_pair(COLUMN_HIGHLIGHT, COLOR_BLUE, COLOR_YELLOW);
+  init_pair(CELL_HIGHLIGHT, COLOR_BLUE, COLOR_RED);
   work_wnd = newwin(WORK_HEIGHT, COLS, LINES - WORK_HEIGHT, 0);
   display_wnd = newwin(LINES - WORK_HEIGHT, COLS, 0, 0);
 }
@@ -85,6 +88,8 @@ int main(void) {
   char cmd_buff[MAX_CMD_LENGTH];
   init();
 
+  init_matrix(4, 4);
+  display_matrix();
   print_help();
   wrefresh(display_wnd);
   while (true) {

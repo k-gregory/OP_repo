@@ -8,4 +8,6 @@ void display_matrix();
 void mutate(size_t row, size_t column, int new_value);
 void flipH();
 void transposeSide();
+void avg();
 void sumColumn(size_t column);
+void sumDown();
