@@ -26,6 +26,6 @@ void fprocess(const char *in_name, const char *of_name) {
   }
 
   f = fopen(of_name, "w");
-  fputs(word,f);
+  fprintf(f,"%zu",strlen(word));
   fclose(f);
 }
