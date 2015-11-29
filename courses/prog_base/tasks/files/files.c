@@ -24,8 +24,10 @@ void fprocess(const char *in_name, const char *of_name) {
     }
     w = strtok(NULL, " ");
   }
+  if(word[strlen(word)-1]=='\n')
+    len--;
 
   f = fopen(of_name, "w");
-  fprintf(f,"%zu",strlen(word));
+  fprintf(f,"%zu",len);
   fclose(f);
 }
