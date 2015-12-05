@@ -3,102 +3,73 @@
 
 typedef struct _LinkedList LinkedList;
 
-struct _LinkedList{
+struct _LinkedList {
   int val;
-  LinkedList* next;
-  LinkedList* first;
+  LinkedList *next;
 };
 
-void ll_add(LinkedList* to, int val){
-  LinkedList* new_el = malloc(sizeof(LinkedList));
+void ll_add(LinkedList *after, int val) {
+  LinkedList *new_el = malloc(sizeof(LinkedList));
   new_el->val = val;
-  new_el->next = to->next;
-  new_el->first = to->first;
-  to->next = new_el;
+  new_el->next = after->next;
+  after->next = new_el;
 }
 
-void ll_insert(LinkedList* root, int val, size_t index){
-  if(index == 0){
-    LinkedList* new_root = malloc(sizeof(LinkedList));
-    new_root->val = val;
-    new_root->next = root;
-    new_root->first = new_root;
-  }
-  root = root->first;
-  for(size_t i = 0;i<index-1;i++)
-      root = root->next;
-  ll_add(root, val);
+void ll_remove(LinkedList *after) {
+  LinkedList *next = after->next->next;
+  free(after->next);
+  after->next = next;
 }
 
-void ll_remove(LinkedList* root, size_t index){
-  root = root->first;
-  size_t i;
-  for(i = 0; i<index-1;i++)
+void ll_insert(LinkedList *root, int val, size_t index) {
+  for(size_t i = 0; i<index;i++)
     root = root->next;
-  LinkedList* next = root->next->next;
-  free(root->next);
-  root->next = next;
-}
-
-size_t ll_count(LinkedList* root){
-  root = root->first;
-  size_t count = 1;
-  while((root=root->next)!=0)
-    count++;
-  return count;
-}
-
-inline LinkedList* ll_first(LinkedList* root){
-  return root->first;
-}
-
-inline LinkedList* ll_last(LinkedList* root){
-  while(root->next!=NULL)
-    root = root->next;
-  return root;
-}
-
-int ll_element_at(LinkedList* root, size_t index){
-  root=  root->first;
-  for(size_t i = 0;i<index;i++)
-    root = root->next;
-  return root->val;
-}
-
-size_t ll_index_of(LinkedList* root, int val){
-  size_t index = 0;
-  while(root!=NULL){
-    if(root->val==val)
-      return index;
-    index++;
-    root = root->next;
-  }
-  return 0;
+  ll_add(root,val);
 }
 
 LinkedList* ll_reverse(LinkedList* root){
-  LinkedList* new = root;
+  LinkedList* new_root = NULL;
   while(root!=NULL){
-    LinkedList* t = new;
-    new = root;
-    new->next = t;
-    root=root->next;
+    LinkedList* next = root->next;
+    root->next = new_root;
+    new_root = root;
+    root = next;
   }
-  new->first = new;
-  return new;
+  return new_root;
 }
 
-int main(void){
-  LinkedList list = {15,NULL,NULL};
-  list.first = &list;
-  ll_insert(&list, 145, 1);
-  ll_insert(&list, 1, 1);
-  ll_remove(&list, 1);
-  printf("%d\n",ll_count(&list));
-  printf("%d\n",ll_element_at(&list,0));
-  printf("%d\n",ll_element_at(&list,1));
-  printf("%d\n",ll_index_of(&list,145));
-  LinkedList* rev_list = ll_reverse(&list);
-  printf("%d\n",rev_list->next->val);
+LinkedList* ll_new(int val){
+  LinkedList* ret =  malloc(sizeof(LinkedList));
+  ret->val = val;
+  ret->next = NULL;
+  return ret;
+}
+
+void ll_free(LinkedList *root) {
+  while (root != NULL) {
+    LinkedList *r = root->next;
+    free(root);
+    root = r;
+  }
+}
+
+void ll_print(LinkedList* root){
+  while(root!=NULL){
+    printf("%d->",root->val);
+    root = root->next;
+  }
+  puts("NULL");
+}
+
+int main(void) {
+  LinkedList* list = ll_new(0);
+  for(size_t i =1;i<=5;i++)
+    ll_insert(list,i,i-1);
+  ll_print(list);
+  
+  list = ll_reverse(list);
+  ll_print(list);
+
+  ll_free(list);
   return EXIT_SUCCESS;
 }
