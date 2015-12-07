@@ -4,7 +4,9 @@ package com.gregory.opi.lab7;
  * Class representing a point on two-dimensional Cartesian coordinate system
  */
 public class Point2D {
-    /** Segment coordinate */
+    /**
+     * Segment coordinate
+     */
     private double x, y;
 
     public Point2D() {
