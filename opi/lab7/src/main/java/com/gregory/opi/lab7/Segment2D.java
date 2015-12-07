@@ -6,7 +6,7 @@ package com.gregory.opi.lab7;
 public class Segment2D implements Segment {
 
     /*Segment ending*/
-    private Point2D p1,p2;
+    private Point2D p1, p2;
 
     public Segment2D() {
         setP1(new Point2D());
