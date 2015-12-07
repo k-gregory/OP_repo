@@ -1,68 +1,75 @@
 package com.gregory.opi.lab7;
 
-public class Segment{
-  private Point2D p1,p2;
+/**
+ * Class representing a segment on two-dimensional Cartesian coordinate system
+ */
+public class Segment {
+    private Point2D p1, p2;
 
-  public Point2D getP2(){
-    return this.p2;
-  }
-  public Point2D getP1(){
-    return this.p1;
-  }
-  public void setP1(Point2D val){
-    this.p1 = val;
-  }
-  public void setP2(Point2D val){
-    this.p2 = val;
-  }
-  
-  /**@return Difference between first point's X coordinate, and second point's X coordinate*/
-  protected double dx(){
-    return p2.getX()-p1.getX();
-  }
+    public Segment() {
+        setP1(new Point2D());
+        setP2(new Point2D());
+    }
 
-  /**@return Difference between first point's Y coordinate, and second point's Y coordinate*/
-  protected double dy(){
-    return p2.getY()-p1.getY();
-  }
- 
-  /** @return length of the segment*/
-  public double getLength(){
-    //Length = (dx^2+dy^2)^(1/2)
-    double lx = dx();
-    lx = lx*lx;//dx^2
-    double ly = dy();
-    ly = ly*ly;//dy^2
+    public Segment(Point2D p1, Point2D p2) {
+        setP1(p1);
+        setP2(p2);
+    }
 
-    return Math.sqrt(lx+ly);
-  }
+    public Point2D getP2() {
+        return this.p2;
+    }
 
-  /**
-   * Returns angle between OX and the segment
-   * @return angle in radians (-PI/2..PI/2)
-   * */
-  public double getAngle(){
-    /*
-    if(dx()==0){ //Vertical line
-      if(dy()>0) //Angle == 90 or 270?
-	return Math.PI/2;
-      else return Math.PI*3/2;
-    }*/
-    return Math.atan2(dy(),dx());
-  }
+    public void setP2(Point2D val) {
+        this.p2 = val;
+    }
 
-  @Override
-  public String toString(){
-    return "Segment from "+getP1()+" to "+getP2();
-  }
+    public Point2D getP1() {
+        return this.p1;
+    }
 
+    public void setP1(Point2D val) {
+        this.p1 = val;
+    }
 
-  public Segment(){
-    setP1(new Point2D());
-    setP2(new Point2D());
-  }
-  public Segment(Point2D p1, Point2D p2){
-    setP1(p1);
-    setP2(p2);
-  }
+    /**
+     * @return Difference between first point's X coordinate, and second point's X coordinate
+     */
+    protected double dx() {
+        return p2.getX() - p1.getX();
+    }
+
+    /**
+     * @return Difference between first point's Y coordinate, and second point's Y coordinate
+     */
+    protected double dy() {
+        return p2.getY() - p1.getY();
+    }
+
+    /**
+     * @return length of the segment
+     */
+    public double getLength() {
+        //Length = (dx^2+dy^2)^(1/2)
+        double lx = dx();
+        lx = lx * lx;//dx^2
+        double ly = dy();
+        ly = ly * ly;//dy^2
+
+        return Math.sqrt(lx + ly);
+    }
+
+    /**
+     * Returns angle between OX and the segment
+     *
+     * @return angle in radians (-PI/2..PI/2)
+     */
+    public double getAngle() {
+        return Math.atan2(dy(), dx());
+    }
+
+    @Override
+    public String toString() {
+        return "Segment from " + getP1() + " to " + getP2();
+    }
 }
