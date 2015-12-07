@@ -1,7 +1,7 @@
 package com.gregory.opi.lab7.test;
 
 import com.gregory.opi.lab7.Point2D;
-import com.gregory.opi.lab7.Segment;
+import com.gregory.opi.lab7.Segment2D;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +15,7 @@ public class LengthTest {
 
     @Test
     public void simpleLengthToOX() {
-        Segment s = new Segment();
+        Segment2D s = new Segment2D();
         s.setP1(ox);
 
         s.setP2(new Point2D(0, 1));
@@ -27,7 +27,7 @@ public class LengthTest {
 
     @Test
     public void simpleLengthTest() {
-        Segment s = new Segment();
+        Segment2D s = new Segment2D();
         s.setP1(new Point2D(3, 4));
 
         s.setP2(new Point2D(3, 5));
@@ -42,7 +42,7 @@ public class LengthTest {
         for (int i = -5000; i < 5000; i += 500) {
             Point2D p1 = new Point2D(i, i);
             Point2D p2 = new Point2D(i + 10, i - 10);
-            assertEquals(new Segment(p1, p2).getLength(), new Segment(p2, p1).getLength(), 0.001);
+            assertEquals(new Segment2D(p1, p2).getLength(), new Segment2D(p2, p1).getLength(), 0.001);
         }
     }
 }
