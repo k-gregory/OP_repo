@@ -17,11 +17,11 @@ public class Point2D{
   }
 
   
-  Point2D(){
+  public Point2D(){
     setX(0);
     setY(0);
   }
-  Point2D(double x, double y){
+  public Point2D(double x, double y){
     setX(x);
     setY(y);
   }
