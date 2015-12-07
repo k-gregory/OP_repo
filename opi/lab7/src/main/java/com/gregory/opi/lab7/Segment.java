@@ -1,7 +1,7 @@
 package com.gregory.opi.lab7;
 
 /**
- * Created by gregory on 08.12.15.
+ * Abstract segment
  */
 public interface Segment {
     /**

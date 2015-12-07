@@ -6,10 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by gregory on 07.12.15.
- */
-public class LengthTest {
+public class Segment2DLengthTest {
 
     private final Point2D ox = new Point2D(0, 0);
 

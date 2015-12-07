@@ -40,7 +40,7 @@
                         -views
                         -all
                     </additionalparam>
-                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
             </plugin>
         </plugins>

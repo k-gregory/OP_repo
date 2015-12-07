@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class AnglesTest {
+public class Segment2DAnglesTest {
 
     private final Point2D ox = new Point2D(0, 0);
 
