@@ -12,7 +12,7 @@ public interface Segment {
     /**
      * Returns angle between OX and the segment
      *
-     * @return angle in radians (-PI/2..PI/2)
+     * @return angle in radians (-PI..PI)
      */
     double getAngle();
 }

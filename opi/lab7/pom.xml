@@ -38,7 +38,8 @@
                     </docletArtifact>
                     <additionalparam>
                         -views
-                        -all
+			-all
+			-inferrel
                     </additionalparam>
                     <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
