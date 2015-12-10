@@ -14,6 +14,14 @@ create table Post(
   foreign key (answer_to) references Post(id)
 );
 
+create table Like(
+  id integer primary key autoincrement not null,
+  liker_id integer not null,
+  post_id integer not null,
+  foreign key (liker_id) references User(id),
+  foreign key (post_id) references Post(id)
+);
+
 create table Friends(
   user_a integer not null,
   user_b integer not null,
