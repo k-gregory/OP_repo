@@ -40,7 +40,7 @@ void init_statements(AppDB *db) {
           "values (?, ?, datetime() , ?, ?);",
       -1, &STMT[WRITE_MESSAGE], NULL);
 
-  sqlite3_prepare_v2(DB, "select (id,sender_id,body,attachments)"
+  sqlite3_prepare_v2(DB, "select id,sender_id,body,attachments"
                          " from Message where receiver_id = ? limit ?;",
                      -1, &STMT[RECEIVE_MESSAGES], NULL);
 
@@ -98,16 +98,17 @@ _id send_message(AppDB *db, _id writer, _id receiver, const char *body,
   sqlite3_bind_text(db->statements[WRITE_MESSAGE], 4, attachments, -1,
                     SQLITE_STATIC);
 
-
-  printf("%d",sqlite3_step(db->statements[WRITE_MESSAGE]));
+  sqlite3_step(db->statements[WRITE_MESSAGE]);
   sqlite3_reset(db->statements[WRITE_MESSAGE]);
 
   return sqlite3_last_insert_rowid(db->db);
 }
 
+
 size_t receive_messages(AppDB *db, _id receiver, Message *messages,
                         int max_messages) {
   size_t fetched = 0;
+  char* text_column;
 
   sqlite3_bind_int64(db->statements[RECEIVE_MESSAGES], 1, receiver);
   sqlite3_bind_int(db->statements[RECEIVE_MESSAGES], 2, max_messages);
@@ -117,10 +118,15 @@ size_t receive_messages(AppDB *db, _id receiver, Message *messages,
     msg.id = sqlite3_column_int64(db->statements[RECEIVE_MESSAGES], 0);
     msg.receiver = receiver;
     msg.sender = sqlite3_column_int64(db->statements[RECEIVE_MESSAGES], 1);
-    strcpy(msg.body, sqlite3_column_text(db->statements[RECEIVE_MESSAGES], 2));
-    strcpy(msg.attachments,
-           sqlite3_column_text(db->statements[RECEIVE_MESSAGES], 3));
-    printf("%s\n", msg.body);
+
+    text_column = (char*) sqlite3_column_text(db->statements[RECEIVE_MESSAGES],2);
+    if(text_column != NULL)
+        strcpy(msg.body, text_column);
+
+    text_column = (char*) sqlite3_column_text(db->statements[RECEIVE_MESSAGES],2);
+    if(text_column != NULL)
+        strcpy(msg.attachments, text_column);
+
     messages[fetched++] = msg;
   }
 

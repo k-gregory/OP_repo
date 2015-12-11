@@ -19,9 +19,14 @@ int main(int argc, char *argv[]) {
 
   send_message(db, sender, recv, "Privet", NULL);
   send_message(db, recv, sender, "Poka", NULL);
+  send_message(db, recv, sender, "Poka", NULL);
+  send_message(db, recv, sender, "Poka", NULL);
+  send_message(db, recv, sender, "Poka", NULL);
+  send_message(db, recv, sender, "Poka", NULL);
 
   Message msgs[100];
- // receive_messages(db,sender,msgs, 5);
+  for(size_t i =0; i< receive_messages(db,sender,msgs, 5);i++)
+      printf("%s", msgs[i].body);
 
   close_db(db);
 
