@@ -1,13 +1,14 @@
 create table User(
   id rowid not null,
   password text not null,
+  name text not null,
   additionalInfo text
 );
 
 create table Post(
   id rowid not null,
   author_id integer not null,
-  answer_to integer not null,
+  answer_to integer,
   body text,
   attachments text,
   foreign key (author_id) references User(id),

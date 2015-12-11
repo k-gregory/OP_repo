@@ -7,6 +7,10 @@ find_package(Curses REQUIRED)
 
 set(SOURCES
   "main.c"
+  "DBStructs.h"
+  "DBQueries.h"
+  "DBUtil.h"
+  "DBUtil.c"
   )
 
 
