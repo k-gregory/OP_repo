@@ -10,6 +10,7 @@ create table Post(
   author_id integer not null,
   answer_to integer not null,
   likes integer not null,
+  post_date integer not null,
   body text,
   attachments text,
   foreign key (author_id) references User(id),
@@ -35,7 +36,8 @@ create table Message(
   id integer primary key autoincrement not null,
   sender_id integer not null,
   receiver_id integer not null,
-  body text not null,
+  post_date integer not null,
+  body text,
   attachments text,
   foreign key(sender_id) references User(id),
   foreign key(receiver_id) references User(id)

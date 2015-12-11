@@ -1,4 +1,5 @@
 #include "DBQueries.h"
+#include "DBStructs.h"
 
 #include <stdlib.h>
 
@@ -51,26 +52,53 @@ void release_statements(AppDB *db) {
   free(db->statements);
 }
 
-sqlite3_int64 create_user(AppDB *db, const char *name, const char *password,
-                          const char *details) {
+_id create_user(AppDB *db, const char *name, const char *password,
+                const char *details) {
   sqlite3_bind_text(db->statements[CREATE_USER], 1, name, -1, SQLITE_STATIC);
   sqlite3_bind_text(db->statements[CREATE_USER], 2, password, -1,
                     SQLITE_STATIC);
   sqlite3_bind_text(db->statements[CREATE_USER], 3, details, -1, SQLITE_STATIC);
 
   sqlite3_step(db->statements[CREATE_USER]);
+  sqlite3_reset(db->statements[CREATE_USER]);
 
   return sqlite3_last_insert_rowid(db->db);
 }
 
-sqlite3_int64 create_post(AppDB *db, sqlite3_int64 poster, sqlite3_int64 answer_to,
-                          const char *text, const char *details) {
-    sqlite3_bind_int64(db->statements[CREATE_POST], 1, poster);
-    sqlite3_bind_int64(db->statements[CREATE_POST], 2, answer_to);
-    sqlite3_bind_text(db->statements[CREATE_POST],3, text,-1, SQLITE_STATIC);
-    sqlite3_bind_text(db->statements[CREATE_POST], 4, details,-1, SQLITE_STATIC);
+_id create_post(AppDB *db, _id poster, _id answer_to, const char *text,
+                const char *details) {
+  sqlite3_bind_int64(db->statements[CREATE_POST], 1, poster);
+  sqlite3_bind_int64(db->statements[CREATE_POST], 2, answer_to);
+  sqlite3_bind_text(db->statements[CREATE_POST], 3, text, -1, SQLITE_STATIC);
+  sqlite3_bind_text(db->statements[CREATE_POST], 4, details, -1, SQLITE_STATIC);
 
-    sqlite3_step(db->statements[CREATE_POST]);
+  sqlite3_step(db->statements[CREATE_POST]);
+  sqlite3_reset(db->statements[CREATE_POST]);
 
-    return sqlite3_last_insert_rowid(db->db);
+  return sqlite3_last_insert_rowid(db->db);
+}
+
+_id like_post(AppDB *db, _id liker, _id liked_post) {
+  sqlite3_bind_int64(db->statements[LIKE_POST], 1, liked_post);
+  sqlite3_bind_int64(db->statements[LIKE_POST], 2, liker);
+  sqlite3_bind_int64(db->statements[LIKE_POST], 3, liked_post);
+
+  sqlite3_step(db->statements[LIKE_POST]);
+  sqlite3_reset(db->statements[LIKE_POST]);
+
+  return sqlite3_last_insert_rowid(db->db);
+}
+
+_id send_message(AppDB *db, _id writer, _id receiver, const char *body,
+                 const char *attachments) {
+  sqlite3_bind_int64(db->statements[WRITE_MESSAGE], 1, writer);
+  sqlite3_bind_int64(db->statements[WRITE_MESSAGE], 2, receiver);
+  sqlite3_bind_text(db->statements[WRITE_MESSAGE], 3, body, -1, SQLITE_STATIC);
+  sqlite3_bind_text(db->statements[WRITE_MESSAGE], 4, attachments, -1,
+                    SQLITE_STATIC);
+
+  sqlite3_step(db->statements[WRITE_MESSAGE]);
+  sqlite3_reset(db->statements[WRITE_MESSAGE]);
+
+  return sqlite3_last_insert_rowid(db->db);
 }

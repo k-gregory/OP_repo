@@ -9,32 +9,34 @@
 #define MAX_MESSAGE_LENGTH 130
 #define MAX_ATTACHMENTS_LENGTH 100
 
+typedef sqlite3_int64 _id;
+
 typedef struct _User {
-  sqlite3_int64 id;
+  _id id;
   char name[MAX_NAME_LENGTH];
   char password[MAX_PASSWORD_LENGTH];
   char details[MAX_USER_DETAILS_LENGTH];
 } User;
 
 typedef struct _Post {
-  sqlite3_int64 id;
-  sqlite3_int64 author_id;
-  sqlite3_int64 answer_to_post_id;
+  _id id;
+  _id author;
+  _id answererd_post;
   int likes;
   char text[MAX_POST_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
 } Post;
 
 typedef struct _Like {
-  sqlite3_int64 id;
-  sqlite3_int64 liker_id;
-  sqlite3_int64 post_id;
+  _id id;
+  _id liker;
+  _id post;
 } Like;
 
 typedef struct _Message {
-  sqlite3_int64 id;
-  sqlite3_int64 sender_id;
-  sqlite3_int64 receiver_id;
+  _id id;
+  _id sender;
+  _id receiver;
   char text[MAX_MESSAGE_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
 } Message;
