@@ -1,14 +1,15 @@
 create table User(
-  id rowid not null,
-  password text not null,
+  id integer primary key autoincrement not null,
   name text not null,
-  additionalInfo text
+  password text not null,
+  details text
 );
 
 create table Post(
-  id rowid not null,
+  id integer primary key autoincrement not null,
   author_id integer not null,
-  answer_to integer,
+  answer_to integer not null,
+  likes integer not null,
   body text,
   attachments text,
   foreign key (author_id) references User(id),
@@ -16,7 +17,7 @@ create table Post(
 );
 
 create table Like(
-  id rowid not null,
+  id integer primary key autoincrement not null,
   liker_id integer not null,
   post_id integer not null,
   foreign key (liker_id) references User(id),
@@ -31,9 +32,10 @@ create table Friends(
 );
 
 create table Message(
-  id rowid not null,
+  id integer primary key autoincrement not null,
   sender_id integer not null,
   receiver_id integer not null,
+  body text not null,
   attachments text,
   foreign key(sender_id) references User(id),
   foreign key(receiver_id) references User(id)

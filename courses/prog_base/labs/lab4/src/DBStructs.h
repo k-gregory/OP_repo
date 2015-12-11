@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sqlite.h>
+#include <sqlite3.h>
 
 #define MAX_NAME_LENGTH 30
 #define MAX_PASSWORD_LENGTH 10
@@ -20,6 +20,7 @@ typedef struct _Post {
   sqlite3_int64 id;
   sqlite3_int64 author_id;
   sqlite3_int64 answer_to_post_id;
+  int likes;
   char text[MAX_POST_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
 } Post;
@@ -36,4 +37,4 @@ typedef struct _Message {
   sqlite3_int64 receiver_id;
   char text[MAX_MESSAGE_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
-}
+} Message;

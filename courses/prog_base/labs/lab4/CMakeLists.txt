@@ -6,11 +6,12 @@ add_subdirectory(sqlite3)
 find_package(Curses REQUIRED)
 
 set(SOURCES
-  "main.c"
-  "DBStructs.h"
-  "DBQueries.h"
-  "DBUtil.h"
-  "DBUtil.c"
+  "src/main.c"
+  "src/DBStructs.h"
+  "src/DBQueries.h"
+  "src/DBQueries.c"
+  "src/DBUtil.h"
+  "src/DBUtil.c"
   )
 
 

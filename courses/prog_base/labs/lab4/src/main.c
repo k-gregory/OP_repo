@@ -1,21 +1,20 @@
-#include <sqlite3.h>
+#include "DBUtil.h"
+#include "DBQueries.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
-  int rc;
-  sqlite3 *db;
+  AppDB *db;
   if (argc != 2) {
     fprintf(stderr, "Usage: %s dbname\n", argv[0]);
     return EXIT_FAILURE;
   }
 
-  if (sqlite3_open(argv[1], &db)) {
-    fprintf(stderr, "Can't open db: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
+  if (!(db = init_db(argv[1])))
     return EXIT_FAILURE;
-  }
+
+  close_db(db);
 
   return EXIT_SUCCESS;
 }
