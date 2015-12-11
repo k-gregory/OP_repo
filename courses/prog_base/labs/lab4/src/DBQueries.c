@@ -27,8 +27,8 @@ void init_statements(AppDB *db) {
       &STMT[CREATE_USER], NULL);
 
   sqlite3_prepare_v2(DB, "insert into Post("
-                         "author_id, answer_to, likes, body, attachments) "
-                         "values (?,?,0,?,?);",
+                         "author_id, answer_to, likes, post_date, body, attachments) "
+                         "values (?,?,0, strftime('%s','now') ,?,?);",
                      -1, &STMT[CREATE_POST], NULL);
 
   sqlite3_prepare_v2(DB, "update Post set likes = likes+1 where id = ?;"
@@ -37,14 +37,15 @@ void init_statements(AppDB *db) {
 
   sqlite3_prepare_v2(
       DB, "insert into Message(sender_id, receiver_id, post_date , body, attachments) "
-          "values (?, ?, datetime() , ?, ?);",
+          "values (?, ?, strftime('%s','now') , ?, ?);",
       -1, &STMT[WRITE_MESSAGE], NULL);
 
   sqlite3_prepare_v2(DB, "select id,sender_id,body,attachments"
                          " from Message where receiver_id = ? limit ?;",
                      -1, &STMT[RECEIVE_MESSAGES], NULL);
 
-  sqlite3_prepare_v2(DB, "select * from Post where author_id = ? limit ?;", -1,
+  sqlite3_prepare_v2(DB, "select id, author_id, answer_to, likes,body, attachments"
+                         " from Post where author_id = ? limit ?;", -1,
                      &STMT[READ_USERS_POSTS], NULL);
 }
 void release_statements(AppDB *db) {
@@ -120,16 +121,49 @@ size_t receive_messages(AppDB *db, _id receiver, Message *messages,
     msg.sender = sqlite3_column_int64(db->statements[RECEIVE_MESSAGES], 1);
 
     text_column = (char*) sqlite3_column_text(db->statements[RECEIVE_MESSAGES],2);
-    if(text_column != NULL)
-        strcpy(msg.body, text_column);
+    if(text_column == NULL)
+        text_column = "";
+    strcpy(msg.body, text_column);
 
     text_column = (char*) sqlite3_column_text(db->statements[RECEIVE_MESSAGES],2);
-    if(text_column != NULL)
-        strcpy(msg.attachments, text_column);
+    if(text_column == NULL)
+        text_column = "";
+    strcpy(msg.attachments, text_column);
 
     messages[fetched++] = msg;
   }
 
   sqlite3_reset(db->statements[RECEIVE_MESSAGES]);
   return fetched;
+}
+
+size_t read_users_posts(AppDB *db, _id poster, Post *posts, int max_posts){
+    size_t fetched = 0;
+    char* text_column;
+
+    sqlite3_bind_int64(db->statements[READ_USERS_POSTS],1, poster);
+    sqlite3_bind_int(db->statements[READ_USERS_POSTS], 2, max_posts);
+
+    while(sqlite3_step(db->statements[READ_USERS_POSTS])==SQLITE_ROW){
+        Post post;
+        post.id = sqlite3_column_int64(db->statements[READ_USERS_POSTS],0);
+        post.author = sqlite3_column_int64(db->statements[READ_USERS_POSTS],1);
+        post.answer_to = sqlite3_column_int64(db->statements[READ_USERS_POSTS],2);
+        post.likes = sqlite3_column_int(db->statements[READ_USERS_POSTS],3);
+
+        text_column = (char*) sqlite3_column_text(db->statements[READ_USERS_POSTS],4);
+        if(text_column==NULL)
+            text_column = "";
+        strcpy(post.body, text_column);
+
+        text_column = (char*) sqlite3_column_text(db->statements[READ_USERS_POSTS],5);
+        if(text_column==NULL)
+            text_column = "";
+        strcpy(post.attachments, text_column);
+
+        posts[fetched++]  = post;
+    }
+
+    sqlite3_reset(db->statements[READ_USERS_POSTS]);
+    return fetched;
 }

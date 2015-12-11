@@ -21,9 +21,9 @@ typedef struct _User {
 typedef struct _Post {
   _id id;
   _id author;
-  _id answererd_post;
+  _id answer_to;
   int likes;
-  char text[MAX_POST_LENGTH];
+  char body[MAX_POST_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
 } Post;
 

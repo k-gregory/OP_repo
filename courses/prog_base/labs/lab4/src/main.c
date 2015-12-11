@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
   _id sender = create_user(db, "UserA", "pass", NULL);
   _id recv = create_user(db, "UserB", "pass2", NULL);
 
+  create_post(db,sender,1,"Loh", NULL);
+
   send_message(db, sender, recv, "Privet", NULL);
   send_message(db, recv, sender, "Poka", NULL);
   send_message(db, recv, sender, "Poka", NULL);
