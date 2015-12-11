@@ -2,7 +2,7 @@
 
 #include <sqlite3.h>
 
-typedef struct {
+typedef struct _AppDB {
   sqlite3 *db;
   sqlite3_stmt **statements;
 } AppDB;

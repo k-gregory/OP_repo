@@ -25,12 +25,12 @@ _id send_message(AppDB *db, _id writer, _id receiver, const char *body,
  * \param[in] max_messages Number of messages to fetch
  * \returns number of received messages
 */
-size_t receive_messages(AppDB *db, _id receiver, const Message *messages,
-                        size_t max_messages);
+size_t receive_messages(AppDB *db, _id receiver, Message *messages,
+                        int max_messages);
 
 /**
  * \param[out] posts Array to write posts
  * \param[in] max_posts Number of posts to fetch
  * \returns number of fetched posts
 */
-size_t read_users_posts(AppDB *db, _id poster, Post *posts, size_t max_posts);
+size_t read_users_posts(AppDB *db, _id poster, Post *posts, int max_posts);

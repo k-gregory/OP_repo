@@ -20,6 +20,9 @@ int main(int argc, char *argv[]) {
   send_message(db, sender, recv, "Privet", NULL);
   send_message(db, recv, sender, "Poka", NULL);
 
+  Message msgs[100];
+ // receive_messages(db,sender,msgs, 5);
+
   close_db(db);
 
   return EXIT_SUCCESS;
