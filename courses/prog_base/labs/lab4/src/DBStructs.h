@@ -25,6 +25,8 @@ typedef struct _Post {
   int likes;
   char body[MAX_POST_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
+
+  char author_name[MAX_NAME_LENGTH];
 } Post;
 
 typedef struct _Like {
@@ -39,4 +41,7 @@ typedef struct _Message {
   _id receiver;
   char body[MAX_MESSAGE_LENGTH];
   char attachments[MAX_ATTACHMENTS_LENGTH];
+
+  char sender_name[MAX_NAME_LENGTH];
+  char receiver_name[MAX_NAME_LENGTH];
 } Message;

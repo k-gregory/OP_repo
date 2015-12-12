@@ -28,6 +28,7 @@ create table Like(
 create table Friends(
   user_a integer not null,
   user_b integer not null,
+  confirmed boolean not null,
   foreign key (user_a) references User(id),
   foreign key (user_b) references User(id)
 );
