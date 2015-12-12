@@ -22,9 +22,9 @@ void print_writer(Writer *w) {
          get_country(w->homeland));
 }
 
-void print_book(Book* b){
-  printf("Book by %s published in %s by %s", b->title, ctime(&b->publication_time),
-      b->author->name);
+void print_book(Book *b) {
+  printf("Book by %s published in %s by %s\n", b->title,
+         ctime(&b->publication_time), b->author->name);
 }
 
 void writer_c_3(Writer *w, const char *name, time_t birth_date,

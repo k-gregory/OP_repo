@@ -16,6 +16,7 @@ int main(void) {
 
   for (size_t i = 0; i < tasked_books(filtBooks, books, LEN(books)); i++) {
     print_book(&books[i]);
+    printf("CNT: %d\n", filtBooks[i].author->homeland);
   }
 
   printf("%d\n", cmp_writers(w, w + 1));
