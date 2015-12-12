@@ -36,3 +36,5 @@ build
 #Editors
 #Vim
 *.swp
+#QtCreator
+CMakeLists.txt.user
