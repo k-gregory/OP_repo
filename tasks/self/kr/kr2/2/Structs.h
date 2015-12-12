@@ -7,9 +7,7 @@
 #define BOOK_NAME_LENGTH 20
 #define BOOK_DESCRIPTION_LENGTH 100
 
-enum Country{
-  Ukraine, NotUkraineYet
-};
+enum Country { Ukraine, NotUkraineYet };
 
 typedef struct _Writer {
   char name[WRITER_NAME_LENGTH];
@@ -17,32 +15,38 @@ typedef struct _Writer {
   enum Country homeland;
 } Writer;
 
-void print_writer(Writer* w);
+int cmp_writers(const Writer *a, const Writer *b);
 
-Writer* new_writer(void);
-void delete_writer(Writer* w);
+void print_writer(Writer *w);
 
-void writer_c(Writer* w);
-void writer_c_3(Writer* w, const char* name, time_t birth_date,enum Country homeland);
+Writer *new_writer(void);
+void delete_writer(Writer *w);
+
+void writer_c(Writer *w);
+void writer_c_3(Writer *w, const char *name, time_t birth_date,
+                enum Country homeland);
 
 typedef struct _Book {
   char title[BOOK_NAME_LENGTH];
   char description[BOOK_DESCRIPTION_LENGTH];
   time_t publication_time;
-  Writer* author;
+  Writer *author;
 } Book;
 
-typedef int (*book_filter)(Book* book);
-typedef int (*writer_filter)(Writer* writer);
+int cmp_books(const Book *a, const Book *b);
 
-void print_book(Book* book);
+typedef int (*book_filter)(Book *book);
+typedef int (*writer_filter)(Writer *writer);
 
-Book* new_book(void);
-void  delete_book(void);
+void print_book(Book *book);
 
-void book_c(Book* b);
-void book_c_4(Book* b);
+Book *new_book(void);
+void delete_book(void);
 
-size_t filter_books(Book* res,const Book* arr, size_t length, book_filter f);
+void book_c(Book *b);
+void book_c_4(Book *b, const char *title, const char *description,
+              time_t publication_time, Writer *author);
 
-size_t tasked_books(Book* res, Book* arr, size_t length);
+size_t filter_books(Book *res, Book *arr, size_t length, book_filter f);
+
+size_t tasked_books(Book *res, Book *arr, size_t length);
