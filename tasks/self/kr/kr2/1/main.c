@@ -34,26 +34,26 @@ void print_unique_letters(const char *str, FILE *stream) {
   for (size_t i = 0; i < LEN(letters); i++)
     if(letters[i] && is_consonant(i+CHAR_MIN))
       fprintf(stream, "%c ", i + CHAR_MIN);
+  fprintf(stream, "\n");
 }
 
 int main(int argc, char *argv[]) {
-  FILE *f;
+  FILE *in_f, *out_f;
   char buff[1024];
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s filename", argv[0]);
+  if (argc != 3) {
+    fprintf(stderr, "Usage: %s infile outfile", argv[0]);
     return EXIT_FAILURE;
   }
-  f = fopen(argv[1], "w");
 
-  puts("Please, enter your string");
-  fgets(buff, LEN(buff), stdin);
+  in_f = fopen(argv[1], "r");
+  out_f = fopen(argv[2],"w");
 
+  while(fgets(buff, LEN(buff),in_f)){
   tolower_string(buff);
-  printf("Lowered string: %s", buff);
+  print_unique_letters(buff,out_f);  
+  }
 
-  print_unique_letters(buff, f);
-
-
-  fclose(f);
+  fclose(in_f);
+  fclose(out_f);
   return EXIT_SUCCESS;
 }
