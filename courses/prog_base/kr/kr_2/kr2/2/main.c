@@ -14,7 +14,9 @@ int main(void) {
   for (size_t i = 0; i < LEN(books); i++)
     book_c_4(&books[i], "Test book", "Test descr", time(NULL), &w[rand() % 2]);
 
-  tasked_books(filtBooks, books, LEN(books));
+  for (size_t i = 0; i < tasked_books(filtBooks, books, LEN(books)); i++) {
+    print_book(&books[i]);
+  }
 
   printf("%d\n", cmp_writers(w, w + 1));
 
