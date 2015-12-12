@@ -9,7 +9,6 @@ create table Post(
   id integer primary key autoincrement not null,
   author_id integer not null,
   answer_to integer not null,
-  likes integer not null,
   post_date integer not null,
   body text,
   attachments text,
@@ -28,9 +27,15 @@ create table Like(
 create table Friends(
   user_a integer not null,
   user_b integer not null,
-  confirmed boolean not null,
   foreign key (user_a) references User(id),
   foreign key (user_b) references User(id)
+);
+
+create table FriendInvite(
+  invitor integer not null,
+  invited integer not null,
+  foreign key(invitor) references User(id),
+  foreign key(invited) references User(id)
 );
 
 create table Message(

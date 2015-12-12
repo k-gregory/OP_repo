@@ -1,4 +1,5 @@
 #include "DBUtil.h"
+#include "DBQueries.h"
 
 #include <sqlite3.h>
 #include <stdlib.h>
@@ -15,6 +16,12 @@ int main(int argc, char* argv[]){
     return EXIT_FAILURE;
   }
 
+  _id a =  create_user(db,"Ogirok", "Password", "Some details");
+  _id b =  create_user(db,"Pomidor","Oh sosi suka...","Attached");
+
+
+  init_friendship(db,b,a);
+  accept_friendship(db,a,b);
 
   close_db(db);
   return EXIT_SUCCESS;
