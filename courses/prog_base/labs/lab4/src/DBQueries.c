@@ -50,12 +50,10 @@ void init_statements(AppDB *db) {
                          "values (?, ?, strftime('%s','now') , ?, ?);",
                      -1, &STMT[WRITE_MESSAGE], NULL);
 
-  sqlite3_prepare_v2(DB, "select m.id,m.sender_id, m.body, m.attachments, s.name r.name"
+  sqlite3_prepare_v2(DB, "select m.id,m.sender_id, m.body, m.attachments, s.name"
                          " from Message m "
                          "left outer join User s on m.sender_id = s.id "
-                         "left outer join User r on m.receiver_id = r.id"
-                         "where receiver_id = "
-                         "? or sender_id = ? order by -post_date limit ?;",
+                         "where receiver_id = ? order by -post_date limit ?;",
                      -1, &STMT[RECEIVE_MESSAGES], NULL);
 
   sqlite3_prepare_v2(DB,
@@ -161,10 +159,7 @@ size_t receive_messages(AppDB *db, _id receiver, Message *messages,
   const char *text_column;
 
   sqlite3_bind_int64(db->statements[RECEIVE_MESSAGES], 1, receiver);
-  sqlite3_bind_int64(db->statements[RECEIVE_MESSAGES], 2, receiver);
-  sqlite3_bind_int(db->statements[RECEIVE_MESSAGES], 3, max_messages);
-
-  printf("%d\n", sqlite3_step(db->statements[RECEIVE_MESSAGES]));
+  sqlite3_bind_int(db->statements[RECEIVE_MESSAGES], 2, max_messages);
 
   while (sqlite3_step(db->statements[RECEIVE_MESSAGES]) == SQLITE_ROW) {
     Message msg;
@@ -185,8 +180,7 @@ size_t receive_messages(AppDB *db, _id receiver, Message *messages,
     strcpy(msg.attachments, text_column);
 
     strcpy(msg.sender_name, (char*)sqlite3_column_text(db->statements[RECEIVE_MESSAGES],4));
-    strcpy(msg.receiver_name, (char*) sqlite3_column_text(db->statements[RECEIVE_MESSAGES],5));
-
+    printf("!!!%s\n!!!",msg.sender_name);
 
     messages[fetched++] = msg;
   }

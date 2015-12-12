@@ -3,6 +3,7 @@
 #include <string.h>
 #include "commands.h"
 #include "util.h"
+#include  <math.h>
 
 int *matrix;
 size_t rows, columns;
@@ -129,7 +130,7 @@ void sumDown() {
   if (columns != rows)
     return;
   for(size_t row = 0;row<rows;row++)
-    for(size_t column = 0; column<columns - row;column++)
+    for(size_t column = 0; column < row;column++)
       sum+=matrix[mi(row,column,columns)];
   wprintw(display_wnd, "Sum of el-s under main diagonal is %ld\n", sum);
 }
@@ -189,6 +190,8 @@ void randomize(int l, int h){
   h++;
   if(h<l)
     swap_ints(&h,&l);
+  if(h>1000) h = 1000;
+  if(l<-1000) l = -1000;
   for(size_t i = 0; i<rows*columns;i++)
     matrix[i] = l + rand()%(h-l);
 }
