@@ -11,7 +11,10 @@ set(SOURCES
   "src/DBUtil.c"
   "src/DBQueries.h"
   "src/DBQueries.c"
+  "src/Views.h"
+  "src/Views.c"
   "src/types.h"
+  "src/QueryingUtil.h"
   )
 
 
