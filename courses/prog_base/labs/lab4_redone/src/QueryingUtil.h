@@ -1,5 +1,7 @@
 #pragma once
 
+#define WALL_POST 1
+
 #define def_stmt(expr)                                                         \
   static sqlite3_stmt *q = NULL;                                               \
   if (q == NULL)                                                               \

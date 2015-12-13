@@ -8,8 +8,9 @@ _id create_user(sqlite3 *db, const char *name, const char *password,
                 const char *details);
 void delete_user(sqlite3 *db, _id user);
 
-_id create_post(sqlite3 *db, _id author, _id answer_to, const char *body,
+_id create_post(sqlite3 *db, _id author, _id related_post, const char *body,
                 const char *arrachments);
+_id post_wall(sqlite3* db, _id author, const char* body, const char* attachments);
 void remove_post(sqlite3 *db, _id post);
 void like_post(sqlite3 *db, _id liker, _id liked_post);
 

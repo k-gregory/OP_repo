@@ -28,6 +28,13 @@ int main(int argc, char *argv[]) {
   _id a = create_user(db, "Larin", "Password", "Some details");
   _id b = create_user(db, "Pomidor", "test...", "Attached");
 
+  post_wall(db,a,"Very good", NULL);
+  post_wall(db,a,"Oh good", "Nice");
+  PostV* p = new_post_v();
+  read_user_wall(db,a,p,1);
+  printf("Found post: \"%s\" by %s\n", p->body, p->author_name);
+  delete_post_v(p);
+
   send_message(db, a, b, "Verni moi dengi", "Mghaz");
 
   InMessageV msgs[10];

@@ -8,12 +8,12 @@ create table User(
 create table Post(
   id integer primary key autoincrement not null,
   author_id integer not null,
-  answer_to integer not null,
-  post_date datetime default strftime('%s', now) not null,
+  related_post integer not null,
+  post_date datetime default (strftime('%s', 'now')) not null,
   body text,
   attachments text,
   foreign key (author_id) references User(id),
-  foreign key (answer_to) references Post(id)
+  foreign key (related_post) references Post(id)
 );
 
 create table Like(
@@ -42,7 +42,7 @@ create table Message(
   id integer primary key autoincrement not null,
   sender_id integer not null,
   receiver_id integer not null,
-  post_date datetime default strftime('%s', now) not null,
+  post_date datetime default (strftime('%s', 'now')) not null,
   body text,
   attachments text,
   foreign key(sender_id) references User(id),

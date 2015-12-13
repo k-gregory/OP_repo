@@ -28,21 +28,25 @@ void delete_user(sqlite3 *db, _id user) {
   sqlite3_reset(q);
 }
 
-_id create_post(sqlite3 *db, _id author, _id answer_to, const char *body,
+_id create_post(sqlite3 *db, _id author, _id related_post, const char *body,
                 const char *attachments) {
   def_stmt(
-      "insert into Post(author_id, answer_to, body, post_date, attachments) "
-      "values (@author_id, @answer_to, @body, strftime('%s','now'),"
+      "insert into Post(author_id, related_post, body, post_date, attachments) "
+      "values (@author_id, @related_post, @body, strftime('%s','now'),"
       "@attachments)");
 
   bind_id_v("@author_id", author);
-  bind_id_v("@answer_to", answer_to);
+  bind_id_v("@related_post", related_post);
   bind_text_v("@body", body);
   bind_text_v("@attachments", attachments);
 
   sqlite3_step(q);
   sqlite3_reset(q);
   return sqlite3_last_insert_rowid(db);
+}
+
+_id post_wall(sqlite3* db, _id author, const char* body, const char* attachments){
+    return create_post(db,author,WALL_POST,body,attachments);
 }
 
 void remove_post(sqlite3 *db, _id post) {
