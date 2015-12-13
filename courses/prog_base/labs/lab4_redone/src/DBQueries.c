@@ -29,9 +29,17 @@ _id create_user(sqlite3* db,const char* name, const char* password, const char* 
   bind_text_v("@details", details);
 
   sqlite3_step(q);
-
   sqlite3_reset(q);
   return sqlite3_last_insert_rowid(db);
+}
+
+void delete_user(sqlite3 *db, _id user){
+    def_stmt("delete from User where id = @user");
+
+    bind_id_v("@user", user);
+
+    sqlite3_step(q);
+    sqlite3_reset(q);
 }
 
 _id create_post(sqlite3* db, _id author, _id answer_to, const char* body, const char* attachments){
@@ -47,6 +55,15 @@ _id create_post(sqlite3* db, _id author, _id answer_to, const char* body, const 
 
   sqlite3_reset(q);
   return sqlite3_last_insert_rowid(db);
+}
+
+void remove_post(sqlite3* db, _id post){
+    def_stmt("delete from Post where id = @post");
+
+    bind_id_v("@post", post);
+
+    sqlite3_step(q);
+    sqlite3_reset(q);
 }
 
 static int count_likes_by_user(sqlite3* db, _id liker, _id post){
@@ -133,4 +150,34 @@ void accept_friendship(sqlite3 *db, _id acceptor, _id accepted_friend){
     register_friend(db,acceptor, accepted_friend);
     register_friend(db,accepted_friend, acceptor);
     }
+}
+
+static void do_remove_friend(sqlite3 *db, _id remover, _id removed){
+    def_stmt("remove from Friends where user_a = @remover and user_b = @removed");
+
+    bind_id_v("@remover", remover);
+    bind_id_v("@removed", removed);
+
+    sqlite3_step(q);
+    sqlite3_reset(q);
+}
+
+void remove_friend(sqlite3 *db, _id remover, _id removed){
+    do_remove_friend(db,remover,removed);
+    do_remove_friend(db,removed,remover);
+
+    init_friendship(db,removed, remover);
+}
+
+void send_message(sqlite3 *db, _id sender, _id receiver, const char *body, const char *attachments){
+    def_stmt("insert into Message(sender_id,receiver_id,post_date,body,attachments) "
+             "values (@sender, @receiver, strftime('%s','now'), @body, @attachments)");
+
+    bind_id_v("@sender", sender);
+    bind_id_v("@receiver", receiver);
+    bind_text_v("@body", body);
+    bind_text_v("@attachments", attachments);
+
+    sqlite3_step(q);
+    sqlite3_reset(q);
 }
