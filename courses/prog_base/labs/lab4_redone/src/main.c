@@ -17,11 +17,12 @@ int main(int argc, char* argv[]){
   }
 
   _id a =  create_user(db,"Ogirok", "Password", "Some details");
-  _id b =  create_user(db,"Pomidor","Oh sosi suka...","Attached");
+  _id b =  create_user(db,"Pomidor","test...","Attached");
 
 
   init_friendship(db,b,a);
-  accept_friendship(db,a,b);
+  accept_friendship(db,b,a);
+//  accept_friendship(db,a,b);
 
   close_db(db);
   return EXIT_SUCCESS;

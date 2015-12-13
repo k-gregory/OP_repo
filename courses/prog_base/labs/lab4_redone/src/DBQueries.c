@@ -93,27 +93,24 @@ void like_post(sqlite3 *db, _id liker, _id liked_post){
 
 
 void init_friendship(sqlite3 *db, _id initiator, _id acceptor){
-    printf("init %lld %lld\n",initiator, acceptor);
-    def_stmt("insert into FriendInvite(invitor, invited) values(@a,@b)");
+    def_stmt("insert into FriendInvite(inviter, invited) values(@a,@b)");
 
     bind_id_v("@a", initiator);
     bind_id_v("@b", acceptor);
-    bind_int_v("@confirmed", 0);
+
     sqlite3_step(q);
     sqlite3_reset(q);
 }
 
-static int remove_invitation(sqlite3* db, _id invitor, _id invited){
-    printf("remove %lld %lld\n", invitor,invited);
-    def_stmt("delete from FriendInvite where"
-             "where inviter = @invited and invited = @invited");
-    bind_id_v("@acceptor", invited);
-    bind_id_v("@declined_friend", invitor);
+static int remove_invitation(sqlite3* db, _id inviter, _id invited){
+    def_stmt("delete from FriendInvite "
+             "where inviter = @inviter and invited = @invited");
+
+    bind_id_v("@invited", invited);
+    bind_id_v("@inviter", inviter);
 
     sqlite3_step(q);
-
     sqlite3_reset(q);
-    printf("%d\n", sqlite3_changes(db));
     return sqlite3_changes(db);
 }
 
@@ -122,7 +119,6 @@ void decline_friendship(sqlite3 *db, _id acceptor, _id declined_friend){
 }
 
 static void register_friend(sqlite3* db, _id a, _id b){
-    printf("register %lld %lld\n", a,b);
     def_stmt("insert into Friends(user_a,user_b) values(@a,@b)");
     bind_id_v("@a", a);
     bind_id_v("@b", b);
@@ -132,8 +128,8 @@ static void register_friend(sqlite3* db, _id a, _id b){
 }
 
 void accept_friendship(sqlite3 *db, _id acceptor, _id accepted_friend){
-    printf("accept %lld %lld\n", acceptor, accepted_friend);
-    if(remove_invitation(db, acceptor, accepted_friend)>0){
+    if(remove_invitation(db,accepted_friend, acceptor)>0){
+    remove_invitation(db,acceptor, accepted_friend);
     register_friend(db,acceptor, accepted_friend);
     register_friend(db,accepted_friend, acceptor);
     }

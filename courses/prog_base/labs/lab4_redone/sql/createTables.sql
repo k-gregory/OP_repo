@@ -32,9 +32,9 @@ create table Friends(
 );
 
 create table FriendInvite(
-  invitor integer not null,
+  inviter integer not null,
   invited integer not null,
-  foreign key(invitor) references User(id),
+  foreign key(inviter) references User(id),
   foreign key(invited) references User(id)
 );
 
