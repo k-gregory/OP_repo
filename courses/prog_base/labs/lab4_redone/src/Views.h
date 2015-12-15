@@ -7,6 +7,19 @@
 #include <stdlib.h>
 #include <time.h>
 
+typedef struct _UserV {
+  _id id;
+  char *name;
+  char *password;
+  char *details;
+} UserV;
+
+UserV *new_user_v(void);
+void init_user_v(UserV *u);
+void finalize_user_v(UserV *u);
+void ctr_user_v(UserV *u, _id id, char *name, char *password, char *details);
+void delete_user_v(UserV *u);
+
 typedef struct _InMessageV {
   _id id;
   _id sender;
@@ -17,32 +30,32 @@ typedef struct _InMessageV {
   char *sender_name;
 } InMessageV;
 
-
 InMessageV *new_in_message_v(void);
-void init_in_message__v(InMessageV* msg);
-void finalize_in_message_v(InMessageV* msg);
+void init_in_message_v(InMessageV *msg);
+void finalize_in_message_v(InMessageV *msg);
 void ctr_in_message_v(InMessageV *msg, _id id, _id sender, time_t post_date,
-                    char *body,  char* attachments,
-                    char* sender_name);
+                      char *body, char *attachments, char *sender_name);
 void delete_in_message_v(InMessageV *o);
 
-typedef struct _PostV{
-    _id id;
-    _id related_post;
-    _id author;
-    int likes;
-    time_t post_date;
-    char *body;
-    char *attachments;
+typedef struct _PostV {
+  _id id;
+  _id related_post;
+  _id author;
+  int likes;
+  time_t post_date;
+  char *body;
+  char *attachments;
 
-    char* author_name;
+  char *author_name;
 } PostV;
 
 PostV *new_post_v(void);
-void init_post_v(PostV* post);
-void finalize_post_v(PostV* post);
-void ctr_post_v(PostV* post, _id id,_id related_post, _id author, time_t post_date, char* body, char* attachments, char *author_name);
-void delete_post_v(PostV* post);
+void init_post_v(PostV *post);
+void finalize_post_v(PostV *post);
+void ctr_post_v(PostV *post, _id id, _id related_post, _id author,
+                time_t post_date, char *body, char *attachments,
+                char *author_name);
+void delete_post_v(PostV *post);
 
 /*
  * \param[out] res Array to write received messages
@@ -57,12 +70,25 @@ int receive_messages(sqlite3 *db, _id receiver, InMessageV *res, int limit);
  * \parram[in] limit Max number of posts to receive
  * \returns number of received messages
  */
-int read_user_wall(sqlite3* db, _id user, PostV* res, int limit);
+int read_user_wall(sqlite3 *db, _id user, PostV *res, int limit);
 /*
  * \param[in] post related post
  * \param[out] res Array to write recieved posts
  * \parram[in] limit Max number of posts to receive
  * \returns number of received messages
  */
-int read_responces(sqlite3* db, _id post, PostV* res, int limit);
+int read_responces(sqlite3 *db, _id post, PostV *res, int limit);
 
+/* Find user by name
+ * \param[out] res Array to write found users
+ * \parram[in] limit Max number of users to find
+ * \returns number of found users
+ */
+int find_users(sqlite3 *db, char *name, UserV *res, int limit);
+/*
+ * \param[in] user User which has friends
+ * \param[out] res Array to write found friends
+ * \parram[in] limit Max number of friends to receive
+ * \returns number of found users
+ */
+int list_friends(sqlite3 *db, _id user, UserV *res, int limit);

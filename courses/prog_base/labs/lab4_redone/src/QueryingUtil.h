@@ -8,7 +8,7 @@
     sqlite3_prepare_v2(db, expr, -1, &q, NULL);
 
 #define col_int(index) sqlite3_column_int(q, index)
-#define col_text(index) ((char*) sqlite3_column_text(q, index))
+#define col_text(index) ((char *)sqlite3_column_text(q, index))
 #define col_id(index) sqlite3_column_int64(q, index)
 #define col_int64 col_id
 

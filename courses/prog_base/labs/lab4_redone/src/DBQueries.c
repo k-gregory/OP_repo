@@ -45,8 +45,9 @@ _id create_post(sqlite3 *db, _id author, _id related_post, const char *body,
   return sqlite3_last_insert_rowid(db);
 }
 
-_id post_wall(sqlite3* db, _id author, const char* body, const char* attachments){
-    return create_post(db,author,WALL_POST,body,attachments);
+_id post_wall(sqlite3 *db, _id author, const char *body,
+              const char *attachments) {
+  return create_post(db, author, WALL_POST, body, attachments);
 }
 
 void remove_post(sqlite3 *db, _id post) {

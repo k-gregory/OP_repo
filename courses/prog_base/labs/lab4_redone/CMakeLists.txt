@@ -15,6 +15,8 @@ set(SOURCES
   "src/Views.c"
   "src/types.h"
   "src/QueryingUtil.h"
+  "src/Loop.h"
+  "src/Loop.c"
   )
 
 
