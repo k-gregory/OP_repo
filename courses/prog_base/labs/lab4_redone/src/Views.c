@@ -4,9 +4,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <time.h>
-
-// Specified in ../sql/create_system_records.sql
 
 static void assign_text(char **dest, const char *src) {
   if (src == NULL)
@@ -187,12 +186,32 @@ static int map_users(sqlite3_stmt *q, UserV *res) {
 }
 
 int find_users(sqlite3 *db, char *name, UserV *res, int limit) {
+  char* like_wildcard = malloc(strlen(name)+2+1);
+  snprintf(like_wildcard,strlen(name)+2+1,"%%%s%%", name); //%% escapes %
   def_stmt("select id, name, password, details "
-           "from User where name like %@name% limit @limit");
+           "from User where name like @name limit @limit");
   bind_text_v("@name", name);
   bind_int_v("@limit", limit);
 
   int rec = map_users(q, res);
   sqlite3_reset(q);
+  free(like_wildcard);
   return rec;
+}
+
+int find_user_by_id(sqlite3 *db, _id id, UserV *res){
+    int found_users;
+    def_stmt("select count(rowid), name, password, details "
+             "from User where id = @id");
+
+    bind_id_v("@id", id);
+
+    sqlite3_step(q);
+
+    found_users = col_int(0);
+    if(found_users == 0) return 0;
+    ctr_user_v(res, id, col_text(1), col_text(2), col_text(3));
+
+    sqlite3_reset(q);
+    return found_users;
 }

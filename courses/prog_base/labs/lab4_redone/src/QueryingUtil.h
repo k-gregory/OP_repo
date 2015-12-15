@@ -1,5 +1,6 @@
 #pragma once
 
+// Specified in ../sql/create_system_records.sql
 #define WALL_POST 1
 
 #define def_stmt(expr)                                                         \

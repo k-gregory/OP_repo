@@ -57,38 +57,44 @@ void ctr_post_v(PostV *post, _id id, _id related_post, _id author,
                 char *author_name);
 void delete_post_v(PostV *post);
 
-/*
+/**
  * \param[out] res Array to write received messages
- * \parram[in] limit Max number of posts to receive
+ * \param[in] limit Max number of posts to receive
  * \returns number of received messages
  */
 int receive_messages(sqlite3 *db, _id receiver, InMessageV *res, int limit);
 
-/*
+/**
  * Read user's own posts(not responces)
  * \param[out] res Array to write recieved posts
- * \parram[in] limit Max number of posts to receive
+ * \param[in] limit Max number of posts to receive
  * \returns number of received messages
  */
 int read_user_wall(sqlite3 *db, _id user, PostV *res, int limit);
-/*
+/**
  * \param[in] post related post
  * \param[out] res Array to write recieved posts
- * \parram[in] limit Max number of posts to receive
+ * \param[in] limit Max number of posts to receive
  * \returns number of received messages
  */
 int read_responces(sqlite3 *db, _id post, PostV *res, int limit);
 
-/* Find user by name
+/** Find user by name
  * \param[out] res Array to write found users
- * \parram[in] limit Max number of users to find
+ * \param[in] limit Max number of users to find
  * \returns number of found users
  */
+
+/**
+ * \returns 0 if user doesn't exist
+ */
+int find_user_by_id(sqlite3* db, _id id, UserV* res);
+
 int find_users(sqlite3 *db, char *name, UserV *res, int limit);
-/*
+/**
  * \param[in] user User which has friends
  * \param[out] res Array to write found friends
- * \parram[in] limit Max number of friends to receive
+ * \param[in] limit Max number of friends to receive
  * \returns number of found users
  */
 int list_friends(sqlite3 *db, _id user, UserV *res, int limit);
