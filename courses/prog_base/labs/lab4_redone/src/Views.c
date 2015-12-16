@@ -16,6 +16,10 @@ static void assign_text(char **dest, const char *src) {
   }
 }
 
+void print_user_v(UserV *u) {
+  printf("#%lld %s\n------------------\n", u->id, u->name);
+}
+
 void init_in_message_v(InMessageV *msg) {
   msg->attachments = NULL;
   msg->body = NULL;
@@ -59,7 +63,7 @@ int receive_messages(sqlite3 *db, _id receiver, InMessageV *res, int limit) {
            "from Message m "
            "left join User s on sender_id = s.id "
            "where receiver_id = @receiver "
-           "order by -post_date limit @limit");
+           "order by post_date limit @limit");
 
   bind_id_v("@receiver", receiver);
   bind_int_v("@limit", limit);
@@ -122,8 +126,10 @@ int find_post_by_id(sqlite3 *db, _id id, PostV *res) {
 
   sqlite3_step(q);
   found_users = col_int(0);
-  if (found_users == 0)
+  if (found_users == 0) {
+    sqlite3_reset(q);
     return 0;
+  }
 
   ctr_post_v(res, col_id(1), col_id(2), col_id(3), col_int64(4), col_text(5),
              col_text(6), col_text(7));
@@ -139,7 +145,7 @@ int read_responces(sqlite3 *db, _id post, PostV *res, int limit) {
            "from Post p "
            "left join User s on author_id = s.id "
            "where related_post = @post "
-           "order by -post_date limit @limit");
+           "order by post_date limit @limit");
 
   bind_id_v("@post", post);
   bind_id_v("@limit", limit);
@@ -158,7 +164,7 @@ int read_user_wall(sqlite3 *db, _id user, PostV *res, int limit) {
            "from Post p "
            "left join User s on author_id = s.id "
            "where related_post = @wall and author_id = @user "
-           "order by -post_date limit @limit");
+           "order by post_date limit @limit");
 
   bind_id_v("@wall", WALL_POST);
   bind_id_v("@user", user);
@@ -201,6 +207,8 @@ void ctr_user_v(UserV *u, _id id, char *name, char *password, char *details) {
 }
 
 void delete_user_v(UserV *u) {
+  if (u == NULL)
+    return;
   finalize_user_v(u);
   free(u);
 }
@@ -238,10 +246,48 @@ int find_user_by_id(sqlite3 *db, _id id, UserV *res) {
   sqlite3_step(q);
 
   found_users = col_int(0);
-  if (found_users == 0)
+  if (found_users == 0) {
+    sqlite3_reset(q);
     return 0;
+  }
   ctr_user_v(res, id, col_text(1), col_text(2), col_text(3));
 
   sqlite3_reset(q);
   return found_users;
+}
+
+int list_friends(sqlite3 *db, _id user, UserV *res, int limit) {
+  int received = 0;
+  def_stmt("select user_b, u.name, u.password, u.details "
+           "from Friends "
+           "left join User u on user_b = u.id "
+           "where user_a = @id limit @limit");
+
+  bind_id_v("@id", user);
+  bind_int_v("@limit", limit);
+
+  while (sqlite3_step(q) == SQLITE_ROW)
+    ctr_user_v(&res[received++], col_id(0), col_text(1), col_text(2),
+               col_text(3));
+
+  sqlite3_reset(q);
+  return received;
+}
+
+int list_invites(sqlite3 *db, _id user, UserV *res, int limit) {
+  int received = 0;
+  def_stmt("select inviter, u.name, u.password, u.details "
+           "from FriendInvite "
+           "left join User u on inviter = u.id "
+           "where invited = @id limit @limit");
+
+  bind_id_v("@id", user);
+  bind_int_v("@limit", limit);
+
+  while (sqlite3_step(q) == SQLITE_ROW)
+    ctr_user_v(&res[received++], col_id(0), col_text(1), col_text(2),
+               col_text(3));
+
+  sqlite3_reset(q);
+  return received;
 }

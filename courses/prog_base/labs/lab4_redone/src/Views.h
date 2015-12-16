@@ -13,6 +13,7 @@ typedef struct _UserV {
   char *password;
   char *details;
 } UserV;
+void print_user_v(UserV *u);
 
 UserV *new_user_v(void);
 void init_user_v(UserV *u);
@@ -102,3 +103,4 @@ int find_users(sqlite3 *db, char *name, UserV *res, int limit);
  * \returns number of found users
  */
 int list_friends(sqlite3 *db, _id user, UserV *res, int limit);
+int list_invites(sqlite3 *db, _id user, UserV *res, int limit);

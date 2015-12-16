@@ -11,7 +11,10 @@
 
 #define MAX_USERS_FOUND 10
 #define MAX_POSTS_READ 100
+#define MAX_MESSAGES_READ 100
 
+#define MAX_USERNAME_LENGTH 20
+#define MAX_PASS_LENGTH 20
 #define MAX_MSG_LENGTH 200
 
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
@@ -47,6 +50,17 @@ sqlite3 *db;
 UserV *logged_user;
 UserV *selected_user;
 PostV *selected_post;
+
+static void _register() {
+  char login_buff[MAX_USERNAME_LENGTH];
+  char password_buff[MAX_PASS_LENGTH];
+  puts("Enter new user's login");
+  mgets(login_buff);
+  puts("Enter new user's password");
+  mgets(password_buff);
+  _id nu = create_user(db, login_buff, password_buff, NULL);
+  printf("New user id: #%lld\n", nu);
+}
 
 static void _find_users(char *name) {
   UserV found[MAX_USERS_FOUND];
@@ -105,11 +119,14 @@ static void _select_post(char *id) {
 
 static void _log_in(char *password) {
   ensure_user_selected;
+  delete_user_v(logged_user);
   if (strcmp(password, selected_user->password) != 0) {
     puts("Invalid password!");
     return;
   }
-  logged_user = selected_user;
+  logged_user = new_user_v();
+  find_user_by_id(db, selected_user->id, logged_user);
+
   printf("Logged in as %s\n", logged_user->name);
 }
 
@@ -120,10 +137,11 @@ static void _read_wall() {
     init_post_v(&posts[i]);
 
   int n = read_user_wall(db, selected_user->id, posts, LEN(posts));
-  printf("%d\n", n);
   for (int i = 0; i < n; i++)
-    printf("ID:#%lld at %s(%d likes)\n%s", posts[i].id,
-           ctime(&posts[i].post_date), count_likes(db, posts[i].id),
+    printf("ID:#%lld at %s(%d likes)\n%s\n"
+           "-------------------\n",
+           posts[i].id, ctime(&posts[i].post_date),
+           count_likes(db, posts[i].id),
            posts[i].body != NULL ? posts[i].body : "<Empy post>\n");
 
   for (size_t i = 0; i < LEN(posts); i++)
@@ -138,8 +156,9 @@ static void _read_responces() {
 
   int n = read_responces(db, selected_post->id, posts, LEN(posts));
   for (int i = 0; i < n; i++)
-    printf("ID:#%lld by %s(%d likes) at %s%s\n", posts[i].id,
-           posts[i].author_name, count_likes(db, posts[i].id),
+    printf("ID:#%lld by %s(%d likes) at %s%s\n"
+           "------------------------\n",
+           posts[i].id, posts[i].author_name, count_likes(db, posts[i].id),
            ctime(&posts[i].post_date), post_body(posts[i]));
 
   for (size_t i = 0; i < LEN(posts); i++)
@@ -152,10 +171,107 @@ static void _make_responce() {
   ensure_post_selected;
   ensure_authentification;
 
-  puts("Enter your message");
+  puts("Enter your post");
   mgets(msg_buff);
 
   create_post(db, logged_user->id, selected_post->id, msg_buff, NULL);
+}
+
+static void _post() {
+  char msg_buff[MAX_MSG_LENGTH];
+
+  ensure_authentification;
+
+  puts("Enter your post");
+  mgets(msg_buff);
+
+  post_wall(db, logged_user->id, msg_buff, NULL);
+}
+
+static void _send_msg() {
+  ensure_authentification;
+  ensure_user_selected;
+
+  char msg_buff[MAX_MSG_LENGTH];
+  puts("Enter your message");
+  mgets(msg_buff);
+
+  send_message(db, logged_user->id, selected_user->id, msg_buff, NULL);
+}
+
+static void _read_msgs() {
+  ensure_authentification;
+  InMessageV msgs[MAX_MESSAGES_READ];
+
+  for (size_t i = 0; i < LEN(msgs); i++)
+    init_in_message_v(&msgs[i]);
+
+  int n = receive_messages(db, logged_user->id, msgs, LEN(msgs));
+  for (int i = 0; i < n; i++)
+    printf("Msg from %s(#%lld) received at %s%s\n"
+           "----------------------------\n",
+           msgs[i].sender_name, msgs[i].sender, ctime(&msgs[i].post_date),
+           msgs[i].body);
+
+  for (size_t i = 0; i < LEN(msgs); i++)
+    finalize_in_message_v(&msgs[i]);
+}
+
+static void _like() {
+  ensure_post_selected;
+  ensure_authentification;
+  like_post(db, logged_user->id, selected_post->id);
+  printf("You liked post #%lld by %s\n", selected_post->id,
+         selected_post->author_name);
+}
+
+static void _list_friends() {
+  UserV users[MAX_USERS_FOUND];
+  for (size_t i = 0; i < LEN(users); i++)
+    init_user_v(&users[i]);
+
+  int n = list_friends(db, selected_user->id, users, LEN(users));
+  for (int i = 0; i < n; i++)
+    print_user_v(&users[i]);
+
+  for (size_t i = 0; i < LEN(users); i++)
+    finalize_user_v(&users[i]);
+}
+
+static void _list_invites() {
+  UserV users[MAX_USERS_FOUND];
+  for (size_t i = 0; i < LEN(users); i++)
+    init_user_v(&users[i]);
+
+  int n = list_invites(db, selected_user->id, users, LEN(users));
+  for (int i = 0; i < n; i++)
+    print_user_v(&users[i]);
+
+  for (size_t i = 0; i < LEN(users); i++)
+    finalize_user_v(&users[i]);
+}
+
+static void _invite_f() {
+  ensure_authentification;
+  ensure_user_selected;
+
+  init_friendship(db, logged_user->id, selected_user->id);
+
+  printf("You invited %s\n", selected_user->name);
+}
+
+static void _decline_f() {
+  ensure_authentification;
+  ensure_user_selected;
+
+  decline_friendship(db, logged_user->id, selected_user->id);
+}
+
+static void _accept_f() {
+  ensure_authentification;
+  ensure_user_selected;
+
+  accept_friendship(db, logged_user->id, selected_user->id);
 }
 
 void app_loop(sqlite3 *app_db) {
@@ -171,6 +287,7 @@ void app_loop(sqlite3 *app_db) {
     mgets(cli_buff);
 
     CASE("quit") break;
+    CASE("reg") _register();
     CASE("find_users") {
       puts("Enter user name");
       mgets(param_buff);
@@ -189,7 +306,6 @@ void app_loop(sqlite3 *app_db) {
     }
 
     CASE("login") {
-      ensure_user_selected;
       puts("Enter user password");
       mgets(param_buff);
       _log_in(param_buff);
@@ -197,5 +313,14 @@ void app_loop(sqlite3 *app_db) {
     CASE("read_wall") _read_wall();
     CASE("responces") _read_responces();
     CASE("respond") _make_responce();
+    CASE("post") _post();
+    CASE("msg") _send_msg();
+    CASE("imsg") _read_msgs();
+    CASE("like") _like();
+    CASE("list_friends") _list_friends();
+    CASE("list_invites") _list_invites();
+    CASE("invite") _invite_f();
+    CASE("decline_f") _decline_f();
+    CASE("accept_f") _accept_f();
   }
 }

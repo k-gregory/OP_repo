@@ -14,7 +14,8 @@ _id create_user(sqlite3 *db, const char *name, const char *password,
   bind_text_v("@password", password);
   bind_text_v("@details", details);
 
-  sqlite3_step(q);
+  if (sqlite3_step(q) != SQLITE_DONE)
+    puts("Sik");
   sqlite3_reset(q);
   return sqlite3_last_insert_rowid(db);
 }
@@ -116,16 +117,6 @@ void like_post(sqlite3 *db, _id liker, _id liked_post) {
     do_like_post(db, liker, liked_post);
 }
 
-void init_friendship(sqlite3 *db, _id initiator, _id acceptor) {
-  def_stmt("insert into FriendInvite(inviter, invited) values(@a,@b)");
-
-  bind_id_v("@a", initiator);
-  bind_id_v("@b", acceptor);
-
-  sqlite3_step(q);
-  sqlite3_reset(q);
-}
-
 static int remove_invitation(sqlite3 *db, _id inviter, _id invited) {
   def_stmt("delete from FriendInvite "
            "where inviter = @inviter and invited = @invited");
@@ -136,6 +127,17 @@ static int remove_invitation(sqlite3 *db, _id inviter, _id invited) {
   sqlite3_step(q);
   sqlite3_reset(q);
   return sqlite3_changes(db);
+}
+
+void init_friendship(sqlite3 *db, _id initiator, _id acceptor) {
+  remove_invitation(db, initiator, acceptor);
+  def_stmt("insert into FriendInvite(inviter, invited) values(@a,@b)");
+
+  bind_id_v("@a", initiator);
+  bind_id_v("@b", acceptor);
+
+  sqlite3_step(q);
+  sqlite3_reset(q);
 }
 
 void decline_friendship(sqlite3 *db, _id acceptor, _id declined_friend) {
