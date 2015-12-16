@@ -14,8 +14,7 @@ _id create_user(sqlite3 *db, const char *name, const char *password,
   bind_text_v("@password", password);
   bind_text_v("@details", details);
 
-  if (sqlite3_step(q) != SQLITE_DONE)
-    puts("Sik");
+  sqlite3_step(q);
   sqlite3_reset(q);
   return sqlite3_last_insert_rowid(db);
 }
@@ -153,14 +152,6 @@ static void register_friend(sqlite3 *db, _id a, _id b) {
   sqlite3_reset(q);
 }
 
-void accept_friendship(sqlite3 *db, _id acceptor, _id accepted_friend) {
-  if (remove_invitation(db, accepted_friend, acceptor) > 0) {
-    remove_invitation(db, acceptor, accepted_friend);
-    register_friend(db, acceptor, accepted_friend);
-    register_friend(db, accepted_friend, acceptor);
-  }
-}
-
 static void do_remove_friend(sqlite3 *db, _id remover, _id removed) {
   def_stmt("remove from Friends where user_a = @remover and user_b = @removed");
 
@@ -169,6 +160,18 @@ static void do_remove_friend(sqlite3 *db, _id remover, _id removed) {
 
   sqlite3_step(q);
   sqlite3_reset(q);
+}
+
+void accept_friendship(sqlite3 *db, _id acceptor, _id accepted_friend) {
+  if (remove_invitation(db, accepted_friend, acceptor) > 0) {
+    remove_invitation(db, acceptor, accepted_friend);
+
+    do_remove_friend(db, acceptor, accepted_friend);
+    do_remove_friend(db, accepted_friend, acceptor);
+
+    register_friend(db, acceptor, accepted_friend);
+    register_friend(db, accepted_friend, acceptor);
+  }
 }
 
 void remove_friend(sqlite3 *db, _id remover, _id removed) {

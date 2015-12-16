@@ -67,8 +67,11 @@ static void _find_users(char *name) {
   for (size_t i = 0; i < LEN(found); i++)
     init_user_v(&found[i]);
   int n = find_users(db, name, found, MAX_USERS_FOUND);
+
+  puts("------------");
   for (int i = 0; i < n; i++)
-    printf("ID:#%lld %s\n", found[i].id, found[i].name);
+    print_user_v(&found[i]);
+
   for (size_t i = 0; i < 10; i++)
     finalize_user_v(&found[i]);
 }
@@ -230,7 +233,7 @@ static void _list_friends() {
   for (size_t i = 0; i < LEN(users); i++)
     init_user_v(&users[i]);
 
-  int n = list_friends(db, selected_user->id, users, LEN(users));
+  int n = list_friends(db, logged_user->id, users, LEN(users));
   for (int i = 0; i < n; i++)
     print_user_v(&users[i]);
 
@@ -243,7 +246,7 @@ static void _list_invites() {
   for (size_t i = 0; i < LEN(users); i++)
     init_user_v(&users[i]);
 
-  int n = list_invites(db, selected_user->id, users, LEN(users));
+  int n = list_invites(db, logged_user->id, users, LEN(users));
   for (int i = 0; i < n; i++)
     print_user_v(&users[i]);
 
@@ -272,6 +275,13 @@ static void _accept_f() {
   ensure_user_selected;
 
   accept_friendship(db, logged_user->id, selected_user->id);
+}
+
+static void _help() {
+  puts("Available commands: help, quit, reg, find_users, "
+       "select_user, select_post, login, read_wall, responces, "
+       "respond, post, msg, imsg, like, list_friends, list_invites, "
+       "invite, decline_f, accept_f");
 }
 
 void app_loop(sqlite3 *app_db) {
@@ -322,5 +332,6 @@ void app_loop(sqlite3 *app_db) {
     CASE("invite") _invite_f();
     CASE("decline_f") _decline_f();
     CASE("accept_f") _accept_f();
+    CASE("help") _help();
   }
 }
