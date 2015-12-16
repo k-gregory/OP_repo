@@ -41,7 +41,6 @@ typedef struct _PostV {
   _id id;
   _id related_post;
   _id author;
-  int likes;
   time_t post_date;
   char *body;
   char *attachments;
@@ -56,6 +55,11 @@ void ctr_post_v(PostV *post, _id id, _id related_post, _id author,
                 time_t post_date, char *body, char *attachments,
                 char *author_name);
 void delete_post_v(PostV *post);
+
+/**
+ * \returns 0 if user doesn't exist
+ */
+int find_post_by_id(sqlite3 *db, _id id, PostV *res);
 
 /**
  * \param[out] res Array to write received messages
@@ -88,7 +92,7 @@ int read_responces(sqlite3 *db, _id post, PostV *res, int limit);
 /**
  * \returns 0 if user doesn't exist
  */
-int find_user_by_id(sqlite3* db, _id id, UserV* res);
+int find_user_by_id(sqlite3 *db, _id id, UserV *res);
 
 int find_users(sqlite3 *db, char *name, UserV *res, int limit);
 /**

@@ -59,6 +59,20 @@ void remove_post(sqlite3 *db, _id post) {
   sqlite3_reset(q);
 }
 
+int count_likes(sqlite3 *db, _id post) {
+  int res;
+  def_stmt("select count(rowid) from Like "
+           "where post_id = @post");
+
+  bind_id_v("@post", post);
+
+  sqlite3_step(q);
+  res = col_int(0);
+
+  sqlite3_reset(q);
+  return res;
+}
+
 static int count_likes_by_user(sqlite3 *db, _id liker, _id post) {
   int res;
   def_stmt("select count(rowid) from Like "

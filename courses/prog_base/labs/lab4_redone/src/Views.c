@@ -23,6 +23,8 @@ void init_in_message_v(InMessageV *msg) {
 }
 
 void finalize_in_message_v(InMessageV *msg) {
+  if (msg == NULL)
+    return;
   free(msg->attachments);
   free(msg->body);
   free(msg->sender_name);
@@ -77,6 +79,8 @@ void init_post_v(PostV *post) {
 }
 
 void finalize_post_v(PostV *post) {
+  if (post == NULL)
+    return;
   free(post->attachments);
   free(post->body);
   free(post->author_name);
@@ -103,6 +107,29 @@ void ctr_post_v(PostV *post, _id id, _id related_post, _id author,
 void delete_post_v(PostV *post) {
   finalize_post_v(post);
   free(post);
+}
+
+int find_post_by_id(sqlite3 *db, _id id, PostV *res) {
+  int found_users;
+  def_stmt("select "
+           "count(p.rowid), p.id, related_post, author_id, "
+           "post_date, body, attachments, s.name "
+           "from Post p "
+           "left join User s on author_id = s.id "
+           "where p.id = @id");
+
+  bind_id_v("@id", id);
+
+  sqlite3_step(q);
+  found_users = col_int(0);
+  if (found_users == 0)
+    return 0;
+
+  ctr_post_v(res, col_id(1), col_id(2), col_id(3), col_int64(4), col_text(5),
+             col_text(6), col_text(7));
+
+  sqlite3_reset(q);
+  return found_users;
 }
 
 int read_responces(sqlite3 *db, _id post, PostV *res, int limit) {
@@ -159,6 +186,8 @@ void init_user_v(UserV *u) {
 }
 
 void finalize_user_v(UserV *u) {
+  if (u == NULL)
+    return;
   free(u->details);
   free(u->name);
   free(u->password);
@@ -186,11 +215,11 @@ static int map_users(sqlite3_stmt *q, UserV *res) {
 }
 
 int find_users(sqlite3 *db, char *name, UserV *res, int limit) {
-  char* like_wildcard = malloc(strlen(name)+2+1);
-  snprintf(like_wildcard,strlen(name)+2+1,"%%%s%%", name); //%% escapes %
+  char *like_wildcard = malloc(strlen(name) + 2 + 1);
+  snprintf(like_wildcard, strlen(name) + 2 + 1, "%%%s%%", name); //%% escapes %
   def_stmt("select id, name, password, details "
            "from User where name like @name limit @limit");
-  bind_text_v("@name", name);
+  bind_text_v("@name", like_wildcard);
   bind_int_v("@limit", limit);
 
   int rec = map_users(q, res);
@@ -199,19 +228,20 @@ int find_users(sqlite3 *db, char *name, UserV *res, int limit) {
   return rec;
 }
 
-int find_user_by_id(sqlite3 *db, _id id, UserV *res){
-    int found_users;
-    def_stmt("select count(rowid), name, password, details "
-             "from User where id = @id");
+int find_user_by_id(sqlite3 *db, _id id, UserV *res) {
+  int found_users;
+  def_stmt("select count(rowid), name, password, details "
+           "from User where id = @id");
 
-    bind_id_v("@id", id);
+  bind_id_v("@id", id);
 
-    sqlite3_step(q);
+  sqlite3_step(q);
 
-    found_users = col_int(0);
-    if(found_users == 0) return 0;
-    ctr_user_v(res, id, col_text(1), col_text(2), col_text(3));
+  found_users = col_int(0);
+  if (found_users == 0)
+    return 0;
+  ctr_user_v(res, id, col_text(1), col_text(2), col_text(3));
 
-    sqlite3_reset(q);
-    return found_users;
+  sqlite3_reset(q);
+  return found_users;
 }

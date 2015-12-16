@@ -14,6 +14,7 @@ _id post_wall(sqlite3 *db, _id author, const char *body,
               const char *attachments);
 void remove_post(sqlite3 *db, _id post);
 void like_post(sqlite3 *db, _id liker, _id liked_post);
+int count_likes(sqlite3 *db, _id post);
 
 void init_friendship(sqlite3 *db, _id initiator, _id acceptor);
 void decline_friendship(sqlite3 *db, _id acceptor, _id declined_friend);
