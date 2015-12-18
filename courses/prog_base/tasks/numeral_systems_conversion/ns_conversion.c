@@ -65,6 +65,9 @@ char *ns_convert(char *number, unsigned int sourceBase, unsigned int destBase) {
   }
 
   current = res;
+  if (numI == 0) {
+    *(current++) = '0';
+  }
   while (numI != 0) {
     *(current++) = intToSym(numI % destBase);
     numI /= destBase;
