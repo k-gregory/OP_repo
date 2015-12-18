@@ -5,6 +5,8 @@ project(ImgLib C)
 set(SOURCES
   "ImgLib.c"
   "IL_BMP.c"
+  "include/ImgLib/IL_BMP.h"
+  "include/ImgLib/ImgLib.h"
   )
 
 
