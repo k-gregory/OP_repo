@@ -66,10 +66,10 @@ IL_Image *il_load_bmp_fromfile(const char *filename) {
       int read_bytes = 0;
       for(size_t x = 0; x< width;x++){
           int real_y = height - y-1;
-          get_pixel(img,x,real_y)->r = (int)fgetc(f);
-          get_pixel(img,x,real_y)->g = (int)fgetc(f);
           get_pixel(img,x,real_y)->b = (int)fgetc(f);
-          read_bytes++;
+          get_pixel(img,x,real_y)->g = (int)fgetc(f);
+          get_pixel(img,x,real_y)->r = (int)fgetc(f);
+          read_bytes+=3;
       }
       while(read_bytes++ % 4 != 0)
           fgetc(f);
