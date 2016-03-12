@@ -123,6 +123,7 @@ START_TEST(double_array_min_max_max_by_constains_length_restriction_is_respected
   ck_assert(DoubleArray_max_l(arr,2) == -4.4);
   ck_assert(DoubleArray_max_by_l(arr,double_abs_compare,6) == -700);
   ck_assert(DoubleArray_contains_l(arr,42,6) == 0);
+  ck_assert(DoubleArray_contains_l(arr,-50,1) == 1);
   DoubleArray_delete(arr);  
 } END_TEST
 
