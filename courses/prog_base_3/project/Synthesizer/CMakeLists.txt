@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 include(FindPkgConfig)
 
-project(cmake_test C)
+project(Synthesizer C)
 
 pkg_search_module(SDL2 REQUIRED sdl2)
 link_directories(${SDL2_LIBRARY_DIRS})
