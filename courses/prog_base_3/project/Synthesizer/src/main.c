@@ -5,7 +5,7 @@
 #include <math.h>
 #include <assert.h>
 
-#define FREQ 5000
+#define FREQ 3000
 
 unsigned int audio_pos;
 int audio_len;
@@ -20,11 +20,16 @@ void test_audio_callback(void* data, Uint8* _stream, int len) {
   Sint16* stream = (Sint16*) _stream;
   for(int i = 0; i < len; i++){
     //Harmonics =)
-    stream[i] = audio_volume *  sin (2.f * M_PI * audio_pos * audio_frequency);
-    stream[i] += audio_volume * cos(2.f / 2 * M_PI * audio_pos * audio_frequency);
-    stream[i] += audio_volume * sin(2.f / 3 * M_PI * audio_pos * audio_frequency);
-    stream[i] += audio_volume * cos(2.f / 4 * M_PI * audio_pos * audio_frequency);
-    stream[i] += audio_volume * sin(0.2* M_PI * audio_pos * audio_frequency);
+    stream[i] = audio_volume/4 *  sin (2.f * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 2 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 3 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 4 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 5 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 6 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 7 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 8 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 9 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume/4 * sin(2.f / 10* M_PI * audio_pos * audio_frequency);
     
     stream[i] = stream[i] * COEF() * COEF();
    
