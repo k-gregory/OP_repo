@@ -2,13 +2,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <math.h>
+#include <assert.h>
 
-size_t freq;
+#define FREQ 5000
 
-void test_audio_callback(void* data, Uint8* stream, int len) {
-  for(size_t i = 0; i < len; i++)
-    stream[i] = rand();
+unsigned int audio_pos;
+int audio_len;
+int al_s;
+float audio_frequency;
+float audio_volume;
+
+#define COEF() (1.f - 1.f * audio_pos / al_s)
+
+void test_audio_callback(void* data, Uint8* _stream, int len) {
+  len = len / sizeof(Sint16);
+  Sint16* stream = (Sint16*) _stream;
+  for(int i = 0; i < len; i++){
+    //Harmonics =)
+    stream[i] = audio_volume *  sin (2.f * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume * cos(2.f / 2 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume * sin(2.f / 3 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume * cos(2.f / 4 * M_PI * audio_pos * audio_frequency);
+    stream[i] += audio_volume * sin(0.2* M_PI * audio_pos * audio_frequency);
+    
+    stream[i] = stream[i] * COEF() * COEF();
+   
+    audio_pos++;
+  }
+  audio_len -= len;
 }
 
 void play_something() {
@@ -25,15 +47,21 @@ void play_something() {
   if(dev == 0)
     printf("Failed to open audio: %s\n",SDL_GetError());
   else {
-    freq = have.freq;
+    audio_len = have.freq * 5;
+    al_s = audio_len;
+    audio_pos = 0;
+    audio_frequency = 1.0 * FREQ / have.freq;
+    audio_volume = 6000;
+      
     SDL_PauseAudioDevice(dev,0);
-    SDL_Delay(5000);
+    while(audio_len > 0)
+      SDL_Delay(500);
     SDL_CloseAudioDevice(dev);
   }
 }
 
 int main(int argc, char* argv[]){
-  srand(time(NULL));
+  assert(sizeof(Sint16) == 2);
   if(SDL_Init(SDL_INIT_AUDIO) != 0) {
     fprintf(stderr,
 	    "\nUnable to initialize SDL: %s\n",
