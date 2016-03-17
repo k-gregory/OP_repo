@@ -24,12 +24,21 @@ void text_word_length_cb(const char* _text){
 
 void bad_word_checker_cb(const char* text){
   const char* const bad_words[] =
-    {"assembly", "Windows", "matan", "kursach", "deadline"};
-  for(size_t i = 0 ; i < LEN(bad_words); ++i)
-    if(strcasecmp(text,bad_words[i]) == 0){
-      printf("A bad word found: %s\n", text);
+    {"assembly", "windows", "matan", "kursach", "deadline"};
+
+  char* low_text = malloc(strlen(text));
+  strcpy(low_text, text);
+  for(size_t i = 0; i < strlen(text); i++)
+    low_text[i] = tolower(low_text[i]);
+  
+  for(size_t i = 0 ; i < LEN(bad_words); ++i){
+    char* bad_word = strstr(low_text,bad_words[i]);
+    if(bad_word) {
+      printf("A bad word found: %s\n", bad_word);
       break;
     }
+  }
+  free(low_text);
 }
 
 void word_print_cb(const char* text){
@@ -83,7 +92,7 @@ int main(void){
   
   puts("\n#####Another launch ######\n");
   
-  process("I have just done some matan."\
+  process("I have just done some strstrtestmatan."\
 	  "It is time to write some ASSembly"	\
           " for !!WinDoWS?!!. It is going to be"\
 	  " my kursach?Writting assembly is the"\
