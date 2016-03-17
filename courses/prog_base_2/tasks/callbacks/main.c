@@ -36,7 +36,8 @@ void process(const char* _str, text_f sentenceCB, text_f wordCB){
 	tokenized++;
       }
 
-      wordCB(word_start);
+      if(*word_start != '\0')
+	wordCB(word_start);
     }
 
     tokenized = strtok(NULL, ".?!");
@@ -48,7 +49,7 @@ void process(const char* _str, text_f sentenceCB, text_f wordCB){
 int main(void){
   process("Oh, lol! Tthis is insanity. " \
       "  What are me doein here?   " \
-      "I love rabbits????Penguins"
+      "I love rabbits????  Penguins  "
       ,sent_fl, word_fl);
   return EXIT_SUCCESS;
 }
