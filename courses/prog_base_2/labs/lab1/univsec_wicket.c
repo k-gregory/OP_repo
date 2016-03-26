@@ -3,32 +3,59 @@
 
 #define UNIVSEC_WICKET_START_STACKSIZE 10
 
+univsec_wicket_status univsec_wicket_status_;
+#define ok_return(ret) univsec_wicket_status_ = UNIVSEC_WICKET_S_OK;\
+  return ret;
+
+univsec_wicket_status univsec_wicket_get_error(){
+  return univsec_wicket_status_;
+}
+
 struct univsec_wicket{
-  univ_person** passers;
+  //It is a stack of passers(Type univ_person*)
+  univ_person** passers; //Passers holder
   size_t capacity;
-  size_t top;
+  size_t passers_top;
 };
 
 univsec_wicket* univsec_wicket_new(){
   univsec_wicket* ret = malloc(sizeof(struct univsec_wicket));
-  ret->passed_top = 0;
+  ret->passers_top = 0;
   ret->capacity = UNIVSEC_WICKET_START_STACKSIZE;
   ret->passers = malloc(sizeof(univ_person*)*UNIVSEC_WICKET_START_STACKSIZE);
-  return ret;
+  ok_return(ret);
 }
+
 void univsec_wicket_free(univsec_wicket* w){
-  for(size_t i = 0 ; i < top; i++)
-    univsec_person_free(w->passers[i]);
-  free(passers);
+  free(w->passers);
   free(w);
 }
 
 void univsec_wicket_pass(univsec_wicket* w, univ_person* p){
-  if(top == capacity){
-    
+  if(w->passers_top == w->capacity){
+    w->capacity = w->capacity * 2  + 1;
+    w->passers = realloc(w->passers, w->capacity*sizeof(univ_person*));
   }
+  w->passers[w->passers_top++] = p;
 }
 
 size_t univsec_wicket_get_passes(univsec_wicket* w,
 				 univ_person** result,
-				 size_t max_passes);
+				 size_t max_passes){
+  if(result == NULL){
+    univsec_wicket_status_ = UNIVSEC_WICKET_S_BADPOLLOUT;
+    return 0;
+  }
+  
+  size_t to_write = max_passes;
+  if(w->passers_top < max_passes)
+    max_passes = w->passers_top;
+  
+  for(size_t i = 0; i < to_write; i++) {
+    result[i] = w->passers[w->passers_top - i - 1];
+  }
+
+  w->passers_top -= to_write;
+  
+  ok_return(to_write);
+}
