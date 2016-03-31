@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<drivers>
+  <driver name="Fabiola" surname="Nicolosi">
+    <car>
+      <manufacturer>BMW</manufacturer>
+      <model>F30</model>
+    </car>
+    <averageSpeedKm>70.5</averageSpeedKm>
+    <kmFare>1.45</kmFare>
+    <satisfiedClients>56</satisfiedClients>
+    <unsatisfiedClients>12</unsatisfiedClients>
+    <hiredAt>2013-06-11</hiredAt>
+  </driver>
+  <driver name="Renzo" surname="Gori">
+    <car>
+      <manufacturer>Volkswagen</manufacturer>
+      <model>Transporter T1</model>
+    </car>
+    <averageSpeedKm>0</averageSpeedKm>
+    <kmFare>0</kmFare>
+    <satisfiedClients>234</satisfiedClients>
+    <unsatisfiedClients>0</unsatisfiedClients>
+    <hiredAt>2001-02-22</hiredAt>
+  </driver>
+  <driver name="Goffredo" surname="Tivoli">
+    <car>
+      <manufacturer>Belarus</manufacturer>
+      <model>Traktor</model>
+    </car>
+    <averageSpeedKm>37.43</averageSpeedKm>
+    <kmFare>0.45</kmFare>
+    <satisfiedClients>1783</satisfiedClients>
+    <unsatisfiedClients>1917</unsatisfiedClients>
+    <hiredAt>1991-12-26</hiredAt>
+  </driver>
+  <driver name="Arnold" surname="Schwarzenegger">
+    <car>
+      <manufacturer>Skynet</manufacturer>
+      <model>T-1000</model>
+    </car>
+    <averageSpeedKm>15</averageSpeedKm>
+    <kmFare>2500</kmFare>
+    <satisfiedClients>2</satisfiedClients>
+    <unsatisfiedClients>0</unsatisfiedClients>
+    <hiredAt>2029-05-12</hiredAt>
+  </driver>
+  <driver name="Albert" surname="Einstein">
+    <car>
+      <manufacturer>Albert Einstein</manufacturer>
+      <model>General relativity</model>
+    </car>
+    <averageSpeedKm>1079252848.8</averageSpeedKm>
+    <kmFare>0</kmFare>
+    <satisfiedClients>0</satisfiedClients>
+    <unsatisfiedClients>0</unsatisfiedClients>
+    <hiredAt>1915-12-25</hiredAt>
+  </driver>
+</drivers>
