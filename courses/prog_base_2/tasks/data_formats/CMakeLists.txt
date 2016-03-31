@@ -5,6 +5,7 @@ find_package(libxml2 REQUIRED)
 
 set(SOURCES
   "src/main.c"
+  "src/Driver.c"
   )
 
 

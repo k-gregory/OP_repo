@@ -16,6 +16,6 @@ typedef struct Driver {
   int satisfiedClients;
   int unsatisfiedClients;
   time_t hired_at;
-} Student;
+} Driver;
 
-int driver_parse_from_xml_file(Driver* d, const char* filename);
+unsigned long drivers_parse_from_xml_file(Driver** d, const char* filename);
