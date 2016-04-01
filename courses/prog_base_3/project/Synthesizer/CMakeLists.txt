@@ -4,7 +4,6 @@ include(FindPkgConfig)
 project(Synthesizer C)
 
 pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(GTK3 REQUIRED gtk+-3.0)
 link_directories(${SDL2_LIBRARY_DIRS})
 
 set(SOURCES
