@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Fabiola",
+        "surname": "Nicolosi",
+        "car": {
+            "manufacturer": "BMW",
+            "model": "F30"
+        },
+        "averageSpeedKm": "70.5",
+        "kmFare": "1.45",
+        "satisfiedClients": "56",
+        "unsatisfiedClients": "12",
+        "hiredAt": "2013-06-11"
+    },
+    {
+        "name": "Renzo",
+        "surname": "Gori",
+        "car": {
+            "manufacturer": "Volkswagen",
+            "model": "Transporter T1"
+        },
+        "averageSpeedKm": "0",
+        "kmFare": "0",
+        "satisfiedClients": "234",
+        "unsatisfiedClients": "0",
+        "hiredAt": "2001-02-22"
+    },
+    {
+        "name": "Goffredo",
+        "surname": "Tivoli",
+        "car": {
+            "manufacturer": "Belarus",
+            "model": "Traktor"
+        },
+        "averageSpeedKm": "37.43",
+        "kmFare": "0.45",
+        "satisfiedClients": "1783",
+        "unsatisfiedClients": "1917",
+        "hiredAt": "1991-12-26"
+    },
+    {
+        "name": "Arnold",
+        "surname": "Schwarzenegger",
+        "car": {
+            "manufacturer": "Skynet",
+            "model": "T-1000"
+        },
+        "averageSpeedKm": "15",
+        "kmFare": "2500",
+        "satisfiedClients": "2",
+        "unsatisfiedClients": "0",
+        "hiredAt": "2029-05-12"
+    },
+    {
+        "name": "Albert",
+        "surname": "Einstein",
+        "car": {
+            "manufacturer": "Albert Einstein",
+            "model": "General relativity"
+        },
+        "averageSpeedKm": "1079252848.8",
+        "kmFare": "0",
+        "satisfiedClients": "0",
+        "unsatisfiedClients": "0",
+        "hiredAt": "1915-12-25"
+    }
+]

@@ -1,0 +1,6 @@
+name,surname,car/manufacturer,car/model,averageSpeedKm,kmFare,satisfiedClients,unsatisfiedClients,hiredAt
+Fabiola,Nicolosi,BMW,F30,70.5,1.45,56,12,2013-06-11
+Renzo,Gori,Volkswagen,Transporter T1,0,0,234,0,2001-02-22
+Goffredo,Tivoli,Belarus,Traktor,37.43,0.45,1783,1917,1991-12-26
+Arnold,Schwarzenegger,Skynet,T-1000,15,2500,2,0,2029-05-12
+Albert,Einstein,Albert Einstein,General relativity,1079252848.8,0,0,0,1915-12-25
