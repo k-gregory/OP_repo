@@ -15,6 +15,7 @@ int main(int argc, char* argv[]){
 
   Driver* drivers;
   n_drivers = drivers_parse_from_xml_file(&drivers, argv[1]);
+  printf("%s\n", drivers[2].c.manufacturer);
   free(drivers);
   
   xmlCleanupParser();
