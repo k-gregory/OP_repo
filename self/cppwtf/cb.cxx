@@ -8,7 +8,7 @@ auto apply(F func, Arg a){
 }
 
 auto fun3(int a, double b, char c){
-  return c;
+  return a+b+c;
 }
 
 int main(void){
