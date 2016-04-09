@@ -15,19 +15,24 @@ START_TEST(univsec_wicket_pass_saves_passers) {
 
   univsec_wicket *w = univsec_wicket_new();
 
+  /*Fill buffer*/
   for (size_t i = 0; i < td_length; i++) {
     sprintf(name_buff, "%zu", i);
     passers[i] = univ_person_new(name_buff, UNIV_PERSON_STUDENT);
   }
 
+  /*Make passes*/
   for (size_t i = 0; i < td_length; i++) {
     univsec_wicket_pass(w, passers[i]);
   }
+
+  /*Test for equality. TODO: relies on reorder of passers*/
   wicket_reply_length = univsec_wicket_get_passes(w, wicket_reply, td_length);
   ck_assert_uint_eq(wicket_reply_length, td_length);
   for (size_t i = 0; i < td_length; i++)
     ck_assert_ptr_eq(wicket_reply[i], passers[td_length - i - 1]);
 
+  /*Cleanup*/
   for (size_t i = 0; i < td_length; i++) {
     univ_person_free(passers[i]);
   }
@@ -70,18 +75,21 @@ START_TEST(univsec_wicket_get_passes_small_buffer) {
 
   univsec_wicket *w = univsec_wicket_new();
 
+  /*Make passes*/
   for (size_t i = 0; i < td_length; i++) {
     sprintf(name_buff, "%zu", i);
     passers[i] = univ_person_new(name_buff, UNIV_PERSON_STUDENT);
     univsec_wicket_pass(w, passers[i]);
   }
 
+  /*Test for equality. TODO: relies on order of passes*/
   for (size_t i = 0; i < td_length; i++) {
     wicket_reply_length = univsec_wicket_get_passes(w, reply_buff, 1);
     ck_assert_uint_eq(wicket_reply_length, 1);
     ck_assert_ptr_eq(reply_buff[0], passers[td_length - i - 1]);
   }
 
+  /*Cleanup*/
   for (size_t i = 0; i < td_length; i++) {
     univ_person_free(passers[i]);
   }
