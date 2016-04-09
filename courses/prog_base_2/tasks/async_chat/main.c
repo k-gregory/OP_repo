@@ -9,6 +9,8 @@
 #include <stdio.h>
 
 #define MAX_CLIENTS 1000
+#define MESSAGES_STRIP_L 10000
+
 #define N_EVENTS 10
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
