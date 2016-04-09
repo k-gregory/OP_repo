@@ -96,6 +96,7 @@ void univ_term_send_passers(univ_term* t,
 			    univ_person **passers_arr,
 			    size_t len){
   size_t lost;
+  if(len == 0) return;
   
   len = MY_MIN(UNIV_TERM_MEMORY, len);
   if(t->n_passers + len < UNIV_TERM_MEMORY)
