@@ -21,7 +21,7 @@ struct univsec_wicket {
 
 univsec_wicket *univsec_wicket_new() {
   univsec_wicket *ret = malloc(sizeof(struct univsec_wicket));
-  ret->passers_top = 1;
+  ret->passers_top = 0;
   ret->capacity = UNIVSEC_WICKET_START_STACKSIZE;
   ret->passers = malloc(sizeof(univ_person *) * UNIVSEC_WICKET_START_STACKSIZE);
   ok_return(ret);
@@ -47,14 +47,10 @@ size_t univsec_wicket_get_passes(univsec_wicket *w, univ_person **result,
     return 0;
   }
 
-  size_t to_write = max_passes;
-  if (w->passers_top - 1 < max_passes)
-    to_write = w->passers_top - 1;
-
+  size_t to_write = w->passers_top < max_passes ? w->passers_top : max_passes;
   for (size_t i = 0; i < to_write; i++) {
     result[i] = w->passers[w->passers_top - i -1];
   }
-
   w->passers_top -= to_write;
 
   ok_return(to_write);

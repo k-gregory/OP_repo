@@ -11,10 +11,10 @@ typedef enum {
 
 typedef enum univ_person_category {
   UNIV_PERSON_STUDENT = 1,
-  UNIV_PERSON_TEACHER = 1<<2,
-  UNIV_PERSON_SERVICE_STUFF = 1<<3,
-  UNIV_PERSON_UNKNOWN = 1<<4,
-  UNIV_PERSON_SPECIAL = 1<< 5
+  UNIV_PERSON_TEACHER = 1<<1,
+  UNIV_PERSON_SERVICE_STUFF = 1<<2,
+  UNIV_PERSON_UNKNOWN = 1<<3,
+  UNIV_PERSON_SPECIAL = 1<< 4
 } univ_person_category;
 
 univ_person *univ_person_new(const char *name, univ_person_category c);
