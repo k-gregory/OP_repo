@@ -64,12 +64,13 @@ static const char* univ_term_category_repr(univ_person_category c){
   }
 }
 void univ_term_display(univ_term* t){
-  printf("Term %d displays passers:\n", t->term_number);
+  printf("Term %d displays %u passers:\n",t->term_number, t->n_passers);
   size_t displayed = 0;
   for(size_t i = 0;
       i < t->n_passers && displayed < t->n_output;
       i++){
     univ_person* passer = t->passers[i];
+    printf("Addr is %p",passer);
     univ_person_category c = univ_person_get_category(passer);
     if((c & t->categories) == 0) continue;
     char* name = univ_person_get_name(passer, NULL, 0);
@@ -95,6 +96,7 @@ void univ_term_set_output_number(univ_term* t, unsigned int n){
 void univ_term_send_passers(univ_term* t,
 			    univ_person **passers_arr,
 			    size_t len){
+  printf("Term %u receives %zu passes\n",t->term_number,len);
   size_t lost;
   if(len == 0) return;
   
@@ -104,11 +106,13 @@ void univ_term_send_passers(univ_term* t,
   else lost = t->n_passers + len - UNIV_TERM_MEMORY;
   
   for(int i = t->n_passers - lost - 1; i >= 0; i--){
+    puts("Replacing");
     t->passers[i + len] = t->passers[i];
   }
 
-  for(size_t i = 0; i < len; i++)
+  for(size_t i = 0; i < len; i++){
+    printf("Setting %zu\n",i);
     t->passers[i] = passers_arr[i];
-  
+  }
   t->n_passers += len - lost;
 }

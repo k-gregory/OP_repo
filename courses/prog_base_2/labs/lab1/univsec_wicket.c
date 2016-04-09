@@ -47,9 +47,9 @@ size_t univsec_wicket_get_passes(univsec_wicket *w, univ_person **result,
     return 0;
   }
 
-  if (w->passers_top < max_passes)
-    max_passes = w->passers_top;
   size_t to_write = max_passes;
+  if (w->passers_top - 1 < max_passes)
+    to_write = w->passers_top - 1;
 
   for (size_t i = 0; i < to_write; i++) {
     result[i] = w->passers[w->passers_top - i -1];
