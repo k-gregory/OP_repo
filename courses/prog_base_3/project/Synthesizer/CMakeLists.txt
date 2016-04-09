@@ -8,6 +8,8 @@ link_directories(${SDL2_LIBRARY_DIRS})
 
 set(SOURCES
     "src/main.c"
+    "src/SimpleWaves.c"
+    "src/audio_utils.c"
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})

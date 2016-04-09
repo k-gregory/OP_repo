@@ -28,14 +28,18 @@ void univ_person_free(univ_person *p) {
   free(p);
 }
 
-char *univ_person_get_name(univ_person *p, char *dest) {
-  if (dest == NULL)
-    dest = malloc(strlen(p->name) + 1);
-  strcpy(dest, p->name);
-  ok_return(dest);
+char *univ_person_get_name(univ_person *p, char *dest, size_t len) {
+  if (dest == NULL){
+    len = strlen(p->name) + 1;
+    dest = malloc(len);
+  }
+  strncpy(dest, p->name, len);
+
+  return dest;
 }
+
 univ_person_category univ_person_get_category(univ_person *p) {
-  ok_return(p->category);
+  return p->category;
 }
 
 univ_person_status univ_person_get_error() { return univ_person_status_; }
