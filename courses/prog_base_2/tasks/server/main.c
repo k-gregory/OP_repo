@@ -33,7 +33,8 @@ typedef enum ParseError{
 
 typedef enum ParseStatus {
   PARSE_START,
-  PARSE_SKIP_EMPTY_LINES,
+  PARSE_SKIP_EMPTY_LINES_LF,
+  PARSE_SKIP_EMPTY_LINES_CR,
   PARSE_METHOD,
   PARSE_URI,
   PARSE_STATUS,
@@ -76,6 +77,7 @@ HTTPRequest *new_req() {
   ret->parse_buff_pos = 0;
   ret->status = PARSE_START;
   ret->method = METHOD_UNDEFINED;
+  ret->uri[0] = '\0';
   ret->n_headers = 0;
   ret->body = NULL;
   ret->body_length = 0;
@@ -85,13 +87,25 @@ HTTPRequest *new_req() {
 bool req_feed(HTTPRequest *req, char feeder[], size_t n) {
   while (n > 0) {
     switch (req->status) {
+      
     case PARSE_START:
-      if(feeder[0] == '\r')
-	req->status = PARSE_SKIP_EMPTY_LINES;
+    case PARSE_SKIP_EMPTY_LINES_CR:
+      if(*feeder == '\r'){
+	req->status = PARSE_SKIP_EMPTY_LINES_LF;
+        feeder++;
+	n--;
+      }
       else req->status = PARSE_METHOD;
       break;
-    case PARSE_SKIP_EMPTY_LINES:
+      
+    case PARSE_SKIP_EMPTY_LINES_LF:
+      if(*feeder == '\n'){
+	req->status = PARSE_SKIP_EMPTY_LINES_CR;
+	feeder++;
+	n--;
+      }
       break;
+      
     case PARSE_METHOD:
       while(isalpha(*feeder) && n > 0){
 	req->parse_buff[req->parse_buff_pos++] = *feeder;
@@ -99,6 +113,9 @@ bool req_feed(HTTPRequest *req, char feeder[], size_t n) {
 	feeder++;
       }
       if(*feeder==' ') {
+	memcpy(req->method, req->parse_buff, req->parse_buff_pos);
+	req->parse_buff[req->parse_buff_pos] = '\0';
+	req->parse_buff_pos = 0;
 	req->status = PARSE_URI;
 	feeder++;
 	n--;
@@ -107,9 +124,14 @@ bool req_feed(HTTPRequest *req, char feeder[], size_t n) {
 	req->error = BAD_METHOD_SEPARATOR;
 	return false;
       }
-      
       break;
+      
     case PARSE_URI:
+      while(*feeder != ' ' && n > 0){
+	req->parse_buff[req->parse_buff_pos++] = *feeder;
+	feeder++;
+	n--;
+      }
       
       break;
     }
