@@ -35,7 +35,8 @@ typedef enum ParseStatus{
   
   PARSE_CR_BEFORE_HEADER_NAME,
   PARSE_LF_BEFORE_HEADER_NAME,
-  PARSE_HEADER_NAME,
+  PARSE_HEADER_NAME = 42,
+  PARSE_HEADER_VALUE_SEP,
   PARSE_SPACE_BEFORE_HEADER_VALUE,
   PARSE_HEADER_VALUE,
 } ParseStatus;
@@ -221,9 +222,17 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	       req->parse_buff);
 	++req->headers_num;
 	
-	req->parse_status = PARSE_SPACE_BEFORE_HEADER_VALUE;
-	++pos;
+	req->parse_status = PARSE_HEADER_VALUE_SEP;
       }
+      break;
+
+    case PARSE_HEADER_VALUE_SEP:
+      if(data[pos] == ':') pos++;
+      else {
+	req->err = BAD_SEPARATOR;
+	return PARSE_ERROR;
+      }
+      req->parse_status = PARSE_SPACE_BEFORE_HEADER_VALUE;
       break;
 
     case PARSE_SPACE_BEFORE_HEADER_VALUE:
@@ -257,7 +266,6 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 }
 
 int main(int argc, char* argv[]){
-  size_t i;
   HTTPRequest* req;
   const char* test_req;
   
@@ -270,8 +278,8 @@ int main(int argc, char* argv[]){
             "x";
 
   http_request_parse_feed(req, test_req, strlen(test_req));
-  /*
-  while(*test_req!='\0'){
+  
+  /*while(*test_req!='\0'){
     http_request_parse_feed(req,test_req,1);
     ++test_req;
     };*/
