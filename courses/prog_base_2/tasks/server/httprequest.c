@@ -257,7 +257,7 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	       req->parse_buff);
 
 	req->parse_status = PARSE_CR_BEFORE_HEADER_NAME;
-	++pos;
+	//	++pos;
       }
       break;
     }
@@ -277,12 +277,12 @@ int main(int argc, char* argv[]){
             CRLF\
             "x";
 
-  http_request_parse_feed(req, test_req, strlen(test_req));
+  //http_request_parse_feed(req, test_req, strlen(test_req));
   
-  /*while(*test_req!='\0'){
+  while(*test_req!='\0'){
     http_request_parse_feed(req,test_req,1);
     ++test_req;
-    };*/
+    };
 
   printf("method: %d\n, URI:\"%s\"\n, version: %d\n"\
 	 "header1: %s: %s\n"\
