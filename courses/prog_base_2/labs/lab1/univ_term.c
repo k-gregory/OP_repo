@@ -4,13 +4,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define UNIV_TERM_MAX_OUTPUT_NUMBER 20
 #define UNIV_TERM_MEMORY 20
 
 static univ_term_status univ_term_status_;
 #define ok_return(ret)				\
   univ_term_status_ = UNIV_TERM_S_OK;		\
   return ret;
+
+univ_term_status univ_term_get_error(){
+  return univ_term_status_;
+}
 
 struct univ_term {
   univ_person* passers[UNIV_TERM_MEMORY];
@@ -61,7 +64,7 @@ static const char* univ_term_category_repr(univ_person_category c){
   }
 }
 void univ_term_display(univ_term* t){
-  printf("Term %d displays passers:\n", t->term_number);
+  printf("Term %d displays %u passers:\n",t->term_number, t->n_passers);
   size_t displayed = 0;
   for(size_t i = 0;
       i < t->n_passers && displayed < t->n_output;
@@ -93,26 +96,19 @@ void univ_term_send_passers(univ_term* t,
 			    univ_person **passers_arr,
 			    size_t len){
   size_t lost;
+  if(len == 0) return;
   
   len = MY_MIN(UNIV_TERM_MEMORY, len);
   if(t->n_passers + len < UNIV_TERM_MEMORY)
     lost = 0;
   else lost = t->n_passers + len - UNIV_TERM_MEMORY;
-  //  lost = MY_MAX(0, t->n_passers + len -UNIV_TERM_MEMORY);
-  printf("len %zu lost %zu\n", len, lost);
-
   
-  //printf("n_passers-lost %lu\n", t->n_passers - lost);
-  //xprintf("n_passers %u lost %zu\n", t->n_passers, lost);
-  //printf("Copy from index %zu\n",
-  //	 t->n_passers - lost + len -1);
   for(int i = t->n_passers - lost - 1; i >= 0; i--){
     t->passers[i + len] = t->passers[i];
   }
 
-  for(size_t i = 0; i < len; i++)
+  for(size_t i = 0; i < len; i++){
     t->passers[i] = passers_arr[i];
-  
+  }
   t->n_passers += len - lost;
-  printf("len - lost %zu length %u\n",len-lost, t->n_passers);
 }

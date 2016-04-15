@@ -11,6 +11,7 @@ typedef enum {
 
 typedef struct univ_term univ_term;
 
+#define UNIV_TERM_MAX_OUTPUT_NUMBER 20
 univ_term* univ_term_new(unsigned int output_number,
 			 unsigned int term_number,
 			 univ_person_category c);

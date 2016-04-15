@@ -6,6 +6,14 @@
 #include <stdlib.h>
 #include <stdio.h> //sprintf
 
+START_TEST(univsec_wicket_get_passes_empty){
+  univsec_wicket* w = univsec_wicket_new();
+  univ_person* p[1];
+  size_t n_polled = univsec_wicket_get_passes(w,p,1);
+  ck_assert(n_polled == 0);
+  univsec_wicket_free(w);
+} END_TEST;
+
 START_TEST(univsec_wicket_pass_saves_passers) {
 #define td_length 30
   char name_buff[256];
@@ -104,6 +112,7 @@ Suite *univsec_wicket_suite() {
 
   ret = suite_create("univsec_wicket");
   tc_core = tcase_create("core");
+  tcase_add_test(tc_core,univsec_wicket_get_passes_empty);
   tcase_add_test(tc_core, univsec_wicket_pass_saves_passers);
   tcase_add_test(tc_core,
                  univsec_wicket_get_passes_result_NULL_error_returns_0);

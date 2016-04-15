@@ -1,31 +1,68 @@
 #include "univ_person.h"
+#include "univsec_wicket.h"
 #include "univ_term.h"
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define LEN(arr) (sizeof(arr)/sizeof((arr)[0]))
 
 int main(void){
-  char name_buff[20];
-  univ_person* passers[10];
-  univ_term* term  = univ_term_new(20,4,UNIV_PERSON_TEACHER);
-  for(size_t i = 0; i < LEN(passers); i++){
-    sprintf(name_buff,"P%zu",i);
-    passers[i] = univ_person_new(name_buff, UNIV_PERSON_TEACHER);
-  }
-  univ_term_send_passers(term,passers, 10);
-  univ_term_display(term);
-  univ_term_send_passers(term,passers, 2);
-  univ_term_display(term);
-  univ_term_send_passers(term,passers+4, 3);
-  univ_term_send_passers(term,passers,1);
-  univ_term_display(term);
-  univ_term_send_passers(term,passers, 10);
-  univ_term_display(term);
+  char buff[256];
+  univ_person* persons[1024];
+  size_t n_persons = 0;
 
-  for(size_t i = 0; i < LEN(passers); i++){
-    univ_person_free(passers[i]);
+  univ_term* t1 = univ_term_new(5,1,UNIV_PERSON_STUDENT);
+  univ_term* t2 = univ_term_new(5,2,UNIV_PERSON_STUDENT | UNIV_PERSON_TEACHER);
+  univ_term* t3 = univ_term_new(5,3,UNIV_PERSON_SERVICE_STUFF);
+
+  univsec_wicket* w1 = univsec_wicket_new();
+  univsec_wicket* w2 = univsec_wicket_new();
+
+  while(1){
+    univ_person* p[10];
+    size_t n_polled;
+    char name_buff[256];
+    unsigned int id,cat;
+
+    n_polled = univsec_wicket_get_passes(w1, p, LEN(p));
+    univ_term_send_passers(t1, p, n_polled);
+    univ_term_send_passers(t2, p, n_polled);
+    
+    n_polled = univsec_wicket_get_passes(w2,p, LEN(p));
+    univ_term_send_passers(t3, p, n_polled);
+
+    fgets(buff, LEN(buff), stdin);
+    if(strcmp(buff,"exit\n") == 0) break;
+    else if(sscanf(buff,"pass2 %d %s\n",&cat,name_buff)==2){
+      persons[n_persons] = univ_person_new(name_buff, cat);
+      univsec_wicket_pass(w2,persons[n_persons]);
+      n_persons++;
+    } else 
+    if(sscanf(buff,"pass1 %d %s\n",&cat,name_buff)==2){
+      persons[n_persons] = univ_person_new(name_buff, cat);
+      univsec_wicket_pass(w1,persons[n_persons]);
+      n_persons++;
+    } else 
+    if(sscanf(buff,"setctg1 %d\n",&id)==1)
+      univ_term_set_categories(t1,id); 
+    else if(sscanf(buff,"setctg2 %d\n", &id)==1)
+      univ_term_set_categories(t2,id);
+    else if(sscanf(buff,"setctg3 %d\n", &id)==1)
+      univ_term_set_categories(t3,id);
+    else if(strcmp(buff,"disp1\n")==0) univ_term_display(t1);
+    else if(strcmp(buff,"disp2\n")==0) univ_term_display(t2);
+    else if(strcmp(buff,"disp3\n")==0) univ_term_display(t3);
   }
-  univ_term_free(term);
+
+  for(size_t i = 0; i < n_persons; i++)
+    univ_person_free(persons[i]);
+
+  univsec_wicket_free(w1);
+  univsec_wicket_free(w2);
+
+  univ_term_free(t1);
+  univ_term_free(t2);
+  univ_term_free(t3);
 }
