@@ -20,25 +20,30 @@ typedef enum ParseError{
   PARSED,
   BAD_SEPARATOR,
   BAD_CRLF,
+  BAD_BODYLENGTH_UNDEFINED,
+  BAD_UNIMPLEMENTED,
 } ParseError;
 
 typedef enum ParseStatus{
-  PARSE_START,
+  PARSE_START = 0,
   
-  PARSE_METHOD,
+  PARSE_METHOD = 1,
   
-  PARSE_SPACE_BEFORE_URI,
-  PARSE_URI,
+  PARSE_SPACE_BEFORE_URI = 2,
+  PARSE_URI = 3,
   
-  PARSE_SPACE_BEFORE_VERSION,  
-  PARSE_VERSION,
+  PARSE_SPACE_BEFORE_VERSION = 4,  
+  PARSE_VERSION = 5,
   
-  PARSE_CR_BEFORE_HEADER_NAME,
-  PARSE_LF_BEFORE_HEADER_NAME,
-  PARSE_HEADER_NAME = 42,
-  PARSE_HEADER_VALUE_SEP,
-  PARSE_SPACE_BEFORE_HEADER_VALUE,
-  PARSE_HEADER_VALUE,
+  PARSE_CR_BEFORE_HEADER_NAME = 6,
+  PARSE_LF_BEFORE_HEADER_NAME = 7,
+  PARSE_HEADER_NAME = 8,
+  PARSE_HEADER_VALUE_SEP = 9,
+  PARSE_SPACE_BEFORE_HEADER_VALUE = 10,
+  PARSE_HEADER_VALUE = 11,
+  PARSE_PRE_BODY = 12,
+  PARSE_BODY=13,
+  PARSE_FOOTERS,
 } ParseStatus;
 
 typedef enum HTTPMethod {
@@ -70,6 +75,7 @@ typedef struct HTTPRequest {
   char* body;
   size_t content_length;
 
+  unsigned int crlf_count; /*TODO: Use parse_buff*/
   char parse_buff[1024];
   size_t parse_buff_pos;
   ParseStatus parse_status;
@@ -89,6 +95,7 @@ HTTPRequest* http_request_new(){
   req->parse_buff_pos = 0;
   req->parse_status = PARSE_START;
   req->err = PARSE_NOTSTARTED;
+  req->crlf_count = 0;
   
   return req;
 }
@@ -105,10 +112,11 @@ void http_request_free(HTTPRequest* req){
 
 /*TODO: Parse buff size is limited*/
 int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
-  size_t pos;
+  size_t pos,i,bytes_to_copy;
   pos = 0;
   
   while(pos < len){
+    printf("a\"%c\"b: %d\n",data[pos],req->parse_status);
     switch(req->parse_status){
       
     case PARSE_START:
@@ -182,15 +190,19 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	  req->http_version = HTTP11;
 
 	req->parse_buff_pos = 0;
-	req->parse_status = PARSE_LF_BEFORE_HEADER_NAME;
+	req->parse_status = PARSE_CR_BEFORE_HEADER_NAME;
 
-	pos++;
+	//	pos++;
       }
       break;
 
     case PARSE_LF_BEFORE_HEADER_NAME:
       if(data[pos] == '\n'){
+	++req->crlf_count;
+	if(req->crlf_count < 2)
 	req->parse_status = PARSE_CR_BEFORE_HEADER_NAME;
+	else req->parse_status = PARSE_PRE_BODY;
+	       
 	pos++;
       } else  {
 	req->err = BAD_CRLF;
@@ -256,9 +268,49 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	strcpy(req->headers[req->headers_num -1].value,
 	       req->parse_buff);
 
+	req->crlf_count = 0;
 	req->parse_status = PARSE_CR_BEFORE_HEADER_NAME;
 	//	++pos;
       }
+      break;
+
+    case PARSE_PRE_BODY:
+      for(i = 0; i < req->headers_num;i++){
+	if(!strcmp(req->headers[i].name,"Content-Length")){
+	  /*TODO: replace %zu*/
+	  /*TODO: check maximum content-length*/
+	  sscanf(req->headers[i].value,"%zu",&req->content_length);
+	  req->body = realloc(req->body,req->content_length+1);
+	  req->body[req->content_length] = '\0';
+	}
+      }
+      if(req->body == NULL){
+	req->err = BAD_BODYLENGTH_UNDEFINED;
+	return PARSE_ERROR;
+      }
+      req->parse_buff_pos = 0;
+      req->parse_status = PARSE_BODY;
+      break;
+
+    case PARSE_BODY:
+      if(len - pos > req->content_length - req->parse_buff_pos){
+	bytes_to_copy = req->content_length - req->parse_buff_pos;
+	req->parse_status = PARSE_FOOTERS;
+      }
+      else {
+	bytes_to_copy = len - pos;
+      }
+      memcpy(req->body+req->parse_buff_pos,
+	     data+pos,
+	     bytes_to_copy);
+      req->parse_buff_pos += bytes_to_copy;
+      pos += bytes_to_copy;
+      break;
+
+    case PARSE_FOOTERS:
+      req->err = BAD_UNIMPLEMENTED;
+      return PARSE_ERROR;
+      pos++;
       break;
     }
   }
@@ -266,6 +318,7 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 }
 
 int main(int argc, char* argv[]){
+  size_t reqlen;
   HTTPRequest* req;
   const char* test_req;
   
@@ -277,23 +330,34 @@ int main(int argc, char* argv[]){
             CRLF\
             "x";
 
+  reqlen =  strlen(test_req) - 1;
+
   //http_request_parse_feed(req, test_req, strlen(test_req));
+
   
-  while(*test_req!='\0'){
+  for(size_t i = 0;  i < reqlen / 9; i+=9){
+    http_request_parse_feed(req,test_req,9);
+    test_req+=9;
+  }
+  http_request_parse_feed(req,test_req,reqlen - reqlen / 9);
+  
+  /*while(*test_req!='\0'){
     http_request_parse_feed(req,test_req,1);
     ++test_req;
-    };
+    };*/
 
   printf("method: %d\n, URI:\"%s\"\n, version: %d\n"\
-	 "header1: %s: %s\n"\
-	 "header3: %s: %s\n"\
-	 "err : %d\n",
+	 "header1: \"%s\": \"%s\"\n"\
+	 "header3: \"%s\": %s\n"\
+	 "err : %d\n"\
+	 "body: %s\n",
 	 req->method,
 	 req->URI,
 	 req->http_version,
 	 req->headers[0].name, req->headers[0].value,
 	 req->headers[2].name, req->headers[2].value,
-	 req->err);
+	 req->err,
+	 req->body);
   
   http_request_free(req);
   exit(EXIT_SUCCESS);
