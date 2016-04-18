@@ -7,12 +7,29 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Client {
+  int fd;
+  HTTPRequest* req;
+  int can_write;
+  int has_to_write;
+} Client;
 
 #define EVENT_POOL 20
 
 #define LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+const char* ans = "\
+HTTP/1.0 200 OK\r\n\
+Server: Apache\r\n\
+Content-Language: uk\r\n\
+Content-Type: text/html; charset=utf-8\r\n\
+Content-Length: 1\r\n\
+\r\n\
+x";
 
 int setnonblock(int fd){
   int flags;
@@ -57,9 +74,13 @@ int main(void){
   int listener_fd, epoll_fd;
   struct epoll_event ev;
   struct epoll_event events[EVENT_POOL];
+  Client clients[40];
+  size_t n_clients;
   int got_events;
 
-  listener_fd = create_in_listener_nb(8082);
+  n_clients = 0;
+
+  listener_fd = create_in_listener_nb(8081);
   epoll_fd = epoll_create1(0);
 
   ev.events = EPOLLIN | EPOLLET;
@@ -79,12 +100,19 @@ int main(void){
       if(events[i].data.fd == listener_fd &&
 	 events[i].events & EPOLLIN){ /* Got accept*/
 	int accepted_fd;
+	Client* new_client;
 	accepted_fd = accept(listener_fd, NULL, NULL);
 	printf("Connected %d\n", accepted_fd);
 	setnonblock(accepted_fd);
-	ev.events = EPOLLIN | EPOLLET;
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
 	ev.data.fd = accepted_fd;
 	epoll_ctl(epoll_fd, EPOLL_CTL_ADD, accepted_fd, &ev);
+
+	new_client = &clients[n_clients++];
+	new_client->fd = accepted_fd;
+	new_client->req = http_request_new();
+	new_client->can_write = 0;
+	new_client->has_to_write = 0;
       } else if(events[i].events & EPOLLIN){ /*Got something from client*/
 	HTTPRequest* req;
 	ssize_t got_len;
@@ -99,6 +127,16 @@ int main(void){
 	puts(http_request_get_uri(req));
 
 	http_request_free(req);
+      } else if(events[i].events & EPOLLOUT){ /*Can write to client*/
+	size_t cid;
+	Client* wc;
+	puts("Can write");
+	for(cid = 0; cid < n_clients; cid++)
+	  if(events[i].data.fd == clients[cid].fd)
+	    wc = &clients[cid];
+
+	//	send(wc->fd,"Lel\r\n\r\n",7,0);
+	send(wc->fd,ans,strlen(ans),0);
       }
     }
     printf("%d\n",got_events);
