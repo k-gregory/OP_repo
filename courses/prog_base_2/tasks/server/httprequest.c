@@ -1,28 +1,9 @@
+#include "httprequest.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
-#define CR '\r'
-#define LF '\n'
-
-#define CRLF "\r\n"
-
-#define MAX_URI_LENGTH 100
-#define MAX_HEADERS 100
-
-#define PARSE_OK 0
-#define PARSE_END 1
-#define PARSE_ERROR 2
-
-typedef enum ParseError{
-  PARSE_NOTSTARTED,
-  PARSED,
-  BAD_SEPARATOR,
-  BAD_CRLF,
-  BAD_BODYLENGTH_UNDEFINED,
-  BAD_UNIMPLEMENTED,
-} ParseError;
 
 typedef enum ParseStatus{
   PARSE_START = 0,
@@ -46,24 +27,12 @@ typedef enum ParseStatus{
   PARSE_FOOTERS,
 } ParseStatus;
 
-typedef enum HTTPMethod {
-  GET=-50,
-  POST,
-  DELETE,
-  METHOD_UNKNOWN,
-} HTTPMethod;
-
-typedef enum HTTPVersion {
-  HTTP11=-45,
-  VERSION_UNKNOWN,
-} HTTPVersion;
-
 typedef struct HTTPHeader {
   char* name;
   char* value;
 } HTTPHeader;
 
-typedef struct HTTPRequest {
+struct HTTPRequest {
   HTTPMethod method;
   char URI[MAX_URI_LENGTH];
 
@@ -80,7 +49,7 @@ typedef struct HTTPRequest {
   size_t parse_buff_pos;
   ParseStatus parse_status;
   ParseError err;
-} HTTPRequest;
+};
 
 HTTPRequest* http_request_new(){
   HTTPRequest* req;
@@ -294,8 +263,10 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 
     case PARSE_BODY:
       if(len - pos > req->content_length - req->parse_buff_pos){
+	req->err = PARSED;
 	bytes_to_copy = req->content_length - req->parse_buff_pos;
 	req->parse_status = PARSE_FOOTERS;
+	return PARSE_END; /*Footers not implemented yet*/
       }
       else {
 	bytes_to_copy = len - pos;
@@ -317,6 +288,37 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
   return PARSE_OK;
 }
 
+
+ParseError http_request_get_error(HTTPRequest* req){
+  return req->err;
+}
+
+HTTPMethod http_request_get_method(HTTPRequest* req){
+  return req->method;
+}
+
+HTTPVersion http_request_get_http_version(HTTPRequest* req){
+  return req->http_version;
+}
+
+char* http_request_get_uri(HTTPRequest* req){
+  return req->URI;
+}
+
+char* http_request_get_header(HTTPRequest* req, char* name){
+  size_t i;
+  for(i = 0; i < req->headers_num; i++)
+    if(!strcmp(req->headers[i].name, name))
+      return req->headers[i].value;
+  
+  return NULL;
+}
+
+char* http_request_get_body(HTTPRequest* req){
+  return req->body;
+}
+
+#ifdef __KILL_THIS_CODE__
 int main(int argc, char* argv[]){
   size_t reqlen;
   HTTPRequest* req;
@@ -362,3 +364,4 @@ int main(int argc, char* argv[]){
   http_request_free(req);
   exit(EXIT_SUCCESS);
 }
+#endif
