@@ -112,6 +112,9 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 
 	req->parse_buff_pos =  0;
 	req->parse_status = PARSE_SPACE_BEFORE_URI;
+      } else {
+	req->err = BAD_SEPARATOR;
+	return PARSE_ERROR;
       }
       break;
 
