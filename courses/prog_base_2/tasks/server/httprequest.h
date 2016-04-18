@@ -2,17 +2,13 @@
 
 #include <stdlib.h>
 
-#define CR '\r'
-#define LF '\n'
-
-#define CRLF "\r\n"
-
 #define MAX_URI_LENGTH 100
 #define MAX_HEADERS 100
 
 #define PARSE_OK 0
 #define PARSE_END 1
-#define PARSE_ERROR 2
+#define PARSED_BODY 3
+#define PARSE_ERROR 4
 
 typedef enum ParseError{
   PARSE_NOTSTARTED,

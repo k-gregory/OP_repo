@@ -5,6 +5,9 @@
 #include <string.h>
 #include <ctype.h>
 
+#define CR '\r'
+#define LF '\n'
+
 typedef enum ParseStatus{
   PARSE_START = 0,
   
@@ -85,7 +88,7 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
   pos = 0;
   
   while(pos < len){
-    printf("a\"%c\"b: %d\n",data[pos],req->parse_status);
+    //    printf("a\"%c\"b: %d\n",data[pos],req->parse_status);
     switch(req->parse_status){
       
     case PARSE_START:
@@ -168,6 +171,7 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
     case PARSE_LF_BEFORE_HEADER_NAME:
       if(data[pos] == '\n'){
 	++req->crlf_count;
+	//	printf("CCC: %d\n",req->crlf_count);
 	if(req->crlf_count < 2)
 	req->parse_status = PARSE_CR_BEFORE_HEADER_NAME;
 	else req->parse_status = PARSE_PRE_BODY;
@@ -244,6 +248,7 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
       break;
 
     case PARSE_PRE_BODY:
+      //      puts("Pre body");
       for(i = 0; i < req->headers_num;i++){
 	if(!strcmp(req->headers[i].name,"Content-Length")){
 	  /*TODO: replace %zu*/
@@ -266,7 +271,6 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	req->err = PARSED;
 	bytes_to_copy = req->content_length - req->parse_buff_pos;
 	req->parse_status = PARSE_FOOTERS;
-	return PARSE_END; /*Footers not implemented yet*/
       }
       else {
 	bytes_to_copy = len - pos;
@@ -276,10 +280,13 @@ int http_request_parse_feed(HTTPRequest* req,const char data[], size_t len){
 	     bytes_to_copy);
       req->parse_buff_pos += bytes_to_copy;
       pos += bytes_to_copy;
+      if(req->parse_buff_pos == req->content_length)
+	return PARSED_BODY;
       break;
 
     case PARSE_FOOTERS:
       req->err = BAD_UNIMPLEMENTED;
+      return PARSE_END; /*Footers not implemented yet*/
       return PARSE_ERROR;
       pos++;
       break;
