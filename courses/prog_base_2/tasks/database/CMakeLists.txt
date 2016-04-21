@@ -5,6 +5,8 @@ add_subdirectory(sqlite3)
 
 set(SOURCES
   "src/main.c"
+  "src/DBUtil.c"
+  "src/Driver.c"
   )
 
 
