@@ -40,7 +40,8 @@ void main_sdl_audio_callback(void* data, Uint8* _stream, int _length){
 
     for(i = 0; i < length; i++){
         float time = app_state.audio_pos * app_state.sample_time;
-        stream[i] = sinf(2*M_PI*time*450*sinf(time));//(time*time);
+        float sin_v = sinf(2*M_PI*time*450);
+        stream[i] = sin_v*sinf(2*M_PI*sinf(time*400)*100);
         ++app_state.audio_pos;
     }
 }
