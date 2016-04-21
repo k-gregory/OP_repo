@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
   configure_db(db);
 
-  driver = driver_find_by_id(db,12);
+  driver = driver_find_by_id(db,1);
   driver->car_average_speed = -400;
   driver_update(db,driver);
   driver_filtered(db,35,0,test_cb);
