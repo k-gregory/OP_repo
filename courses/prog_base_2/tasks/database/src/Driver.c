@@ -132,6 +132,15 @@ void driver_update(sqlite3* db, Driver* driver){
     sqlite3_reset(q);
 }
 
+unsigned int driver_count(sqlite3 *db){
+    unsigned int res;
+    def_stmt("select count(id) from Driver");
+    sqlite3_step(q);
+    res = col_int(0);
+    sqlite3_reset(q);
+    return res;
+}
+
 void driver_delete(sqlite3* db, Driver* driver){
     def_stmt("delete from Driver where id = @id");
 
@@ -141,3 +150,18 @@ void driver_delete(sqlite3* db, Driver* driver){
     sqlite3_reset(q);
 }
 
+void driver_filtered(sqlite3* db, double maxKmFare, time_t minStage,void (*callback)(Driver*)){
+    def_stmt("select name,surname,car_manufacturer,car_model,car_average_speed,km_fare,satisfied_clients,unsatisfied_clients,hired_at,id "
+             "from Driver where km_fare < @maxKmFare and (strftime('%s','now')-hired_at) > @minStage");
+
+    bind_double_v("@maxKmFare",maxKmFare);
+    bind_int64_v("@minStage",minStage);
+
+    while(sqlite3_step(q) == SQLITE_ROW){
+        Driver* d;
+        d = driver_create(col_text(0),col_text(1),col_text(2),col_text(3),col_double(4),col_double(5),col_int(6),col_int(7),col_int64(8));
+        d->id = col_id(9);
+        callback(d);
+    }
+    sqlite3_reset(q);
+}

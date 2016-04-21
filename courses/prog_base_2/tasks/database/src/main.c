@@ -10,6 +10,11 @@ void configure_db(sqlite3 *db) {
   sqlite3_exec(db, "PRAGMA foreign_keys  = ON", NULL, NULL, NULL);
 }
 
+
+void test_cb(Driver* d){
+    printf("Good driver:#%llu %s %s\n",d->id,d->name,d->surname);
+}
+
 int main(int argc, char *argv[]) {
   Driver* driver;
   sqlite3 *db;
@@ -24,12 +29,12 @@ int main(int argc, char *argv[]) {
 
   configure_db(db);
 
-  driver = driver_find_by_id(db,2);
+  driver = driver_find_by_id(db,12);
   driver->car_average_speed = -400;
   driver_update(db,driver);
-  driver = driver_find_by_id(db,3);
-  driver_delete(db,driver);
-  printf("%p %s",driver,driver->car_manufacturer);
+  driver_filtered(db,35,0,test_cb);
+  printf("%p %s\n",driver,driver->car_manufacturer);
+  printf("%u",driver_count(db));
 
   close_db(db);
   return EXIT_SUCCESS;
