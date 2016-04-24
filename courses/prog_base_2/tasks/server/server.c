@@ -74,16 +74,16 @@ int main(void){
   int listener_fd, epoll_fd;
   struct epoll_event ev;
   struct epoll_event events[EVENT_POOL];
-  Client clients[40];
+  Client clients[40]; /*Todo: replace with map*/
   size_t n_clients;
   int got_events;
 
   n_clients = 0;
 
-  listener_fd = create_in_listener_nb(8081);
+  listener_fd = create_in_listener_nb(8082);
   epoll_fd = epoll_create1(0);
 
-  ev.events = EPOLLIN | EPOLLET;
+  ev.events = EPOLLIN;
   ev.data.ptr = NULL;
   ev.data.fd = listener_fd;
   if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listener_fd, & ev) == -1){
@@ -91,8 +91,52 @@ int main(void){
     goto EXIT;
   }
 
-  listen(listener_fd, SOMAXCONN);
+  if(listen(listener_fd, SOMAXCONN) == 0){
+    printf("Listening on fd %d\n", listener_fd);
+  } else {
+    perror("Listen");
+    goto EXIT;
+  };
+  
 
+  while(1){
+    int i;
+    got_events = epoll_wait(epoll_fd, events, EVENT_POOL, -1);
+    for(i = 0; i < got_events; i++){
+      if(events[i].data.fd == listener_fd &&
+	  events[i].events & EPOLLIN){ /*Got accept*/
+	Client* new_client;
+	
+	new_client = &clients[n_clients];
+	new_client->fd = accept(listener_fd, NULL, NULL);
+	setnonblock(new_client->fd);
+	ev.events = EPOLLIN | EPOLLOUT;
+	ev.data.fd = new_client->fd;
+	epoll_ctl(epoll_fd, EPOLL_CTL_ADD, new_client->fd, &ev);
+	printf("Connected %d\n", new_client->fd);
+      } 
+      else if(events[i].events & EPOLLIN) { /*Got something in*/
+	ssize_t received;
+	int sender_fd;
+	char recv_buff[1024];
+	sender_fd = events[i].data.fd;
+	printf("Receiving from %d\n",sender_fd);
+	received = recv(sender_fd, recv_buff, 1023, 0);
+	recv_buff[received] = '\0';
+	printf("Received %d bytes:\n%s\n", received,recv_buff);
+      }
+      else if(events[i].events & EPOLLOUT) { /*Can write to buffer*/
+	printf("Can write to %d, events: %d\n",events[i].data.fd,events[i].events);
+	send(events[i].data.fd,ans,strlen(ans),0);
+      }
+      else {
+	puts("Some unknown shit happened");
+	printf("FD: %d, events: %d\n",events[i].data.fd,events[i].events);
+      }
+    }
+  }
+
+#ifdef KILL_THIS_CODE
   while(1){
     int i;
     got_events = epoll_wait(epoll_fd, events, EVENT_POOL, -1);
@@ -141,6 +185,7 @@ int main(void){
     }
     printf("%d\n",got_events);
   }
+#endif
 
  EXIT:
   close(listener_fd);
