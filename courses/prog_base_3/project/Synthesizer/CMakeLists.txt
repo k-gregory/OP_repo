@@ -9,6 +9,11 @@ set(SOURCES
     "src/main.cpp"
     "src/application.cpp"
     "src/audiogenerator.cpp"
+    "src/instrumentinput.h"
+    "src/instrumentinputdevice.h"
+    "src/keyboardinstrumentinput.cpp"
+    "src/atm_observer.h"
+    "src/functionalspinlock.h"
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})

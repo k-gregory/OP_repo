@@ -3,6 +3,7 @@
 
 #include "audiogenerator.h"
 #include <SDL.h>
+#include <vector>
 
 class Application
 {

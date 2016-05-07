@@ -2,9 +2,15 @@
 
 #include <SDL.h>
 #include <stdexcept>
+#include <cmath>
+#include <iostream>
 
 #define WANTED_FREQUENCY 48000
+//TODO: Determine hardware supported samples
 #define WANTED_SAMPLES 512
+
+int n = 0;
+int nn =0;
 
 void AudioGenerator::synth_audio_callback(void* data, Uint8* stream, int length){
     AudioGenerator *self = (AudioGenerator*) data;
@@ -12,20 +18,20 @@ void AudioGenerator::synth_audio_callback(void* data, Uint8* stream, int length)
 }
 
 void AudioGenerator::generate(float *data, int length){
-
+    unsigned long int last = pos + length;
+    for(;pos < last; pos++)
+        *data++ = std::sin(sample_time*pos*2*3.14*600);
 }
 
 void AudioGenerator::play(){
-    SDL_PauseAudioDevice(dev, 1);
-}
-void AudioGenerator::pause(){
     SDL_PauseAudioDevice(dev, 0);
 }
+void AudioGenerator::pause(){
+    SDL_PauseAudioDevice(dev, 1);
+}
 
-AudioGenerator::AudioGenerator()
-{
+AudioGenerator::AudioGenerator(){
     SDL_AudioSpec want,have;
-    SDL_AudioDeviceID dev;
 
     SDL_zero(want);
     want.freq = WANTED_FREQUENCY;
@@ -39,7 +45,7 @@ AudioGenerator::AudioGenerator()
     if(dev<0) throw std::runtime_error(SDL_GetError());
 
     this->frequency = have.freq;
-    this->period = 1.f/have.freq;
+    this->sample_time = 1.f/have.freq;
 }
 
 AudioGenerator::~AudioGenerator(){

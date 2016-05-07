@@ -1,5 +1,6 @@
 #include "application.h"
 #include <stdexcept>
+#include <iostream>
 
 #define WND_HEIGHT 500
 #define WND_WIDTH 500
@@ -12,12 +13,16 @@ void Application::draw_interface(){
 }
 
 void Application::exec(){
-    SDL_Event ev;
+    generator->play();
     while(true){
         draw_interface();
-        while(SDL_PollEvent(&ev)){
-            if(ev.type==SDL_QUIT)
-                return;
+        if(!SDL_PollEvent(nullptr)){
+            SDL_Event ev;
+            while(SDL_PollEvent(&ev)){
+                if(ev.type == SDL_QUIT)
+                    return;
+
+            }
         }
     }
 }
