@@ -8,6 +8,6 @@ static_library:
 	gcc -c WeatherQueue.c -o WeatherQueue.o
 	ar rcs libWeatherQueue.a WeatherQueue.o
 app: main.c static_library shared_libraries
-	gcc main.c -lWeatherQueue -L.
+	gcc main.c -lWeatherQueue -L. -ldl
 
 all: app
