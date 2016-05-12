@@ -91,6 +91,7 @@ int main(void){
 	  am_queue_add(other, x);
 	} else {
 	  am_observable_emit(crit_observable, &d);
+	  am_queue_remove(active);
 	}
       }
     } else {
@@ -106,7 +107,8 @@ int main(void){
 	am_queue_add(active, x);
       }
     }
-    usleep(50);
+    printf("%p has %d, %p has %d\n",q1,am_queue_contains(q1),q2,am_queue_contains(q2));
+    usleep(250);
   }
 
   am_queue_free(q1);
