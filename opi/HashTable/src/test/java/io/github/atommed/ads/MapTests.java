@@ -3,7 +3,6 @@ package io.github.atommed.ads;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
 /**
  * Created by gregory on 19.05.16.
  */
