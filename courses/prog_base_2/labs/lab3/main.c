@@ -107,7 +107,7 @@ int main(void){
 	am_queue_add(active, x);
       }
     }
-    printf("%p has %d, %p has %d\n",q1,am_queue_contains(q1),q2,am_queue_contains(q2));
+//    printf("%p has %d, %p has %d\n",q1,am_queue_contains(q1),q2,am_queue_contains(q2));
     usleep(250);
   }
 
