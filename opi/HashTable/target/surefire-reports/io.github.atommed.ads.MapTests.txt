@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: io.github.atommed.ads.MapTests
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 116.089 sec <<< FAILURE!
-TenElementSizeRetTen(io.github.atommed.ads.MapTests)  Time elapsed: 39.869 sec  <<< ERROR!
+Tests run: 6, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 79.573 sec <<< FAILURE!
+TenElementSizeRetTen(io.github.atommed.ads.MapTests)  Time elapsed: 40.321 sec  <<< ERROR!
 java.lang.OutOfMemoryError: Java heap space
 	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
@@ -36,41 +36,7 @@ java.lang.OutOfMemoryError: Java heap space
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
 	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-addValuesSaved(io.github.atommed.ads.MapTests)  Time elapsed: 37.655 sec  <<< ERROR!
-java.lang.OutOfMemoryError: Java heap space
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-collisionsHandled(io.github.atommed.ads.MapTests)  Time elapsed: 37.292 sec  <<< ERROR!
+addValuesSaved(io.github.atommed.ads.MapTests)  Time elapsed: 38.021 sec  <<< ERROR!
 java.lang.OutOfMemoryError: Java heap space
 	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)

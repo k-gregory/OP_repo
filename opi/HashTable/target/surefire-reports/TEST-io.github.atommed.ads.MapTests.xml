@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="0" name="io.github.atommed.ads.MapTests" time="116.089" errors="3" skipped="0">
+<testsuite tests="6" failures="0" name="io.github.atommed.ads.MapTests" time="79.573" errors="2" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-openjdk-armhf/jre/lib/arm"/>
@@ -58,11 +58,11 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="io.github.atommed.ads.MapTests" name="emptySizeRetZero" time="0.016"/>
-  <testcase classname="io.github.atommed.ads.MapTests" name="OneElementSizeRetOne" time="0.527"/>
+  <testcase classname="io.github.atommed.ads.MapTests" name="emptySizeRetZero" time="0.017"/>
+  <testcase classname="io.github.atommed.ads.MapTests" name="OneElementSizeRetOne" time="0.563"/>
   <testcase classname="io.github.atommed.ads.MapTests" name="addChangesSize" time="0.002"/>
-  <testcase classname="io.github.atommed.ads.MapTests" name="removeWorks" time="0.116"/>
-  <testcase classname="io.github.atommed.ads.MapTests" name="TenElementSizeRetTen" time="39.869">
+  <testcase classname="io.github.atommed.ads.MapTests" name="removeWorks" time="0.065"/>
+  <testcase classname="io.github.atommed.ads.MapTests" name="TenElementSizeRetTen" time="40.322">
     <error message="Java heap space" type="java.lang.OutOfMemoryError">java.lang.OutOfMemoryError: Java heap space
 	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
@@ -98,43 +98,7 @@
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
 </error>
   </testcase>
-  <testcase classname="io.github.atommed.ads.MapTests" name="addValuesSaved" time="37.655">
-    <error message="Java heap space" type="java.lang.OutOfMemoryError">java.lang.OutOfMemoryError: Java heap space
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-	at io.github.atommed.ads.HashMap.grow(HashMap.java:121)
-	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
-</error>
-  </testcase>
-  <testcase classname="io.github.atommed.ads.MapTests" name="collisionsHandled" time="37.293">
+  <testcase classname="io.github.atommed.ads.MapTests" name="addValuesSaved" time="38.021">
     <error message="Java heap space" type="java.lang.OutOfMemoryError">java.lang.OutOfMemoryError: Java heap space
 	at io.github.atommed.ads.HashMap.grow(HashMap.java:116)
 	at io.github.atommed.ads.HashMap.put(HashMap.java:129)
