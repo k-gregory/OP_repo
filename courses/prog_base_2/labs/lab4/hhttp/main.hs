@@ -67,12 +67,31 @@ indexPage hdl = do
                 \\r\n\
                 \Index page"
     hClose hdl
-  
+
+msgBody req = drop 4 bodyStart
+  where (_,bodyStart) = B.breakSubstring (C.pack "\r\n\r\n") req
 
 indexRoutes state cl GET [] = indexPage 
+
 indexRoutes state cl method ("api" : other) = apiRoutes state cl method other
+
 apiRoutes state cl method ("drivers" : other)  = driverRoutes state cl method other 
+
 driverRoutes state cl GET [] hdl  = indexPage hdl
+
+driverRoutes state cl DELETE [_id] hdl = do
+  (maxID, drivers) <- takeMVar state
+  let 
+    wanted_id = read _id ::Int
+    drivers = filter (\d -> index d /= wanted_id) drivers
+    in putMVar state (maxID, drivers)
+  hClose hdl
+
+driverRoutes state cl POST [""] hdl = do
+  (madID, drivers) <- takeMVar state
+  hPutStr hdl "sd"
+  hClose hdl
+
 driverRoutes state cl GET [_id] hdl = do
   (maxID, drivers) <- takeMVar state
   putMVar state (maxID, drivers)
@@ -109,9 +128,10 @@ serve::State->Handle->IO()
 serve state hdl = do
   request <- C.hGetSome hdl 4096
   let contentLength = findContentLength request
+  print $ parseRequestURI request
 
   case parseRequestMethod request of
-    Just method -> indexRoutes state contentLength method uri hdl
+    Just method -> indexRoutes state request method uri hdl
       where uri = parseRequestURI request   
     _ -> badRequestPage hdl
 
