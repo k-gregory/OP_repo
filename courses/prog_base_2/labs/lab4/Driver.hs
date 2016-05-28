@@ -1,5 +1,6 @@
 module Driver where
 
+import Control.Applicative
 import Text.JSON
 import Control.Monad(mzero)
 
