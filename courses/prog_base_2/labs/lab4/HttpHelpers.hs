@@ -8,6 +8,13 @@ import qualified Data.ByteString.Char8 as C
 
 data Method = GET | POST | DELETE deriving (Show)
 
+createResponseHead::String->[(String, String)]->String
+createResponseHead status headers = status ++ crlf ++ headerText ++crlf
+  where crlf = "\r\n"
+        headerPair (name, value) = name ++ ": "++value++crlf
+        foldF accum nextPair = accum ++ (headerPair nextPair) ++ crlf
+        headerText = foldl foldF "" headers
+
 findContentLength::B.ByteString->Maybe Int
 findContentLength message = fmap fst (byteNumberStr >>= C.readInt)
   where

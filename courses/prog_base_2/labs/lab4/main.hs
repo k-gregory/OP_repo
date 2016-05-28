@@ -39,7 +39,6 @@ instance DriverRepository MemDrivers where
         newDrivers = oldDrivers ++ [updateDriver newDriver (lastId+1)]
       in putMVar (elements r) newDrivers
 
-
 badRequestPage::Handle->IO ()
 badRequestPage hdl = do
     hPutStr hdl "HTTP/1.1 400 Bad Request\r\n\
@@ -54,6 +53,12 @@ pageNotFound hdl = do
                 \\r\n\
                 \404!"
     hClose hdl    
+
+otherIndexPage::Handle->IO ()
+otherIndexPage hdl = do
+  hPutStr hdl $ (createResponseHead 
+                "HTTP/1.1 200 OK"
+                [("Content-Length", "7")]) ++ "Other p"
 
 indexPage::Handle->IO ()
 indexPage hdl = do
@@ -93,7 +98,7 @@ tryGetDriverOrBadRequest cb _id repo hdl = do
 route request repo method uri hdl = do
   print( method, uri)
   case (method, uri) of
-    (GET, [""]) -> indexPage hdl
+    (GET, []) -> otherIndexPage hdl
     (GET, ["api","drivers"]) ->  allDriversPage repo hdl
     (GET, ["api","drivers",_id]) ->
       tryGetDriverOrBadRequest singleDriverPage _id repo hdl
