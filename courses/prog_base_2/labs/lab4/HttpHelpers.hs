@@ -1,19 +1,65 @@
 module HttpHelpers where
 
+import Magic
+
+import System.IO
+import System.Directory
 import Control.Monad
 import Control.Applicative
+import Data.List
 
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as C
 
 data Method = GET | POST | DELETE deriving (Show)
 
+badRequestPage::Handle->IO ()
+badRequestPage hdl = do
+    hPutStr hdl "HTTP/1.1 400 Bad Request\r\n\
+                \Content-Length: 10\r\n\
+                \\r\n\
+                \Bad request"
+    hClose hdl               
+
 createResponseHead::String->[(String, String)]->String
-createResponseHead status headers = status ++ crlf ++ headerText ++crlf
+createResponseHead status headers = status ++ crlf ++ headerText ++ crlf
   where crlf = "\r\n"
-        headerPair (name, value) = name ++ ": "++value++crlf
+        headerPair (name, value) = name ++ ": "++value
         foldF accum nextPair = accum ++ (headerPair nextPair) ++ crlf
         headerText = foldl foldF "" headers
+
+createResponse::String->[(String, String)]->String->String
+createResponse status headersNoCL body =
+  (createResponseHead status headers) ++ body
+  where headers = headersNoCL ++ [("Content-Length",show $ length body)]
+
+pageNotFound::Handle->IO ()
+pageNotFound hdl = do
+  hPutStr hdl $ createResponse "HTTP/1.1 404 Page Not Found" [] "404!"
+  hClose hdl
+
+createStaticServer::FilePath->IO (FilePath->Handle-> IO ())
+createStaticServer path = do
+  magic <- magicOpen [MagicMime]
+  magicLoadDefault magic
+  return $ serveFunc magic
+  where
+    serveFunc magic relFile hdl = do
+      let file = path ++ "/" ++ relFile
+      fileExists <- doesFileExist file
+      if not fileExists
+        then pageNotFound hdl
+        else do
+        mimeType <- magicFile magic file
+        fileHandle <- openFile file ReadMode
+        fileContent <- B.hGetContents fileHandle
+        let respStart =
+              createResponseHead "HTTP/1.1 200 OK"
+              [("Content-Length",show $ B.length fileContent),
+               ("Content-type", mimeType)]
+        B.hPut hdl $ B.concat [C.pack respStart, fileContent]
+        hClose hdl
+                    
 
 findContentLength::B.ByteString->Maybe Int
 findContentLength message = fmap fst (byteNumberStr >>= C.readInt)

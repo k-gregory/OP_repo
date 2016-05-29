@@ -6,10 +6,12 @@ import Text.JSON
 import Text.Read
 import Network
 import System.IO
+import System.Directory
 import Control.Monad(liftM)
 import Control.Concurrent(forkIO)
 import Control.Concurrent.MVar
 import qualified Data.ByteString.Char8 as C
+import Data.List
 
 class DriverRepository t where
   list::t->IO [Driver]
@@ -38,21 +40,6 @@ instance DriverRepository MemDrivers where
         updateDriver d new_index = d { index = new_index}
         newDrivers = oldDrivers ++ [updateDriver newDriver (lastId+1)]
       in putMVar (elements r) newDrivers
-
-badRequestPage::Handle->IO ()
-badRequestPage hdl = do
-    hPutStr hdl "HTTP/1.1 400 Bad Request\r\n\
-                \Content-Length: 10\r\n\
-                \\r\n\
-                \Bad request"
-    hClose hdl
-
-pageNotFound hdl = do
-    hPutStr hdl "HTTP/1.1 404 Page Not Found\n\
-                \Content-Length: 4\r\n\
-                \\r\n\
-                \404!"
-    hClose hdl    
 
 otherIndexPage::Handle->IO ()
 otherIndexPage hdl = do
@@ -92,39 +79,43 @@ tryGetDriverOrBadRequest cb _id repo hdl = do
             _driver <- findById repo sid
             case _driver of
               Just driver -> cb driver hdl
-              _ -> badRequestPage hdl
+              Nothing -> pageNotFound hdl
               
     
-route request repo method uri hdl = do
+route staticServer request repo method uri hdl = do
   print( method, uri)
   case (method, uri) of
-    (GET, []) -> otherIndexPage hdl
+    (GET, []) ->otherIndexPage hdl
+    (GET, ("static":other)) -> staticServer (intercalate "/" other) hdl
     (GET, ["api","drivers"]) ->  allDriversPage repo hdl
     (GET, ["api","drivers",_id]) ->
       tryGetDriverOrBadRequest singleDriverPage _id repo hdl
     (DELETE, ["api", "drivers", _id]) -> do
       case readMaybe _id ::Maybe Int of
         Just sid -> deleteById repo sid
+        Nothing -> pageNotFound hdl
       hClose hdl
 
     (POST, ["api", "drivers"]) -> do
       addDriver request repo hdl
     _ -> pageNotFound hdl      
          
-serve hdl repo = do
+serve hdl repo staticServer = do
   request <- C.hGetSome hdl 4096
   case parseRequestMethod request of
-    Just method -> route request repo method uri hdl
+    Just method -> route staticServer request repo method uri hdl
       where uri = parseRequestURI request
     _ -> badRequestPage hdl
 
 
-acceptLoop serverSocket repo = do
+acceptLoop serverSocket repo staticServer = do
   (client, _, _) <- accept serverSocket
-  forkIO $ serve client repo
-  acceptLoop serverSocket repo
+  forkIO $ serve client repo staticServer
+  acceptLoop serverSocket repo staticServer
 
 main = do
-  drvHolder <- newMVar [(Driver 0 "Root" "19" 0 0 0)]
+  drvHolder <- newMVar []
+  servePath <- getCurrentDirectory
+  staticServer <- createStaticServer servePath
   serverSocket <- listenOn (PortNumber 8080)
-  acceptLoop serverSocket (MemDrivers {elements = drvHolder})
+  acceptLoop serverSocket (MemDrivers {elements = drvHolder}) staticServer
