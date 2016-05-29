@@ -58,7 +58,6 @@ singleDriverPage driver hdl = do
 
 addDriver req repo hdl = do
   let reqBody = parseRequestBody req
-  putStrLn $ C.unpack req
   let newDriver = decode reqBody
   case newDriver of
     Ok drv -> do

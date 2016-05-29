@@ -10,7 +10,7 @@ import Data.List
 
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as C
-import Data.ByteString.UTF8(fromString)
+import Data.ByteString.UTF8(fromString,toString)
 
 data Method = GET | POST | DELETE deriving (Show)
 
@@ -94,7 +94,7 @@ findContentLength message = fmap fst (byteNumberStr >>= C.readInt)
     byteNumberStr = fmap B.drop value_index <*> pure headerText
 
 parseRequestURI::B.ByteString -> [String]
-parseRequestURI message = map C.unpack $ C.split '/' uriText
+parseRequestURI message = map toString $ C.split '/' uriText
   where
     --URI contains first '/' in all request
     (_, uriStart) = B.breakSubstring (C.pack "/") message
@@ -102,7 +102,7 @@ parseRequestURI message = map C.unpack $ C.split '/' uriText
     (uriText, _) = B.breakSubstring (C.pack " ") (C.drop 1 uriStart)
 
 parseRequestBody::B.ByteString -> String
-parseRequestBody message = C.unpack $ C.drop 4 pre_body
+parseRequestBody message = toString $ C.drop 4 pre_body
   where
     pre_body = snd $ B.breakSubstring (C.pack "\r\n\r\n") message
 
@@ -113,4 +113,4 @@ parseRequestMethod message = case getMethod message of
   "DELETE" -> Just DELETE
   _ -> Nothing
   --Method is the beginning of req line and ends with ' '
-  where getMethod = C.unpack . fst . B.breakSubstring (C.pack " ")
+  where getMethod = toString . fst . B.breakSubstring (C.pack " ")
