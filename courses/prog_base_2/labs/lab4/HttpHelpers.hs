@@ -10,8 +10,11 @@ import Data.List
 
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as C
+import Data.ByteString.UTF8(fromString)
 
 data Method = GET | POST | DELETE deriving (Show)
+
+ctJSONutf8 = ("Content-Type", "application/json; charset=utf-8")
 
 badRequestPage::Handle->IO ()
 badRequestPage hdl = do
@@ -28,14 +31,24 @@ createResponseHead status headers = status ++ crlf ++ headerText ++ crlf
         foldF accum nextPair = accum ++ (headerPair nextPair) ++ crlf
         headerText = foldl foldF "" headers
 
-createResponse::String->[(String, String)]->String->String
-createResponse status headersNoCL body =
+createResponseString::String->[(String, String)]->String->String
+createResponseString status headersNoCL body =
   (createResponseHead status headers) ++ body
-  where headers = headersNoCL ++ [("Content-Length",show $ length body)]
+  where
+    cl = show $ B.length (fromString body)
+    headers = [("Content-Length",cl)] ++ headersNoCL
+
+createResponse::String->[(String,String)]->String->C.ByteString
+createResponse status headers body =
+  fromString $ createResponseString status headers body
+
+createJSONResponse = createResponse "HTTP/1.1 200 OK" [ctJSONutf8]
+
+sendJSON = (. createJSONResponse) . C.hPutStr
 
 pageNotFound::Handle->IO ()
 pageNotFound hdl = do
-  hPutStr hdl $ createResponse "HTTP/1.1 404 Page Not Found" [] "404!"
+  C.hPutStr hdl $ createResponse "HTTP/1.1 404 Page Not Found" [] "404!"
   hClose hdl
 
 createStaticServer::FilePath->IO (FilePath->Handle-> IO ())
