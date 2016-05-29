@@ -19,11 +19,11 @@
 	  <div ng-repeat = "driver in drivers" class="well">
 	    <h3>{{driver.name}}</h3>
 	    <h4>Kilemeter fare: {{driver.kmFare | currency}}</h4>
-	    <ul>
-	      <li>Work start date: {{driver.workStartDate}}</li>
-	      <li>Satisfied {{driver.satisfiedClients}} clients</li>
-	      <li>Unsatisfied {{driver.unsatisfiedClients}} clients</li>
-	      <li>Average speed: {{driver.averageSpeed}} km/h</li>	      
+	    <ul class="list-group">
+	      <li class="list-group-item">Work start date: {{driver.workStartDate}}</li>
+	      <li class="list-group-item">Satisfied {{driver.satisfiedClients}} clients</li>
+	      <li class="list-group-item">Unsatisfied {{driver.unsatisfiedClients}} clients</li>
+	      <li class="list-group-item">Average speed: {{driver.averageSpeed}} km/h</li>	      
 	    </ul>
 	    <button type="button" class="btn btn-default btn-lg" ng-click="deleteDriver(driver)">
 	      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
