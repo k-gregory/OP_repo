@@ -74,8 +74,9 @@ testPage hdl = do
   C.hPutStr hdl $ createResponse "HTTP/1.1 200 OK" [ctJSONutf8] "Пиздос"
     
 route staticServer request repo method uri hdl = do
-  print( method, uri)
+  print(method, uri)
   case (method, uri) of
+    (GET, []) -> staticServer "index.html" hdl
     (GET, ["test"]) -> testPage hdl
     (GET, ("static":other)) -> staticServer (intercalate "/" other) hdl
     (GET, ["api","drivers"]) ->  allDriversPage repo hdl
@@ -106,6 +107,6 @@ acceptLoop serverSocket repo staticServer = do
 main = do
   drvHolder <- newMVar [Driver 0 "UTF-8 Dead Moroze ЪЪЇЇ" "Новий рік" 0 0 0]
   servePath <- getCurrentDirectory
-  staticServer <- createStaticServer servePath
+  staticServer <- createStaticServer $ servePath ++ "/static"
   serverSocket <- listenOn (PortNumber 8080)
   acceptLoop serverSocket (MemDrivers {elements = drvHolder}) staticServer

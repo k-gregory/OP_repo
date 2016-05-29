@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="cabService">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/lib/bootstrap/css/bootstrap.css">
+    <title>Drivers page</title>
+  </head>
+  <body>
+    <div ng-controller="cabsController as cabs">
+      <div ng-repeat = "driver in cabs.drivers">
+	<h1>{{driver.name}}</h1>
+	<h2>Kilemeter fare: ${{driver.kmFare}}</h2>
+	<ul>
+	  <li>Work start date: {{diver.workStartDate}}</li>
+	  <li>Satisfied {{driver.satisfiedClients}} clients</li>
+	  <li>Average speed: {{driver.averageSpeed}} km/h</li>
+	</ul>
+      </div>
+    </div>
+    <script src="static/lib/jquery/jquery.js"></script>    
+    <script src="static/lib/angular/angular.js"></script>
+    <script src="static/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="static/js/app.js"></script>
+  </body>
+</html>

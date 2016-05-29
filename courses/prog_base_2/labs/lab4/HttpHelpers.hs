@@ -51,6 +51,16 @@ pageNotFound hdl = do
   C.hPutStr hdl $ createResponse "HTTP/1.1 404 Page Not Found" [] "404!"
   hClose hdl
 
+getMimeType::Magic->FilePath->IO String
+getMimeType magic path = do
+  case guessedByExtension of
+    Just (_,res) -> return res
+    Nothing -> magicFile magic path
+  where    
+    knownTypes = [(".css","text/css"),(".js","application/javascript")]
+    guessedByExtension = find (\(ext,_) -> isSuffixOf ext path) knownTypes
+    
+
 createStaticServer::FilePath->IO (FilePath->Handle-> IO ())
 createStaticServer path = do
   magic <- magicOpen [MagicMime]
@@ -63,7 +73,7 @@ createStaticServer path = do
       if not fileExists
         then pageNotFound hdl
         else do
-        mimeType <- magicFile magic file
+        mimeType <- getMimeType magic file
         fileHandle <- openFile file ReadMode
         fileContent <- B.hGetContents fileHandle
         let respStart =
