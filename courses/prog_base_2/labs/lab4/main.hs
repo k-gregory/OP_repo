@@ -39,10 +39,12 @@ instance DriverRepository MemDrivers where
       
   add r newDriver = do
     oldDrivers <- takeMVar $ elements r
-    let lastId = index $ last oldDrivers
-        updateDriver d new_index = d { index = new_index}
-        newDrivers = oldDrivers ++ [updateDriver newDriver (lastId+1)]
-      in putMVar (elements r) newDrivers
+    let newId = case oldDrivers of
+          [] -> 0
+          _ -> (index $ last oldDrivers) + 1
+    let updateDriver d new_index = d { index = new_index}
+        newDrivers = oldDrivers ++ [updateDriver newDriver newId]
+          in putMVar (elements r) newDrivers
 
 allDriversPage repo hdl = do
   drivers <- list repo
@@ -55,9 +57,14 @@ singleDriverPage driver hdl = do
   hClose hdl
 
 addDriver req repo hdl = do
-  putStrLn $ parseRequestBody req
-  case (decode $ parseRequestBody req) of
-    Ok drv -> add repo drv
+  let reqBody = parseRequestBody req
+  putStrLn $ C.unpack req
+  let newDriver = decode reqBody
+  case newDriver of
+    Ok drv -> do
+      add repo drv
+      hPutStr hdl $ createResponseHead "HTTP/1.1 200 OK" [("Connection","close"),("Content-Type","text/plain")]
+      hClose hdl
     _ -> badRequestPage hdl
 
 tryGetDriverOrBadRequest cb _id repo hdl = do
@@ -70,23 +77,21 @@ tryGetDriverOrBadRequest cb _id repo hdl = do
               Just driver -> cb driver hdl
               Nothing -> pageNotFound hdl
 
-testPage hdl = do
-  C.hPutStr hdl $ createResponse "HTTP/1.1 200 OK" [ctJSONutf8] "Пиздос"
-    
 route staticServer request repo method uri hdl = do
   print(method, uri)
   case (method, uri) of
     (GET, []) -> staticServer "index.html" hdl
-    (GET, ["test"]) -> testPage hdl
     (GET, ("static":other)) -> staticServer (intercalate "/" other) hdl
     (GET, ["api","drivers"]) ->  allDriversPage repo hdl
     (GET, ["api","drivers",_id]) ->
       tryGetDriverOrBadRequest singleDriverPage _id repo hdl
     (DELETE, ["api", "drivers", _id]) -> do
       case readMaybe _id ::Maybe Int of
-        Just sid -> deleteById repo sid
+        Just sid -> do
+          deleteById repo sid
+          hPutStr hdl $ createResponseHead "HTTP/1.1 200 OK" [("Connection","close"),("Content-Type","text/plain")]
+          hClose hdl
         Nothing -> pageNotFound hdl
-      hClose hdl
 
     (POST, ["api", "drivers"]) -> do
       addDriver request repo hdl
@@ -96,11 +101,13 @@ serve hdl repo staticServer = do
   request <- C.hGetSome hdl 4096
   case parseRequestMethod request of
     Just method -> route staticServer request repo method uri hdl
-      where uri = parseRequestURI request
+      where
+        uri = parseRequestURI request            
     _ -> badRequestPage hdl
 
 acceptLoop serverSocket repo staticServer = do
   (client, _, _) <- accept serverSocket
+  hSetBuffering client NoBuffering
   forkIO $ serve client repo staticServer
   acceptLoop serverSocket repo staticServer
 

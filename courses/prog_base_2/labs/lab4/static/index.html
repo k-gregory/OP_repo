@@ -8,17 +8,74 @@
     <title>Drivers page</title>
   </head>
   <body>
-    <div ng-controller="cabsController as cabs">
-      <div ng-repeat = "driver in cabs.drivers">
-	<h1>{{driver.name}}</h1>
-	<h2>Kilemeter fare: ${{driver.kmFare}}</h2>
-	<ul>
-	  <li>Work start date: {{diver.workStartDate}}</li>
-	  <li>Satisfied {{driver.satisfiedClients}} clients</li>
-	  <li>Average speed: {{driver.averageSpeed}} km/h</li>
-	</ul>
+    <div class = "container">
+      <div>
+	<div class = "jumbotron">
+	  <h1>This is a page service!</h1>
+	  <h2>Here you can observe drivers or add your own driver</h2>
+	</div>
+	<div ng-controller="CabsController as cabs" class="pull-left">
+	  <h2>Available drivers</h2>
+	  <div ng-repeat = "driver in drivers" class="well">
+	    <h3>{{driver.name}}</h3>
+	    <h4>Kilemeter fare: {{driver.kmFare | currency}}</h4>
+	    <ul>
+	      <li>Work start date: {{driver.workStartDate}}</li>
+	      <li>Satisfied {{driver.satisfiedClients}} clients</li>
+	      <li>Unsatisfied {{driver.unsatisfiedClients}} clients</li>
+	      <li>Average speed: {{driver.averageSpeed}} km/h</li>	      
+	    </ul>
+	    <button type="button" class="btn btn-default btn-lg" ng-click="deleteDriver(driver)">
+	      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+	      Remove
+	    </button>
+	  </div>
+	</div>
+      </div>
+
+      <div ng-controller="DriverController as driverCtrl" class="pull-right">
+	<h2>Add driver</h2>
+	<form name ="driverForm"
+	      ng-submit="addDriver()" novalidate>
+	  <blockquote>
+	    <h3>New drivers name: {{newDriver.name}}</h3>
+	    <h4>New drivers kilemeter fare: {{newDriver.kmFare | currency}}</h4>
+	    <ul>
+	      <li>Worked as driver since: {{newDriver.workStartDate}}</li>
+	      <li>Average speed: {{newDriver.averageSpeed}} km/h</li>
+	    </ul>	
+	  </blockquote>
+	  
+	  <div class="form-group"
+	       ng-class="{'has-error' : driverForm.name.$invalid && driverForm.name.$dirty}">
+	    <label>Name</label>
+	    <input type="text" ng-model="newDriver.name" name="name"
+		   class="form-control" placeholder="Driver name" required>
+	  </div>
+	  <div class="form-group"
+	       ng-class="{'has-error' : driverForm.name.$invalid && driverForm.name.$dirty}">
+	    <label>Fare per kilometer</label>
+	    <input ng-model="newDriver.kmFare" name="kmFare"
+		   class="form-control" required>
+	  </div>
+	  <div class="form-group"
+	       ng-class="{'has-error' : driverForm.name.$invalid && driverForm.name.$dirty}">
+	    <label>Started work date</label>
+	    <input type="text" ng-model="newDriver.workStartDate" name="date"
+		   class="form-control" placeholder="Work start date" required>
+	  </div>
+	  <div class="form-group"
+	       ng-class="{'has-error' : driverForm.name.$invalid && driverForm.name.$dirty}">
+	    <label>Average speed</label>
+	    <input ng-model="newDriver.averageSpeed" name="speed"
+		   class="form-control" required>
+	  </div>
+	  <button type="submit" class="btn btn-default"
+		  ng-disabled="driverForm.$invalid">Submit!</button>
+	</form>
       </div>
     </div>
+    
     <script src="static/lib/jquery/jquery.js"></script>    
     <script src="static/lib/angular/angular.js"></script>
     <script src="static/lib/bootstrap/js/bootstrap.js"></script>

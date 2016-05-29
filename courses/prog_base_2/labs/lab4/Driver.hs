@@ -16,6 +16,7 @@ data Driver = Driver {
 instance JSON Driver where
   showJSON d =
     makeObj [
+    put "index" index,
     put "name" name,
     put "workStartDate" workStartDate,
     put "satisfiedClients" satisfiedClients,
@@ -23,7 +24,8 @@ instance JSON Driver where
     put "kmFare" kmFare]
     where put prop propName = (prop, showJSON $ propName d)
   readJSON (JSObject obj) =
-    Driver 0 <$>
+    Driver <$>
+    get "index" <*>
     get "name" <*>
     get "workStartDate" <*>
     get "satisfiedClients" <*>
