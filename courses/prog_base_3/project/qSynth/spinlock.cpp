@@ -4,15 +4,15 @@ namespace qSynth {
 namespace util {
 
 bool Spinlock::try_lock(){
-    return lock.test_and_set(std::memory_order_acquire);
+    return a_lock.test_and_set(std::memory_order_acquire);
 }
 
 void Spinlock::lock(){
-    while(lock.test_and_set(std::memory_order_acquire));
+    while(a_lock.test_and_set(std::memory_order_acquire));
 }
 
 void Spinlock::unlock(){
-    lock.clear(std::memory_order_release);
+    a_lock.clear(std::memory_order_release);
 }
 
 } // namespace util

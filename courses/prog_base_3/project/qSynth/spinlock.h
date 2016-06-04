@@ -8,7 +8,7 @@ namespace util {
 
 class Spinlock
 {
-    std::atomic_flag lock = ATOMIC_FLAG_INIT;
+    std::atomic_flag a_lock = ATOMIC_FLAG_INIT;
 public:
     bool try_lock();
     void lock();

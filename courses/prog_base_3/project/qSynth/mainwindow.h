@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "iaudiobackend.h"
+#include "iaudiocallback.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    qSynth::IAudioBackend* audio;
+    qSynth::IAudioCallback* cb;
 };
 
 #endif // MAINWINDOW_H
