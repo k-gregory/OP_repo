@@ -15,14 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     pabackend.cpp \
-    testcallback.cpp
+    testcallback.cpp \
+    spinlock.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
     iaudiobackend.h \
     iaudiocallback.h \
     testcallback.h \
-    constants.h
+    constants.h \
+    spinlock.h
 
 FORMS    += mainwindow.ui
 
