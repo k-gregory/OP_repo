@@ -19,3 +19,13 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_playButton_clicked()
+{
+    audio->start();
+}
+
+void MainWindow::on_pauseButton_clicked()
+{
+    audio->stop();
+}
