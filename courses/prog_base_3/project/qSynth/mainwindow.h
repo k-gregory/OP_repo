@@ -20,12 +20,13 @@ public:
 private slots:
     void on_playButton_clicked();
 
-    void on_pauseButton_clicked();
-
 private:
+    void setupIcons();
+
     Ui::MainWindow *ui;
     qSynth::IAudioBackend* audio;
     qSynth::IAudioCallback* cb;
+    bool playing = false;
 };
 
 #endif // MAINWINDOW_H

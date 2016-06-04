@@ -17,9 +17,9 @@ public:
     ~PABackend();
     void start() override;
     void stop() override;
-    void pause() override;
-    void unpause() override;
+    void togglePause() override;
 private:
+    bool playing = false;
     PaStream* stream;
     IAudioCallback* cb;
     static int callback(const void* in, void* out, unsigned long frames,

@@ -53,23 +53,31 @@ int PABackend::callback(const void *, void *_out, unsigned long frames,
 void PABackend::start(){
     PaError err;
 
+    if(playing) throw "Already playing!";
+
     err = Pa_StartStream(stream);
     if(err){
         throw err;
+    } else{
+        playing = true;
     }
 }
 void PABackend::stop(){
     PaError err;
+
+    if(!playing) throw "Not playing yet!";
+
     err = Pa_StopStream(stream);
     if(err!=paNoError) {
         throw err;
+    } else {
+        playing = false;
     }
 }
-void PABackend::pause(){
-    stop();
-}
-void PABackend::unpause(){
-    start();
+
+void PABackend::togglePause(){
+    if(playing) stop();
+    else start();
 }
 
 }
