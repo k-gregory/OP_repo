@@ -6,6 +6,7 @@
 #include "igenericinput.h"
 #include <QMainWindow>
 #include <vector>
+#include <unordered_set>
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +35,8 @@ private:
     void keyPressEvent(QKeyEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
     std::vector<qSynth::Action> action_queue;
+
+    std::unordered_set<IGenericInput*> inputs;
 };
 
 #endif // MAINWINDOW_H
