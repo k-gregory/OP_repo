@@ -24,7 +24,9 @@ HEADERS  += mainwindow.h \
     iaudiocallback.h \
     testcallback.h \
     constants.h \
-    spinlock.h
+    spinlock.h \
+    iaudioeffect.h \
+    igenericinput.h
 
 FORMS    += mainwindow.ui
 

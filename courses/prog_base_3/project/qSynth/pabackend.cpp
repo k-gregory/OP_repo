@@ -76,8 +76,10 @@ void PABackend::stop(){
 }
 
 void PABackend::togglePause(){
-    if(playing) stop();
-    else start();
+    if(playing)
+        stop();
+    else
+        start();
 }
 
 }
