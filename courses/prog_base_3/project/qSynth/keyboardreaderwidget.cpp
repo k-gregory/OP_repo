@@ -18,9 +18,9 @@ void KeyboardReaderWidget::setupLabel(){
 }
 
 void KeyboardReaderWidget::keyPressEvent(QKeyEvent *e){
-    Action new_action;
+    GenericInputAction new_action;
     if(e->isAutoRepeat()) return;
-    new_action.type = Action::KeyPress;
+    new_action.type = GenericInputAction::KeyPress;
     new_action.key = e->key();
     new_action.specialInfo[0] = e->modifiers();
     qDebug()<<"Pressed: "<<new_action.key;
@@ -28,15 +28,20 @@ void KeyboardReaderWidget::keyPressEvent(QKeyEvent *e){
 }
 
 void KeyboardReaderWidget::keyReleaseEvent(QKeyEvent *e){
-    Action new_action;
-    new_action.type = Action::KeyRelease;
+    GenericInputAction new_action;
+    if(e->isAutoRepeat()) return;
+    new_action.type = GenericInputAction::KeyRelease;
     new_action.key = e->key();
     new_action.specialInfo[0] = e->modifiers();
     action_queue.push_back(new_action);
 }
 
-std::vector<Action> KeyboardReaderWidget::poll_input(){
-    std::vector<Action> ret = std::vector<Action>(action_queue);
+bool KeyboardReaderWidget::hasInput(){
+    return action_queue.size() != 0;
+}
+
+std::vector<GenericInputAction> KeyboardReaderWidget::pollInput(){
+    std::vector<GenericInputAction> ret = std::vector<GenericInputAction>(action_queue);
     action_queue.clear();
     return ret;
 }

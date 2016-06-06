@@ -4,7 +4,7 @@ namespace qSynth {
 namespace util {
 
 bool Spinlock::try_lock(){
-    return a_lock.test_and_set(std::memory_order_acquire);
+    return !a_lock.test_and_set(std::memory_order_acquire);
 }
 
 void Spinlock::lock(){

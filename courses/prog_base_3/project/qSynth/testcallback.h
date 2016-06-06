@@ -12,6 +12,7 @@ class TestCallback : public IAudioCallback
     float freq = 240;
 public:
     TestCallback();
+    void processInput(const std::vector<GenericInputAction>&) override;
     void fillBuffer(float* buffer, unsigned long frames) override;
 };
 

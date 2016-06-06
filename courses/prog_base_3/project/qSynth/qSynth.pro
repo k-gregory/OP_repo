@@ -30,7 +30,8 @@ HEADERS  += mainwindow.h \
     iaudioeffect.h \
     igenericinput.h \
     keyboardreaderwidget.h \
-    simplegenerator.h
+    simplegenerator.h \
+    genericinputaction.h
 
 FORMS    += mainwindow.ui
 

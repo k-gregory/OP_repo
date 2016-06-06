@@ -23,6 +23,7 @@ private slots:
     void on_playButton_clicked();
 
 private:
+    void setupInputTimer();
     void setupIcons();
     void addKeyboardInput();
     void setupInputsModel();
@@ -33,6 +34,9 @@ private:
     bool playing = false;
 
     std::unordered_set<qSynth::IGenericInput*> inputs;
+    QTimer* input_timer;
+private slots:
+    void feedInput();
 };
 
 #endif // MAINWINDOW_H

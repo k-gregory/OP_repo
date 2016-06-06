@@ -9,6 +9,10 @@ TestCallback::TestCallback()
 
 }
 
+void TestCallback::processInput(const std::vector<GenericInputAction> &){
+
+}
+
 void TestCallback::fillBuffer(float *buffer, unsigned long frames){
     unsigned long last = pos + frames;
     for(; pos < last; pos++){

@@ -15,13 +15,14 @@ class KeyboardReaderWidget : public QWidget, public IGenericInput
     Q_OBJECT
 public:
     explicit KeyboardReaderWidget(QWidget *parent = 0);
-    std::vector<Action> poll_input();
+    bool hasInput() override;
+    std::vector<GenericInputAction> pollInput() override;
 private:
     void setupLabel();
 
     void keyPressEvent(QKeyEvent* e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
-    std::vector<Action> action_queue;
+    std::vector<GenericInputAction> action_queue;
 
     QLabel* label;
 };

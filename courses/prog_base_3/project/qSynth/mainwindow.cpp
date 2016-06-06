@@ -5,9 +5,10 @@
 #include "pabackend.h"
 #include "keyboardreaderwidget.h"
 
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QStandardItemModel>
-#include <QKeyEvent>
+
 #include <QDebug>
 
 using namespace qSynth;
@@ -18,6 +19,24 @@ void MainWindow::addKeyboardInput(){
     KeyboardReaderWidget* krw = new KeyboardReaderWidget;
     vbox->addWidget(krw);
     ui->keyboardInputGB->setLayout(vbox);
+    inputs.insert(krw);
+}
+
+void MainWindow::setupInputTimer(){
+    input_timer = new QTimer(this);
+    connect(input_timer,SIGNAL(timeout()),this,SLOT(feedInput()));
+    input_timer->start();
+}
+
+void MainWindow::feedInput(){
+    std::vector<GenericInputAction> multiplexed;
+    for(IGenericInput* in: inputs){
+        if(!in->hasInput()) continue;
+        std::vector<GenericInputAction> current_in = in->pollInput();
+        multiplexed.insert(multiplexed.end(), current_in.begin(), current_in.end());
+    }
+    if(multiplexed.size() > 0)
+        cb->processInput(multiplexed);
 }
 
 void MainWindow::setupInputsModel(){
@@ -60,6 +79,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     cb = new SimpleGenerator();
     audio = new PABackend(cb);
+
+    setupInputTimer();//After generator created
 }
 
 MainWindow::~MainWindow()
