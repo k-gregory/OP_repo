@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>styles/KeyboardReader.qss</file>
+    </qresource>
+</RCC>

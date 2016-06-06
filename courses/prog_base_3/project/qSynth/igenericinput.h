@@ -13,7 +13,7 @@ struct Action{
     };
     ActionType type;
     int key;
-    int specialAction = 0;
+    int specialInfo[10];
 };
 
 class IGenericInput

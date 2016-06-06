@@ -1,13 +1,49 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "simplegenerator.h"
 #include "pabackend.h"
-#include "testcallback.h"
+#include "keyboardreaderwidget.h"
 
+#include <QVBoxLayout>
+#include <QStandardItemModel>
 #include <QKeyEvent>
 #include <QDebug>
 
 using namespace qSynth;
+
+
+void MainWindow::addKeyboardInput(){
+    QVBoxLayout* vbox = new QVBoxLayout;
+    KeyboardReaderWidget* krw = new KeyboardReaderWidget;
+    vbox->addWidget(krw);
+    ui->keyboardInputGB->setLayout(vbox);
+}
+
+void MainWindow::setupInputsModel(){
+    QStandardItemModel * m = new QStandardItemModel(1,1);
+    QModelIndex idx = m->index(0,0);
+    for(int i = 0; i < 5;i++){
+        m->insertRow(i,idx);
+    }
+
+    QStandardItemModel* model = new QStandardItemModel(5,3);
+
+    for(int nTopRow = 0; nTopRow < 5; nTopRow++){
+        QModelIndex index = model->index(nTopRow, 0);
+        model->setData(index, "item" + QString::number(nTopRow + 1));
+
+        model->insertRows(0, 4, index);
+        model->insertColumns(0, 3, index);
+        for(int nRow = 0; nRow < 4; nRow++)
+            for(int nCol = 0; nCol < 3; nCol++){
+                QString strPos = QString("%1,%2").arg(nRow).arg(nCol);
+                model->setData(model->index(nRow,nCol, index), strPos);
+            }
+    }
+
+    ui->effectsTree->setModel(model);
+}
 
 void MainWindow::setupIcons(){
     ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -19,9 +55,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupIcons();
-    setFocusPolicy(Qt::StrongFocus);
+    addKeyboardInput();
+    setupInputsModel();
 
-    cb = new TestCallback();
+    cb = new SimpleGenerator();
     audio = new PABackend(cb);
 }
 
@@ -37,20 +74,4 @@ void MainWindow::on_playButton_clicked()
     ui->playButton->setIcon(style()->standardIcon(newIcon));
     ui->playButton->setText(playing ? "Pause" : "Play");
     audio->togglePause();
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *e){
-    if(e->isAutoRepeat() || e->modifiers()!= Qt::NoModifier) return;
-    action_queue.push_back(Action {Action::KeyPress,e->key()});
-    qDebug()<<action_queue[action_queue.size() - 1].key;
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent *e){
-    action_queue.push_back(Action {Action::KeyRelease, e->key()});
-}
-
-std::vector<Action> MainWindow::poll_input(){
-    std::vector<Action> ret = std::vector<Action>(action_queue);
-    action_queue.clear();
-    return ret;
 }

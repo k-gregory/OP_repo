@@ -5,20 +5,18 @@
 #include "iaudiocallback.h"
 #include "igenericinput.h"
 #include <QMainWindow>
-#include <vector>
 #include <unordered_set>
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow, public qSynth::IGenericInput
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    std::vector<qSynth::Action> poll_input() override;
     ~MainWindow();
 
 private slots:
@@ -26,17 +24,15 @@ private slots:
 
 private:
     void setupIcons();
+    void addKeyboardInput();
+    void setupInputsModel();
 
     Ui::MainWindow *ui;
     qSynth::IAudioBackend* audio;
     qSynth::IAudioCallback* cb;
     bool playing = false;
 
-    void keyPressEvent(QKeyEvent *e) override;
-    void keyReleaseEvent(QKeyEvent *e) override;
-    std::vector<qSynth::Action> action_queue;
-
-    std::unordered_set<IGenericInput*> inputs;
+    std::unordered_set<qSynth::IGenericInput*> inputs;
 };
 
 #endif // MAINWINDOW_H

@@ -28,6 +28,9 @@
         <property name="title">
          <string>Inputs</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QListView" name="inputsList">
@@ -39,10 +42,23 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="inputAddIcon">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="inputModifyBtn">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Modify input</string>
+           </property>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="inputAddBtn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -53,13 +69,13 @@
           </widget>
          </item>
         </layout>
-        <zorder>playButton</zorder>
         <zorder>inputsList</zorder>
-        <zorder>inputAddIcon</zorder>
+        <zorder>inputAddBtn</zorder>
+        <zorder>inputModifyBtn</zorder>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QGroupBox" name="EffectsGB">
+       <widget class="QGroupBox" name="effectsGB">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -77,7 +93,7 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="controlsGB">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -117,6 +133,16 @@
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QGroupBox" name="keyboardInputGB">
+        <property name="title">
+         <string>Keyboard input</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
      </layout>

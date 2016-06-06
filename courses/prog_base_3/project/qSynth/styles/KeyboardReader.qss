@@ -1,0 +1,12 @@
+QWidget
+{
+background: blue;
+background-color: blue;
+border-style:solid;
+border-width:2px;
+border-color:rgb(24,24,10);
+}
+QWidget.QLabel{
+color:white;
+}
+

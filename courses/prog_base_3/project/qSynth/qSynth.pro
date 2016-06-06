@@ -16,7 +16,9 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     pabackend.cpp \
     testcallback.cpp \
-    spinlock.cpp
+    spinlock.cpp \
+    keyboardreaderwidget.cpp \
+    simplegenerator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -26,7 +28,9 @@ HEADERS  += mainwindow.h \
     constants.h \
     spinlock.h \
     iaudioeffect.h \
-    igenericinput.h
+    igenericinput.h \
+    keyboardreaderwidget.h \
+    simplegenerator.h
 
 FORMS    += mainwindow.ui
 
