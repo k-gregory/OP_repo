@@ -19,7 +19,7 @@ class GuitarGenerator :  IAudioEffect
     static constexpr float PI = 3.14159265359;
 
     struct StringInfo{
-        unsigned int base_freq;
+        float base_freq;
         unsigned long samples_played;
         bool active;
     };
@@ -38,6 +38,13 @@ class GuitarGenerator :  IAudioEffect
             return (A*time*time+B*time+C)*std::exp(D*time);
         }
     };
+
+    struct InharmAmplitudeInfo{
+        AmplitudeModel amplitude;
+        float freqShift;
+        float strength;
+    };
+
     AmplitudeModel harmAmplitudesInfo[harmAmplitudesCount] = {
         {0.0000079585,-0.3510846478,6454.3454366928,-0.0000516264},
         {0.0000206901,-0.3488352257,8078.2537944248,-0.0000744984},
@@ -50,12 +57,16 @@ class GuitarGenerator :  IAudioEffect
         {0.0000081147,-0.1803345539,1197.5593762439,-0.0001971705},
         {0.0000000241,-0.0020081514,46.9338124257,-0.0000536678}
     };
+
+    InharmAmplitudeInfo inharmAmplitudesInfo = {
+        {0.0000002462,-0.0324402430,1003.6831527539,-0.0000253380},-9,0.3
+    };
 public:
     GuitarGenerator();
     ~GuitarGenerator();
     void process(const float *samples_in, float *samples_out, unsigned long samplesCount) override;
-    void setStringFrequency(unsigned int string, unsigned int freq);
-    void playString(unsigned int string, unsigned int freq);
+    void setStringFrequency(unsigned int string, float freq);
+    void playString(unsigned int string, float freq);
     void playString(unsigned int string);
 private:
     void initStrings();

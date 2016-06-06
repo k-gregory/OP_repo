@@ -13,6 +13,7 @@ static constexpr float k = -10.f/end_p;
 
 SimpleGenerator::SimpleGenerator()
 {
+    guitar_gen.playString(1,86);
 }
 
 void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input){
@@ -55,9 +56,7 @@ void SimpleGenerator::dangerProcessInput(){
         if(a.key < 10 || a.key > 100) continue;
         //waves.push_back({100+(a.key-'1')*30,0});
         arr2 a2 = keyPos(a.specialInfo[1]);
-        qDebug()<<a2.a<<a2.b;
         if(a2.a!=-1){
-            qDebug()<<"N";
             guitar_gen.playString(a2.a,(a2.b+1)*50);
         }
     }
@@ -94,6 +93,13 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     }
     */
     guitar_gen.process(buffer,buffer, frames);
+    for(unsigned long i = 0; i < frames; i++){
+        //buffer[i] = std::atan(buffer[i])/1.5;
+        if(buffer[i]>0.7)
+            buffer[i] = 0.7;
+        else if(buffer[i]<-0.7)
+            buffer[i] = -0.7;
+    }
 }
 
 } // namespace qSynth

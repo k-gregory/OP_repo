@@ -24,7 +24,7 @@ void GuitarGenerator::initStrings(){
     }
 }
 
-void GuitarGenerator::setStringFrequency(unsigned int string, unsigned int freq){
+void GuitarGenerator::setStringFrequency(unsigned int string, float freq){
     if(string < 1 || string > string_count){
         qDebug()<<"Too big string number: "<<string;
         return;
@@ -41,7 +41,8 @@ void GuitarGenerator::playString(unsigned int string){
     strings[string-1].samples_played = 0;
 }
 
-void GuitarGenerator::playString(unsigned int string, unsigned int freq){
+void GuitarGenerator::playString(unsigned int string, float freq){
+    qDebug()<<string<<" plays "<<freq;
     setStringFrequency(string, freq);
     playString(string);
 }
@@ -74,6 +75,9 @@ void GuitarGenerator::process(const float *, float *samples_out, unsigned long s
                 if(harmIndex == 0) freq+=2;
                 curr_sample+=std::sin(2*PI*t*freq)*harmAmplitudes[nSample][harmIndex];
             }
+            /*curr_sample+=inharmAmplitudesInfo.strength*
+                    std::sin(2*PI*t*strings[string].base_freq+inharmAmplitudesInfo.freqShift)*
+                    inharmAmplitudesInfo.amplitude.calc(t)/6000;*/
         }
         samples_out[sample] = curr_sample;
     }
