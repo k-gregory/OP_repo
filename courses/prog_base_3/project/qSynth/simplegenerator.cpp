@@ -2,11 +2,12 @@
 
 #include <algorithm>
 #include <cmath>
+#include <QDebug>
 
 namespace qSynth {
 
 static constexpr unsigned int sample_rate=44000;
-static constexpr unsigned int string_time = 5;
+static constexpr unsigned int string_time = 2;
 static constexpr unsigned long end_p = sample_rate * string_time;
 static constexpr float k = -10.f/end_p;
 
@@ -29,7 +30,7 @@ void SimpleGenerator::dangerProcessInput(){
         if(a.type!=GenericInputAction::KeyPress) continue;
         int nw = a.key - '1';
         if(nw < 0 || nw > 9) continue;
-        waves.push_back({120+nw*30,0});
+        waves.push_back({100+nw*50,0});
     }
     danger_buffer.clear();
 }
@@ -40,14 +41,20 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         input_lock.unlock();
     }
 
-    float ncoef = 1.f/std::sqrt(waves.size()+1);
+    //float ncoef;
+    //if(waves.size() == 0) ncoef = 1;
+    //else ncoef = 1.f/std::sqrt(waves.size());
+
+
     std::fill(buffer,buffer+frames, 0.f);
     for(Wave& w : waves){
+        using std::sin;
         unsigned long last = w.played_time + frames;
         float* buff = buffer;
         for(; w.played_time < last; w.played_time++){
             float t = w.played_time * 1.f/ sample_rate;
-            *buff++ += std::sin(t*2*3.14*w.frequency+std::sin(t))*adsr(w.played_time);
+            float arg = 2*3.14*t*w.frequency;
+            *buff++ += sin(arg*2)*sin(arg)*sin(arg)*adsr(w.played_time);
         }
     }
 
@@ -58,7 +65,6 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
                 }),waves.end());
 
     for(unsigned int i =0; i < frames; i++){
-         buffer[i]*=ncoef;
     }
 }
 

@@ -25,7 +25,7 @@ void MainWindow::addKeyboardInput(){
 void MainWindow::setupInputTimer(){
     input_timer = new QTimer(this);
     connect(input_timer,SIGNAL(timeout()),this,SLOT(feedInput()));
-    input_timer->start();
+    input_timer->start(1);
 }
 
 void MainWindow::feedInput(){
@@ -35,7 +35,7 @@ void MainWindow::feedInput(){
         std::vector<GenericInputAction> current_in = in->pollInput();
         multiplexed.insert(multiplexed.end(), current_in.begin(), current_in.end());
     }
-    if(multiplexed.size() > 0)
+    if(multiplexed.size() > 0 && playing)
         cb->processInput(multiplexed);
 }
 
