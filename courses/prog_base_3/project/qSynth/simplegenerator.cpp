@@ -21,16 +21,45 @@ void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input)
     input_lock.unlock();
 }
 
-static float adsr(unsigned int pos){
+/*static float adsr(unsigned int pos){
     return exp(k*pos);
+}*/
+
+
+#define LEN(arr) (sizeof(arr)/sizeof((arr)[0]))
+
+struct arr2{
+    int a;
+    int b;
+};
+
+static arr2 keyPos(int key){
+    constexpr int first_row[] = {'q','w','e','r','t','y','u','i','o','p'};
+    constexpr int second_row[] = {'a','s','d','f','g','h','j','k','l'};
+    constexpr int third_row[] = {'z','x','c','v','b','n','m'};
+    for(unsigned int i = 0; i < LEN(first_row); i++){
+        if(first_row[i] == key) return {1,i};
+    }
+    for(unsigned int i = 0; i < LEN(second_row); i++){
+        if(second_row[i] == key) return {2,i};
+    }
+    for(unsigned int i = 0; i < LEN(third_row); i++){
+        if(third_row[i] == key) return {3,i};
+    }
+    return {-1,-1};
 }
 
 void SimpleGenerator::dangerProcessInput(){
     for(GenericInputAction& a : danger_buffer){
         if(a.type!=GenericInputAction::KeyPress) continue;
-        int nw = a.key - '1';
-        if(nw < 0 || nw > 9) continue;
-        waves.push_back({100+nw*50,0});
+        if(a.key < 10 || a.key > 100) continue;
+        //waves.push_back({100+(a.key-'1')*30,0});
+        arr2 a2 = keyPos(a.specialInfo[1]);
+        qDebug()<<a2.a<<a2.b;
+        if(a2.a!=-1){
+            qDebug()<<"N";
+            guitar_gen.playString(a2.a,(a2.b+1)*50);
+        }
     }
     danger_buffer.clear();
 }
@@ -41,11 +70,7 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         input_lock.unlock();
     }
 
-    //float ncoef;
-    //if(waves.size() == 0) ncoef = 1;
-    //else ncoef = 1.f/std::sqrt(waves.size());
-
-
+    /*
     std::fill(buffer,buffer+frames, 0.f);
     for(Wave& w : waves){
         using std::sin;
@@ -65,7 +90,10 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
                 }),waves.end());
 
     for(unsigned int i =0; i < frames; i++){
+        buffer[i] = std::atan(buffer[i]);
     }
+    */
+    guitar_gen.process(buffer,buffer, frames);
 }
 
 } // namespace qSynth

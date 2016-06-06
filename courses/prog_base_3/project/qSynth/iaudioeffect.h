@@ -7,8 +7,9 @@ namespace qSynth {
 class IAudioEffect
 {
 public:
-    void prepare(unsigned long bufferSize) = 0;
-    void process(const float* samples_in,float* samples_out,unsigned long samplesCount) = 0;
+    virtual void process(const float* samples_in,
+                         float* samples_out,
+                         unsigned long samplesCount) = 0;
 };
 
 } // namespace qSynth

@@ -23,6 +23,7 @@ void KeyboardReaderWidget::keyPressEvent(QKeyEvent *e){
     new_action.type = GenericInputAction::KeyPress;
     new_action.key = e->key();
     new_action.specialInfo[0] = e->modifiers();
+    new_action.specialInfo[1] = e->text()[0].toLatin1();
     qDebug()<<"Pressed: "<<new_action.key;
     action_queue.push_back(new_action);
 }

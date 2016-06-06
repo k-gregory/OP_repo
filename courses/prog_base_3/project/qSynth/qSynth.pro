@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     testcallback.cpp \
     spinlock.cpp \
     keyboardreaderwidget.cpp \
-    simplegenerator.cpp
+    simplegenerator.cpp \
+    guitargenerator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     igenericinput.h \
     keyboardreaderwidget.h \
     simplegenerator.h \
-    genericinputaction.h
+    genericinputaction.h \
+    guitargenerator.h
 
 FORMS    += mainwindow.ui
 

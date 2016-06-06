@@ -1,7 +1,7 @@
 #ifndef CONSTANTS
 #define CONSTANTS
 
-#define SAMPLE_RATE (44100)
+constexpr auto SAMPLE_RATE = 44100;
 
 #endif // CONSTANTS
 
