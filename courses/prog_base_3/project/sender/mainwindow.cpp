@@ -3,10 +3,12 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    addr("127.0.0.1")
 {
     ui->setupUi(this);
     sock = new QUdpSocket(this);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 MainWindow::~MainWindow()
@@ -28,6 +30,11 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
 
     qDebug()<<sock->writeDatagram((char*)array,
                                   sizeof(qint32)*12,
-                                  QHostAddress(ui->ipEdit->text()),
-                                  8000);
+                                  addr,
+                                  ui->spinBox->value());
+}
+
+void MainWindow::on_ipEdit_editingFinished()
+{
+    addr = QHostAddress(ui->ipEdit->text());
 }

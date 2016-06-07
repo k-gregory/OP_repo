@@ -20,9 +20,14 @@ public:
 protected:
     void keyPressEvent(QKeyEvent* e);
 
+private slots:
+    void on_ipEdit_editingFinished();
+
 private:
     Ui::MainWindow *ui;
     QUdpSocket* sock;
+    QHostAddress addr;
+    int port;
 };
 
 #endif // MAINWINDOW_H
