@@ -59,8 +59,8 @@ void SimpleGenerator::dangerProcessInput(){
         //waves.push_back({100+(a.key-'1')*30,0});
         arr3 a2 = keyPos(a.specialInfo[1]);
         if(a2.a!=-1){
-            //guitar_gen.playString(a2.a,(a2.b+1)*50);
-             guitar_gen.playFree(a2.c*20);
+            guitar_gen.playString(a2.a,(a2.b+1)*50);
+            // guitar_gen.playFree(a2.c*20);
         }
     }
     danger_buffer.clear();
@@ -108,9 +108,11 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     }
     */
     guitar_gen.process(buffer,buffer, frames);
+    /*
     for(unsigned long i = 0; i < frames; i++){
-        buffer[i] = softClip(buffer[i],1.f/8);
+        buffer[i] = softClip(buffer[i],20);
     }
+    */
     //qDebug()<<buffer[0];
 }
 
