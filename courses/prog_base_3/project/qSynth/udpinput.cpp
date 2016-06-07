@@ -20,27 +20,36 @@ void UDPInput::readDatagrams(){
         QByteArray datagram;
         datagramSize = sock->pendingDatagramSize();
         datagram.resize(datagramSize);
-        //qDebug()<<"First symbol";
-        //qDebug()<<datagram[0];
+        qDebug()<<datagramSize;
         sock->readDatagram(datagram.data(),datagramSize);
         if(datagramSize != sizeof(qint32)*12) continue;
 
-        QDataStream data(datagram);
+        qint32 msg[12];
+        qint32* recv = (qint32*) datagram.data();
+        for(int i = 0; i < 12; i++){
+            msg[i] = recv[i];
+        }
         GenericInputAction action;
         qint32 t;
-        data >> t;
+        t = msg[0];
         if(t == GenericInputAction::KeyPress)
             action.type = GenericInputAction::KeyPress;
         else if(t==GenericInputAction::KeyRelease)
             action.type = GenericInputAction::KeyRelease;
         else if(t==GenericInputAction::SpecialAction)
             action.type = GenericInputAction::SpecialAction;
-        data >> t;
+        t = msg[1];
         action.key = t;
         for(int i = 0; i < 10; i++){
-            data >> t;
+            t = msg[i+2];
             action.specialInfo[i] = t;
         }
+
+        qDebug()<<(action.type == GenericInputAction::KeyPress);
+        qDebug()<<action.key;
+        qDebug()<<action.specialInfo[0];
+        qDebug()<<action.specialInfo[1];
+
         input_queue.push_back(action);
     }
 }
@@ -52,7 +61,7 @@ std::vector<GenericInputAction> UDPInput::pollInput(){
 }
 
 bool UDPInput::hasInput(){
-    return input_queue.size() != 0;
+    return input_queue.size()!= 0;
 }
 
 } // namespace qSynth

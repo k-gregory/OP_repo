@@ -7,7 +7,7 @@ namespace qSynth {
 struct GenericInputAction
 {
     enum ActionType{
-        KeyPress,
+        KeyPress = 0,
         KeyRelease,
         SpecialAction,
     };
