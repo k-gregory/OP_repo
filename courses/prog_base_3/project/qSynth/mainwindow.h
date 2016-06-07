@@ -34,10 +34,10 @@ private:
     bool playing = false;
 
     qSynth::InputListModel* inputListModel = nullptr;
-    //std::unordered_set<qSynth::IGenericInput*> inputs;
     QTimer* input_timer;
 private slots:
     void feedInput();
+    void on_inputModifyBtn_clicked();
 };
 
 #endif // MAINWINDOW_H

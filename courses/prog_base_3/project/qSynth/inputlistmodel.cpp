@@ -1,5 +1,6 @@
 #include "inputlistmodel.h"
 #include <algorithm>
+#include <QMessageBox>
 
 namespace qSynth {
 
@@ -31,6 +32,18 @@ bool InputListModel::addInput(IGenericInput *i, QString name){
     insertRow(inputs.size(),QModelIndex());
     inputs.push_back({i,name});
     return true;
+}
+
+void InputListModel::modifyItem(const QModelIndex &idx){
+    if(!idx.isValid()) return;
+    QDialog* mod_dialog = inputs.at(idx.row()).modificationDialog;
+    if(mod_dialog!=nullptr)
+        mod_dialog->exec();
+    else {
+        QMessageBox mbox;
+        mbox.setText("No input modifications available");
+        mbox.exec();
+    }
 }
 
 std::vector<GenericInputAction> InputListModel::getMultiplexedInput(){

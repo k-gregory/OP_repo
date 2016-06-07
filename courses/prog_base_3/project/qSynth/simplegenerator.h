@@ -21,7 +21,6 @@ public:
     void processInput(const std::vector<GenericInputAction>& input) override;
     void fillBuffer(float* buffer, unsigned long frames) override;
 private:
-    //std::vector<Wave> waves;
     guitar::GuitarGenerator guitar_gen;
 
     util::Spinlock input_lock;

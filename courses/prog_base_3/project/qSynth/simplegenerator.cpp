@@ -22,11 +22,6 @@ void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input)
     input_lock.unlock();
 }
 
-/*static float adsr(unsigned int pos){
-    return exp(k*pos);
-}*/
-
-
 #define LEN(arr) (sizeof(arr)/sizeof((arr)[0]))
 
 struct arr3{
@@ -83,37 +78,11 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         dangerProcessInput();
         input_lock.unlock();
     }
-
-    /*
-    std::fill(buffer,buffer+frames, 0.f);
-    for(Wave& w : waves){
-        using std::sin;
-        unsigned long last = w.played_time + frames;
-        float* buff = buffer;
-        for(; w.played_time < last; w.played_time++){
-            float t = w.played_time * 1.f/ sample_rate;
-            float arg = 2*3.14*t*w.frequency;
-            *buff++ += sin(arg*2)*sin(arg)*sin(arg)*adsr(w.played_time);
-        }
-    }
-
-    waves.erase(std::remove_if(waves.begin(),
-                               waves.end(),
-                               [](const Wave& w){
-                    return w.played_time > end_p;
-                }),waves.end());
-
-    for(unsigned int i =0; i < frames; i++){
-        buffer[i] = std::atan(buffer[i]);
-    }
-    */
     guitar_gen.process(buffer,buffer, frames);
-    /*
+
     for(unsigned long i = 0; i < frames; i++){
-        buffer[i] = softClip(buffer[i],20);
+        buffer[i] = softClip(buffer[i],10);
     }
-    */
-    //qDebug()<<buffer[0];
 }
 
 } // namespace qSynth

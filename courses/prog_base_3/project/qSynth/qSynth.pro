@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core widgets network
 
 TARGET = qSynth
 TEMPLATE = app
@@ -20,7 +18,9 @@ SOURCES += main.cpp\
     keyboardreaderwidget.cpp \
     simplegenerator.cpp \
     guitargenerator.cpp \
-    inputlistmodel.cpp
+    inputlistmodel.cpp \
+    udpinput.cpp \
+    tc.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -35,7 +35,9 @@ HEADERS  += mainwindow.h \
     simplegenerator.h \
     genericinputaction.h \
     guitargenerator.h \
-    inputlistmodel.h
+    inputlistmodel.h \
+    udpinput.h \
+    tc.h
 
 FORMS    += mainwindow.ui
 
