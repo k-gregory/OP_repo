@@ -60,7 +60,9 @@ class GuitarGenerator :  IAudioEffect
     };
 
     InharmAmplitudeInfo inharmAmplitudesInfo = {
-        {0.0000002462,-0.0324402430,1003.6831527539,-0.0000253380},-9,0.3
+        {0.0000002462,-0.0324402430,0.6831527539,-0.0000253380},
+        -9,
+        0.3
     };
 public:
     GuitarGenerator();
@@ -81,12 +83,13 @@ private:
         float t = nSample*sample_time;
         for(unsigned int harmIndex = 0; harmIndex < harmAmplitudesCount; harmIndex++){
             float freq = string.base_freq*(1+harmIndex);
-            if(harmIndex == 0) freq+=5;
+            if(harmIndex == 0) freq+=2;
             sampleVal+= std::sin(2*PI*t*freq)*harmAmplitudes[nSample][harmIndex];
         }
         sampleVal+=inharmAmplitudesInfo.strength *
-                std::sin(2*PI*t*string.base_freq+inharmAmplitudesInfo.freqShift) *
+                std::sin(2*PI*t*(string.base_freq+inharmAmplitudesInfo.freqShift)) *
                 inharmAmplitudesInfo.amplitude.calc(t)/6000;
+
 
         return sampleVal;
     }

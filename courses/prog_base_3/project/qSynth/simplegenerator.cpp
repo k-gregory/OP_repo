@@ -13,7 +13,7 @@ static constexpr float k = -10.f/end_p;
 
 SimpleGenerator::SimpleGenerator()
 {
-    guitar_gen.playString(1,86);
+    guitar_gen.playString(1,196.0);
 }
 
 void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input){
@@ -55,11 +55,12 @@ void SimpleGenerator::dangerProcessInput(){
     for(GenericInputAction& a : danger_buffer){
         if(a.type!=GenericInputAction::KeyPress) continue;
         if(a.key < 10 || a.key > 100) continue;
+        //guitar_gen.playFree(440.0);
         //waves.push_back({100+(a.key-'1')*30,0});
         arr3 a2 = keyPos(a.specialInfo[1]);
         if(a2.a!=-1){
             //guitar_gen.playString(a2.a,(a2.b+1)*50);
-            guitar_gen.playFree(a2.c*20);
+             guitar_gen.playFree(a2.c*20);
         }
     }
     danger_buffer.clear();
