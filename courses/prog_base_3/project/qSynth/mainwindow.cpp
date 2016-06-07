@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QStandardItemModel>
+#include "inputlistmodel.h"
 
 #include <QDebug>
 
@@ -19,7 +20,7 @@ void MainWindow::addKeyboardInput(){
     KeyboardReaderWidget* krw = new KeyboardReaderWidget;
     vbox->addWidget(krw);
     ui->keyboardInputGB->setLayout(vbox);
-    inputs.insert(krw);
+    inputListModel->addInput(krw,"KeyRead widget");
 }
 
 void MainWindow::setupInputTimer(){
@@ -29,39 +30,15 @@ void MainWindow::setupInputTimer(){
 }
 
 void MainWindow::feedInput(){
-    std::vector<GenericInputAction> multiplexed;
-    for(IGenericInput* in: inputs){
-        if(!in->hasInput()) continue;
-        std::vector<GenericInputAction> current_in = in->pollInput();
-        multiplexed.insert(multiplexed.end(), current_in.begin(), current_in.end());
-    }
+    std::vector<GenericInputAction> multiplexed =
+            inputListModel->getMultiplexedInput();
     if(multiplexed.size() > 0 && playing)
         cb->processInput(multiplexed);
 }
 
 void MainWindow::setupInputsModel(){
-    QStandardItemModel * m = new QStandardItemModel(1,1);
-    QModelIndex idx = m->index(0,0);
-    for(int i = 0; i < 5;i++){
-        m->insertRow(i,idx);
-    }
-
-    QStandardItemModel* model = new QStandardItemModel(5,3);
-
-    for(int nTopRow = 0; nTopRow < 5; nTopRow++){
-        QModelIndex index = model->index(nTopRow, 0);
-        model->setData(index, "item" + QString::number(nTopRow + 1));
-
-        model->insertRows(0, 4, index);
-        model->insertColumns(0, 3, index);
-        for(int nRow = 0; nRow < 4; nRow++)
-            for(int nCol = 0; nCol < 3; nCol++){
-                QString strPos = QString("%1,%2").arg(nRow).arg(nCol);
-                model->setData(model->index(nRow,nCol, index), strPos);
-            }
-    }
-
-    ui->effectsTree->setModel(model);
+    inputListModel = new InputListModel;
+    ui->inputsList->setModel(inputListModel);
 }
 
 void MainWindow::setupIcons(){
@@ -74,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupIcons();
-    addKeyboardInput();
     setupInputsModel();
+    addKeyboardInput();
 
     cb = new SimpleGenerator();
     audio = new PABackend(cb);
@@ -86,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete inputListModel;
 }
 
 void MainWindow::on_playButton_clicked()

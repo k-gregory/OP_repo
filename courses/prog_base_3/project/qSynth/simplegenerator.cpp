@@ -40,13 +40,13 @@ static arr3 keyPos(int key){
     constexpr int second_row[] = {'a','s','d','f','g','h','j','k','l'};
     constexpr int third_row[] = {'z','x','c','v','b','n','m'};
     for(unsigned int i = 0; i < LEN(first_row); i++){
-        if(first_row[i] == key) return {1,i+1,i+1};
+        if(first_row[i] == key) return {1,(int)i+1,(int)i+1};
     }
     for(unsigned int i = 0; i < LEN(second_row); i++){
-        if(second_row[i] == key) return {2,i+1,LEN(first_row)+i+1};
+        if(second_row[i] == key) return {2,(int)i+1,(int)LEN(first_row)+(int)i+1};
     }
     for(unsigned int i = 0; i < LEN(third_row); i++){
-        if(third_row[i] == key) return {3,i+1,LEN(first_row)+LEN(second_row)+1+i};
+        if(third_row[i] == key) return {3,(int)i+1,(int)(LEN(first_row)+LEN(second_row)+1+(int)i)};
     }
     return {-1,-1,-1};
 }

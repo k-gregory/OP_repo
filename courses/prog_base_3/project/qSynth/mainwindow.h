@@ -4,8 +4,8 @@
 #include "iaudiobackend.h"
 #include "iaudiocallback.h"
 #include "igenericinput.h"
+#include "inputlistmodel.h"
 #include <QMainWindow>
-#include <unordered_set>
 
 namespace Ui {
 class MainWindow;
@@ -33,7 +33,8 @@ private:
     qSynth::IAudioCallback* cb;
     bool playing = false;
 
-    std::unordered_set<qSynth::IGenericInput*> inputs;
+    qSynth::InputListModel* inputListModel = nullptr;
+    //std::unordered_set<qSynth::IGenericInput*> inputs;
     QTimer* input_timer;
 private slots:
     void feedInput();
