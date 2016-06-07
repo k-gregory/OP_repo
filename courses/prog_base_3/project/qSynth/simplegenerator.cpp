@@ -29,25 +29,26 @@ void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input)
 
 #define LEN(arr) (sizeof(arr)/sizeof((arr)[0]))
 
-struct arr2{
+struct arr3{
     int a;
     int b;
+    int c;
 };
 
-static arr2 keyPos(int key){
+static arr3 keyPos(int key){
     constexpr int first_row[] = {'q','w','e','r','t','y','u','i','o','p'};
     constexpr int second_row[] = {'a','s','d','f','g','h','j','k','l'};
     constexpr int third_row[] = {'z','x','c','v','b','n','m'};
     for(unsigned int i = 0; i < LEN(first_row); i++){
-        if(first_row[i] == key) return {1,i};
+        if(first_row[i] == key) return {1,i+1,i+1};
     }
     for(unsigned int i = 0; i < LEN(second_row); i++){
-        if(second_row[i] == key) return {2,i};
+        if(second_row[i] == key) return {2,i+1,LEN(first_row)+i+1};
     }
     for(unsigned int i = 0; i < LEN(third_row); i++){
-        if(third_row[i] == key) return {3,i};
+        if(third_row[i] == key) return {3,i+1,LEN(first_row)+LEN(second_row)+1+i};
     }
-    return {-1,-1};
+    return {-1,-1,-1};
 }
 
 void SimpleGenerator::dangerProcessInput(){
@@ -55,12 +56,25 @@ void SimpleGenerator::dangerProcessInput(){
         if(a.type!=GenericInputAction::KeyPress) continue;
         if(a.key < 10 || a.key > 100) continue;
         //waves.push_back({100+(a.key-'1')*30,0});
-        arr2 a2 = keyPos(a.specialInfo[1]);
+        arr3 a2 = keyPos(a.specialInfo[1]);
         if(a2.a!=-1){
-            guitar_gen.playString(a2.a,(a2.b+1)*50);
+            //guitar_gen.playString(a2.a,(a2.b+1)*50);
+            guitar_gen.playFree(a2.c*20);
         }
     }
     danger_buffer.clear();
+}
+
+inline static float hardClip(float val, float s){
+    if(val > s)
+        val = s;
+    else if(val < -s)
+        val = -s;
+    return val;
+}
+
+inline static float softClip(float val, float s){
+    return std::atan(val*s);
 }
 
 void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
@@ -94,12 +108,9 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     */
     guitar_gen.process(buffer,buffer, frames);
     for(unsigned long i = 0; i < frames; i++){
-        //buffer[i] = std::atan(buffer[i])/1.5;
-        if(buffer[i]>0.7)
-            buffer[i] = 0.7;
-        else if(buffer[i]<-0.7)
-            buffer[i] = -0.7;
+        buffer[i] = softClip(buffer[i],1.f/8);
     }
+    //qDebug()<<buffer[0];
 }
 
 } // namespace qSynth

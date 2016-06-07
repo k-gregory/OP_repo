@@ -47,6 +47,10 @@ void GuitarGenerator::playString(unsigned int string, float freq){
     playString(string);
 }
 
+void GuitarGenerator::playFree(float freq){
+    freeNotes.push_back({freq,0,true});
+}
+
 void GuitarGenerator::precalculateAmplitudes(){
     using ulong = unsigned long;
     for(ulong sample = 0; sample < swing_last_pos; sample++){
@@ -64,27 +68,24 @@ void GuitarGenerator::process(const float *, float *samples_out, unsigned long s
     for(ulong sample = 0; sample < samplesCount; sample++){
         //Sample accumulator
         float curr_sample = 0;
+
         //For each string
-        for(ulong string = 0; string < string_count; string++){
-            if(!strings[string].active) continue;
-            unsigned long nSample = strings[string].samples_played++;
-            float t = nSample * sample_time;
-            //For each harmonic of string
-            for(ulong harmIndex = 0; harmIndex < harmAmplitudesCount; harmIndex++){
-                float freq = strings[string].base_freq*(1+harmIndex);
-                if(harmIndex == 0) freq+=2;
-                curr_sample+=std::sin(2*PI*t*freq)*harmAmplitudes[nSample][harmIndex];
-            }
-            /*curr_sample+=inharmAmplitudesInfo.strength*
-                    std::sin(2*PI*t*strings[string].base_freq+inharmAmplitudesInfo.freqShift)*
-                    inharmAmplitudesInfo.amplitude.calc(t)/6000;*/
-        }
-        samples_out[sample] = curr_sample;
+        for(unsigned int i = 0; i < string_count; i++)
+            curr_sample+=calcStringSample(strings[i]);
+        //For each free note
+        for(StringInfo& s : freeNotes)
+            curr_sample += calcStringSample(s);
+
+        samples_out[sample] = curr_sample;///4;
     }
     //Deactivate finished strings
     for(ulong i = 0; i  <string_count; i++)
         if(strings[i].active && strings[i].samples_played > swing_last_pos)
             strings[i].active = false;
+    freeNotes.erase(std::remove_if(freeNotes.begin(),freeNotes.end(),
+                                   [](const StringInfo& s){
+        return s.samples_played >= swing_last_pos;
+    }),freeNotes.end());
 }
 
 } // namespace guitar

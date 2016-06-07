@@ -5,6 +5,7 @@
 
 #include "iaudioeffect.h"
 #include <cmath>
+#include <vector>
 
 namespace qSynth {
 namespace guitar {
@@ -68,13 +69,32 @@ public:
     void setStringFrequency(unsigned int string, float freq);
     void playString(unsigned int string, float freq);
     void playString(unsigned int string);
+    void playFree(float freq);
 private:
     void initStrings();
     void precalculateAmplitudes();
 
+    inline float calcStringSample(StringInfo& string){
+        if(!string.active) return 0;
+        float sampleVal = 0;
+        unsigned long nSample = string.samples_played++;
+        float t = nSample*sample_time;
+        for(unsigned int harmIndex = 0; harmIndex < harmAmplitudesCount; harmIndex++){
+            float freq = string.base_freq*(1+harmIndex);
+            if(harmIndex == 0) freq+=5;
+            sampleVal+= std::sin(2*PI*t*freq)*harmAmplitudes[nSample][harmIndex];
+        }
+        sampleVal+=inharmAmplitudesInfo.strength *
+                std::sin(2*PI*t*string.base_freq+inharmAmplitudesInfo.freqShift) *
+                inharmAmplitudesInfo.amplitude.calc(t)/6000;
+
+        return sampleVal;
+    }
+
     using arrType = float(*)[harmAmplitudesCount];
     arrType harmAmplitudes = new float[swing_last_pos+SAMPLE_RATE][harmAmplitudesCount];
     StringInfo strings[string_count];
+    std::vector<StringInfo> freeNotes;
 };
 
 } // namespace guitar
