@@ -14,6 +14,9 @@ public:
     ~UDPInput();
     std::vector<GenericInputAction> pollInput() override;
     bool hasInput() override;
+    void close();
+    bool open(int port);
+    quint16 getPort();
 
 private slots:
     void readDatagrams();

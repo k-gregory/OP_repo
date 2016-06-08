@@ -10,6 +10,7 @@
 #include <QStandardItemModel>
 #include "inputlistmodel.h"
 #include "udpinput.h"
+#include "udpinputconfig.h"
 
 #include <QDebug>
 
@@ -19,12 +20,10 @@ using namespace qSynth;
 void MainWindow::addKeyboardInput(){
     QVBoxLayout* vbox = new QVBoxLayout;
     KeyboardReaderWidget* krw = new KeyboardReaderWidget;
-    UDPInput* udpInput = new UDPInput(this);
 
     vbox->addWidget(krw);
     ui->keyboardInputGB->setLayout(vbox);
     inputListModel->addInput(krw,"KeyRead widget");
-    inputListModel->addInput(udpInput,"Socket");
 }
 
 void MainWindow::setupInputTimer(){
@@ -83,4 +82,13 @@ void MainWindow::on_inputModifyBtn_clicked()
 {
     QModelIndex sel = ui->inputsList->selectionModel()->currentIndex();
     inputListModel->modifyItem(sel);
+}
+
+void MainWindow::on_inputAddBtn_clicked()
+{
+    UDPInputConfig conf(this);
+    conf.exec();
+    IGenericInput* new_in = conf.getResult();
+    if(new_in!=nullptr && !ui->lineEdit->text().isEmpty())
+        inputListModel->addInput(new_in,ui->lineEdit->text());
 }

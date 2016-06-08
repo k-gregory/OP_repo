@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     guitargenerator.cpp \
     inputlistmodel.cpp \
     udpinput.cpp \
-    tc.cpp
+    tc.cpp \
+    udpinputconfig.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -37,9 +38,11 @@ HEADERS  += mainwindow.h \
     guitargenerator.h \
     inputlistmodel.h \
     udpinput.h \
-    tc.h
+    tc.h \
+    udpinputconfig.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    udpinputconfig.ui
 
 CONFIG += c++14
 CONFIG += link_pkgconfig

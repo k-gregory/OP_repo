@@ -38,6 +38,7 @@ private:
 private slots:
     void feedInput();
     void on_inputModifyBtn_clicked();
+    void on_inputAddBtn_clicked();
 };
 
 #endif // MAINWINDOW_H

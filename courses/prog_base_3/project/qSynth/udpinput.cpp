@@ -5,9 +5,20 @@ namespace qSynth {
 
 UDPInput::UDPInput(QObject* pobj) : QObject(pobj)
 {
-    sock = new QUdpSocket();
+    sock = new QUdpSocket(pobj);
     connect(sock,&QUdpSocket::readyRead,this,&UDPInput::readDatagrams);
-    sock->bind(QHostAddress::AnyIPv4,8000);
+}
+
+bool UDPInput::open(int port){
+    return sock->bind(QHostAddress::AnyIPv4,port);
+}
+
+void UDPInput::close(){
+    sock->close();
+}
+
+quint16 UDPInput::getPort(){
+    return sock->localPort();
 }
 
 UDPInput::~UDPInput(){
@@ -44,11 +55,6 @@ void UDPInput::readDatagrams(){
             t = msg[i+2];
             action.specialInfo[i] = t;
         }
-
-        qDebug()<<(action.type == GenericInputAction::KeyPress);
-        qDebug()<<action.key;
-        qDebug()<<action.specialInfo[0];
-        qDebug()<<action.specialInfo[1];
 
         input_queue.push_back(action);
     }
