@@ -27,7 +27,7 @@ private:
     util::Spinlock input_lock;
     std::vector<GenericInputAction> danger_buffer;
     void dangerProcessInput();
-    MidiEventList m;
+    std::vector<std::pair<int, MidiEventList>> toPlay;
     long currentTick = 0;
     int midiPos = 0;
 };

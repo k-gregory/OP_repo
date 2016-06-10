@@ -15,8 +15,10 @@ SimpleGenerator::SimpleGenerator()
 {
     //guitar_gen.playString(1,196.0);
     MidiFile f;
-    f.read("/tmp/imb.mid");
-    m = f[0];
+    f.read("/tmp/spt.mid");
+    //qDebug()<<f.size();
+    for(int i = 0; i  < f.size(); i++)
+         toPlay.push_back({0,f[i]});
 }
 
 void SimpleGenerator::processInput(const std::vector<GenericInputAction> &input){
@@ -86,9 +88,13 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         dangerProcessInput();
         input_lock.unlock();
     }
-    long nextTick = currentTick + (float)frames/SAMPLE_RATE * 700;
+    long nextTick = currentTick + (float)frames/SAMPLE_RATE * 2000;
+    for(auto& x: toPlay){
+        MidiEventList& m = x.second;
+        int& midiPos = x.first;
+        if(m.size() > 1500) continue;
     while(midiPos < m.size() && m[midiPos].tick <= nextTick){
-        qDebug()<<"lel";
+        //qDebug()<<"lel";
         if(m[midiPos].isNoteOn())
         {
             guitar_gen.playFree(freqFromMidiKey(m[midiPos][1]));
@@ -96,14 +102,15 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         }
         midiPos++;
     }
+    }
     currentTick = nextTick;
 
     guitar_gen.process(buffer,buffer, frames);
 
     for(unsigned long i = 0; i < frames; i++){
-        buffer[i] = hardClip(buffer[i],0.85);
-        //buffer[i] = softClip(buffer[i],8);
-        //buffer[i]/=10;
+        //buffer[i] = hardClip(buffer[i],0.5);
+        //buffer[i] = softClip(buffer[i],5);
+        buffer[i]/=toPlay.size();
     }
 }
 
