@@ -66,11 +66,11 @@ inline static float hardClip(float val, float s){
         val = s;
     else if(val < -s)
         val = -s;
-    return val;
+    return val/s;
 }
 
 inline static float softClip(float val, float s){
-    return std::atan(val*s);
+    return std::atan(val*s)/1.57f;
 }
 
 void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
@@ -81,7 +81,7 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     guitar_gen.process(buffer,buffer, frames);
 
     for(unsigned long i = 0; i < frames; i++){
-        buffer[i] = softClip(buffer[i],10);
+        buffer[i] = hardClip(buffer[i],0.05);
     }
 }
 
