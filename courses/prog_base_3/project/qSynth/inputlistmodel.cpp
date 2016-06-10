@@ -1,6 +1,5 @@
 #include "inputlistmodel.h"
 #include <algorithm>
-#include <QMessageBox>
 
 namespace qSynth {
 
@@ -15,7 +14,8 @@ int InputListModel::rowCount(const QModelIndex&) const{
 QVariant InputListModel::data(const QModelIndex &index, int role) const{
     if(!index.isValid() || role != Qt::DisplayRole) return QVariant();
 
-    return inputs.at(index.row()).name;
+    QString data = inputs[index.row()].getName();
+    return data;
 }
 
 bool InputListModel::insertRow(int row, const QModelIndex &parent){
@@ -24,34 +24,28 @@ bool InputListModel::insertRow(int row, const QModelIndex &parent){
     return true;
 }
 
-bool InputListModel::addInput(IGenericInput *i, QString name){
-    InputInfo newIn = {i,name};
-    if(std::find_if(inputs.begin(),inputs.end(),[&name](InputInfo& o){
-        return name == o.name;
+bool InputListModel::addInput(InputListItem& item){
+    QString name = item.getName();
+    if(std::find_if(inputs.begin(),inputs.end(),[&name](InputListItem& o){
+        return name == o.getName();
     }) != inputs.end()) return false;
     insertRow(inputs.size(),QModelIndex());
-    inputs.push_back({i,name});
+    inputs.push_back(item);
     return true;
 }
 
-void InputListModel::modifyItem(const QModelIndex &idx){
+void InputListModel::modifyItem(const QModelIndex &idx){    
     if(!idx.isValid()) return;
-    QDialog* mod_dialog = inputs.at(idx.row()).modificationDialog;
-    if(mod_dialog!=nullptr)
-        mod_dialog->exec();
-    else {
-        QMessageBox mbox;
-        mbox.setText("No input modifications available");
-        mbox.exec();
-    }
+    inputs.at(idx.row()).modify();
 }
 
 std::vector<GenericInputAction> InputListModel::getMultiplexedInput(){
     std::vector<GenericInputAction> multiplexed;
     std::vector<GenericInputAction> to_multiplex;
-    for(InputInfo& ii : inputs){
-        if(!ii.i->hasInput()) continue;
-        to_multiplex = ii.i->pollInput();
+    for(InputListItem& item : inputs){
+        IGenericInput* input = item.getInput();
+        if(!input->hasInput()) continue;
+        to_multiplex = input->pollInput();
         multiplexed.insert(multiplexed.end(),to_multiplex.begin(),to_multiplex.end());
         to_multiplex.clear();
     }

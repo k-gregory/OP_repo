@@ -10,7 +10,6 @@
 #include <QStandardItemModel>
 #include "inputlistmodel.h"
 #include "udpinput.h"
-#include "udpinputconfig.h"
 
 #include <QDebug>
 
@@ -22,8 +21,10 @@ void MainWindow::addKeyboardInput(){
     KeyboardReaderWidget* krw = new KeyboardReaderWidget;
 
     vbox->addWidget(krw);
-    ui->keyboardInputGB->setLayout(vbox);
-    inputListModel->addInput(krw,"KeyRead widget");
+    ui->keyboardInputGB->setLayout(vbox);   
+
+    InputListItem newItem("KeyRead widget", krw, this);
+    inputListModel->addInput(newItem);
 }
 
 void MainWindow::setupInputTimer(){
@@ -86,9 +87,4 @@ void MainWindow::on_inputModifyBtn_clicked()
 
 void MainWindow::on_inputAddBtn_clicked()
 {
-    UDPInputConfig conf(this);
-    conf.exec();
-    IGenericInput* new_in = conf.getResult();
-    if(new_in!=nullptr && !ui->lineEdit->text().isEmpty())
-        inputListModel->addInput(new_in,ui->lineEdit->text());
 }
