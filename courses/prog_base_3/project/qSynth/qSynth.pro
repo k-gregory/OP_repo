@@ -23,7 +23,13 @@ SOURCES += main.cpp\
     tc.cpp \
     inputlistitem.cpp \
     inputaddingdialog.cpp \
-    udpinputcreator.cpp
+    udpinputcreator.cpp \
+    lib/midifile/Binasc.cpp \
+    lib/midifile/MidiEvent.cpp \
+    lib/midifile/MidiEventList.cpp \
+    lib/midifile/MidiFile.cpp \
+    lib/midifile/MidiMessage.cpp \
+    lib/midifile/Options.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -44,7 +50,13 @@ HEADERS  += mainwindow.h \
     inputlistitem.h \
     inputaddingdialog.h \
     iinputcreator.h \
-    udpinputcreator.h
+    udpinputcreator.h \
+    lib/midifile/Binasc.h \
+    lib/midifile/MidiEvent.h \
+    lib/midifile/MidiEventList.h \
+    lib/midifile/MidiFile.h \
+    lib/midifile/MidiMessage.h \
+    lib/midifile/Options.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \
