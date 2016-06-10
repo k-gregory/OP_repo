@@ -7,10 +7,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+
     /*
     MidiFile f;
-    f.read("/tmp/s.mid");
-    //f.deltaTicks();
+    f.read("/tmp/imb.mid");
     int c = 0;
     MidiEventList midi = f[1];
     for(int i = 0; i < midi.size()-1;i++){
@@ -27,5 +27,4 @@ int main(int argc, char *argv[])
     w.show();
 
     return a.exec();
-
 }

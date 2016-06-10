@@ -15,8 +15,8 @@ SimpleGenerator::SimpleGenerator()
 {
     //guitar_gen.playString(1,196.0);
     MidiFile f;
-    f.read("/tmp/u.mid");
-    //qDebug()<<f.size();
+    f.read("/tmp/skr.mid");
+    qDebug()<<f.size();
     for(int i = 0; i  < f.size(); i++)
          toPlay.push_back({0,f[i]});
 }
@@ -100,8 +100,9 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         MidiEventList& m = x.second;
         int& midiPos = x.first;
         if(m.size() > 1500) continue;
+        qDebug()<<"kek";
     while(midiPos < m.size() && m[midiPos].tick <= nextTick){
-        //qDebug()<<"lel";
+        qDebug()<<"lel";
         if(m.size() > 1200) continue;
         if(m[midiPos].isNoteOn())
         {
