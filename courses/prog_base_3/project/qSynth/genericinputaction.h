@@ -13,7 +13,7 @@ struct GenericInputAction
     };
     ActionType type;
     int key;
-    int specialInfo[10];
+    int specialInfo[10] = {0};
 };
 
 } // namespace qSynth

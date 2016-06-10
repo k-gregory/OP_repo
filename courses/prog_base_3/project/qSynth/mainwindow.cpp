@@ -9,12 +9,17 @@
 #include <QVBoxLayout>
 #include <QStandardItemModel>
 #include "inputlistmodel.h"
-#include "udpinput.h"
+#include "udpinputcreator.h"
 
 #include <QDebug>
 
 using namespace qSynth;
 
+void MainWindow::setupInputCreator(){
+    QSet<IInputCreator*> inputCreators;
+    inputCreators.insert(new UDPInputCreator(this));
+    inputAddingDialog = new InputAddingDialog(inputCreators, this);
+}
 
 void MainWindow::addKeyboardInput(){
     QVBoxLayout* vbox = new QVBoxLayout;
@@ -57,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupIcons();
     setupInputsModel();
     addKeyboardInput();
+    setupInputCreator();
 
     cb = new SimpleGenerator();
     audio = new PABackend(cb);
@@ -87,4 +93,7 @@ void MainWindow::on_inputModifyBtn_clicked()
 
 void MainWindow::on_inputAddBtn_clicked()
 {
+    if(ui->newInputNameEdit->text().isEmpty()) return;
+    qSynth::InputListItem* new_in = inputAddingDialog->getInput(ui->newInputNameEdit->text());
+    if(new_in != nullptr) inputListModel->addInput(*new_in);
 }

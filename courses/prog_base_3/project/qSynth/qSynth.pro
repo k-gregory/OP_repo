@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     inputlistmodel.cpp \
     udpinput.cpp \
     tc.cpp \
-    inputlistitem.cpp
+    inputlistitem.cpp \
+    inputaddingdialog.cpp \
+    udpinputcreator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -39,9 +41,14 @@ HEADERS  += mainwindow.h \
     inputlistmodel.h \
     udpinput.h \
     tc.h \
-    inputlistitem.h
+    inputlistitem.h \
+    inputaddingdialog.h \
+    iinputcreator.h \
+    udpinputcreator.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    inputaddingdialog.ui \
+    udpinputcreator.ui
 
 CONFIG += c++14
 CONFIG += link_pkgconfig

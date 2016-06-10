@@ -5,6 +5,7 @@
 #include "iaudiocallback.h"
 #include "igenericinput.h"
 #include "inputlistmodel.h"
+#include "inputaddingdialog.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -23,12 +24,14 @@ private slots:
     void on_playButton_clicked();
 
 private:
+    void setupInputCreator();
     void setupInputTimer();
     void setupIcons();
     void addKeyboardInput();
     void setupInputsModel();
 
     Ui::MainWindow *ui;
+    InputAddingDialog* inputAddingDialog;
     qSynth::IAudioBackend* audio;
     qSynth::IAudioCallback* cb;
     bool playing = false;

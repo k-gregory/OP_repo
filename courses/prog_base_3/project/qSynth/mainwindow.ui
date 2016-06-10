@@ -114,7 +114,7 @@
          <item>
           <layout class="QHBoxLayout" name="inputCreatorLayout">
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="newInputNameEdit"/>
            </item>
            <item>
             <widget class="QPushButton" name="inputAddBtn">
