@@ -39,16 +39,6 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="1" colspan="3">
-       <widget class="QGroupBox" name="keyboardInputGB">
-        <property name="title">
-         <string>Keyboard input</string>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QGroupBox" name="inputsGB">
         <property name="sizePolicy">
@@ -113,6 +103,16 @@
         </layout>
        </widget>
       </item>
+      <item row="2" column="1" colspan="3">
+       <widget class="QGroupBox" name="keyboardInputGB">
+        <property name="title">
+         <string>Keyboard input</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="2">
        <layout class="QVBoxLayout" name="effectAddLayout">
         <item>
@@ -141,10 +141,13 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="effectAddLt">
+         <layout class="QHBoxLayout" name="effectAdditionLt">
           <property name="topMargin">
            <number>0</number>
           </property>
+          <item>
+           <widget class="QComboBox" name="comboBox"/>
+          </item>
           <item>
            <widget class="QPushButton" name="addEffectBtn">
             <property name="sizePolicy">
@@ -158,6 +161,13 @@
             </property>
            </widget>
           </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="effectAddLt">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QPushButton" name="pushButton">
             <property name="sizePolicy">

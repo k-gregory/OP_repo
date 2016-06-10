@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     lib/midifile/MidiFile.cpp \
     lib/midifile/MidiMessage.cpp \
     lib/midifile/Options.cpp \
-    distortion.cpp
+    distortion.cpp \
+    generator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -58,7 +59,8 @@ HEADERS  += mainwindow.h \
     lib/midifile/MidiFile.h \
     lib/midifile/MidiMessage.h \
     lib/midifile/Options.h \
-    distortion.h
+    distortion.h \
+    generator.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

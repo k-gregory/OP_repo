@@ -15,7 +15,7 @@ SimpleGenerator::SimpleGenerator()
 {
     //guitar_gen.playString(1,196.0);
     MidiFile f;
-    f.read("/tmp/skr.mid");
+    f.read("/tmp/zhuki.mid");
     f.absoluteTicks();
     qDebug()<<f.size();
     for(int i = 0; i  < f.size(); i++)
@@ -101,6 +101,7 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     for(auto& x : toPlay){
         int& currentTrackPos = x.first;
         MidiEventList& track = x.second;
+        //if(track.size() > 1000) continue;
         while(currentTrackPos < track.size() &&
               track[currentTrackPos].tick <= nextTick){
             MidiEvent& ev = track[currentTrackPos];
@@ -116,9 +117,9 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     for(unsigned long i = 0; i < frames; i++){
         //buffer[i] = hardClip(buffer[i],1);
         //buffer[i] = softClip(buffer[i],5);
-        //buffer[i]/=10;
+        buffer[i]/=20;
 
-        buffer[i] = exponential_distortion(buffer[i]);
+        //buffer[i] = exponential_distortion(buffer[i]);
     }
 }
 
