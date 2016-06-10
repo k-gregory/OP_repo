@@ -111,23 +111,6 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
     }
     currentTick = nextTick;
 
-    /*
-    for(auto& x: toPlay){
-        MidiEventList& m = x.second;
-        if(m.size() > 1500) continue;
-    while(x.first < m.size() && m[x.first].tick <= nextTick){
-        //qDebug()<<"lel";
-        //if(m.size() > 1200) continue;
-        if(m[x.first].isNoteOn())
-        {
-            guitar_gen.playFree(freqFromMidiKey(m[x.first][1]));
-            qDebug()<<freqFromMidiKey(m[x.first][1]);
-        }
-        x.first++;
-    }
-    }
-    currentTick = nextTick;*/
-
     guitar_gen.process(buffer, frames);
 
     for(unsigned long i = 0; i < frames; i++){
