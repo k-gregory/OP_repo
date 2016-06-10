@@ -61,7 +61,7 @@ void GuitarGenerator::precalculateAmplitudes(){
     }
 }
 
-void GuitarGenerator::process(const float *, float *samples_out, unsigned long samplesCount){
+void GuitarGenerator::process(float *samples_out, unsigned long samplesCount){
     using ulong = unsigned long;
     std::fill(samples_out,samples_out+samplesCount, 0);
     //For each sample

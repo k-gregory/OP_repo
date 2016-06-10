@@ -67,7 +67,7 @@ class GuitarGenerator :  IAudioEffect
 public:
     GuitarGenerator();
     ~GuitarGenerator();
-    void process(const float *samples_in, float *samples_out, unsigned long samplesCount) override;
+    void process(float *samples_out, unsigned long samplesCount) override;
     void setStringFrequency(unsigned int string, float freq);
     void playString(unsigned int string, float freq);
     void playString(unsigned int string);

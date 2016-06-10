@@ -17,7 +17,7 @@
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="1" colspan="3">
        <widget class="QGroupBox" name="controlsGB">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -36,31 +36,10 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="recordButton">
-           <property name="text">
-            <string>Record</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="configSaveBtn">
-           <property name="text">
-            <string>Save config</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="configLoadBtn">
-           <property name="text">
-            <string>Load config</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item row="2" column="1" colspan="3">
        <widget class="QGroupBox" name="keyboardInputGB">
         <property name="title">
          <string>Keyboard input</string>
@@ -135,29 +114,79 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QGroupBox" name="effectsGB">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="title">
-         <string>Effects</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QTreeView" name="effectsTree">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QVBoxLayout" name="effectAddLayout">
+        <item>
+         <widget class="QGroupBox" name="effectsGB">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Effects</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QTreeView" name="effectsTree">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="effectAddLt">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="addEffectBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Add effect</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Modify effect</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Remove effect</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>

@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     lib/midifile/MidiEventList.cpp \
     lib/midifile/MidiFile.cpp \
     lib/midifile/MidiMessage.cpp \
-    lib/midifile/Options.cpp
+    lib/midifile/Options.cpp \
+    distortion.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -56,7 +57,8 @@ HEADERS  += mainwindow.h \
     lib/midifile/MidiEventList.h \
     lib/midifile/MidiFile.h \
     lib/midifile/MidiMessage.h \
-    lib/midifile/Options.h
+    lib/midifile/Options.h \
+    distortion.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \
