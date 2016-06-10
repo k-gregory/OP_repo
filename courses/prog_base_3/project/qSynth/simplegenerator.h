@@ -29,7 +29,6 @@ private:
     void dangerProcessInput();
     std::vector<std::pair<int, MidiEventList>> toPlay;
     long currentTick = 0;
-    int midiPos = 0;
 };
 
 } // namespace qSynth

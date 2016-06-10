@@ -15,8 +15,9 @@ SimpleGenerator::SimpleGenerator()
 {
     //guitar_gen.playString(1,196.0);
     MidiFile f;
-    f.read("/tmp/u.mid");
-    //qDebug()<<f.size();
+    f.read("/tmp/skr.mid");
+    f.absoluteTicks();
+    qDebug()<<f.size();
     for(int i = 0; i  < f.size(); i++)
          toPlay.push_back({0,f[i]});
 }
@@ -95,23 +96,37 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         dangerProcessInput();
         input_lock.unlock();
     }
-    long nextTick = currentTick + (float)frames/SAMPLE_RATE * 2000;
-    for(auto& x: toPlay){
-        MidiEventList& m = x.second;
-        int& midiPos = x.first;
-        if(m.size() > 1500) continue;
-    while(midiPos < m.size() && m[midiPos].tick <= nextTick){
-        //qDebug()<<"lel";
-        if(m.size() > 1200) continue;
-        if(m[midiPos].isNoteOn())
-        {
-            guitar_gen.playFree(freqFromMidiKey(m[midiPos][1]));
-            qDebug()<<freqFromMidiKey(m[midiPos][1]);
+
+    long nextTick = currentTick + (float)frames/SAMPLE_RATE * 2000;    
+    for(auto& x : toPlay){
+        int& currentTrackPos = x.first;
+        MidiEventList& track = x.second;
+        while(currentTrackPos < track.size() &&
+              track[currentTrackPos].tick <= nextTick){
+            MidiEvent& ev = track[currentTrackPos];
+            if(ev.isNoteOn())
+                guitar_gen.playFree(freqFromMidiKey(ev[1]));
+            currentTrackPos++;
         }
-        midiPos++;
-    }
     }
     currentTick = nextTick;
+
+    /*
+    for(auto& x: toPlay){
+        MidiEventList& m = x.second;
+        if(m.size() > 1500) continue;
+    while(x.first < m.size() && m[x.first].tick <= nextTick){
+        //qDebug()<<"lel";
+        //if(m.size() > 1200) continue;
+        if(m[x.first].isNoteOn())
+        {
+            guitar_gen.playFree(freqFromMidiKey(m[x.first][1]));
+            qDebug()<<freqFromMidiKey(m[x.first][1]);
+        }
+        x.first++;
+    }
+    }
+    currentTick = nextTick;*/
 
     guitar_gen.process(buffer, frames);
 
@@ -120,7 +135,7 @@ void SimpleGenerator::fillBuffer(float *buffer, unsigned long frames){
         //buffer[i] = softClip(buffer[i],5);
         //buffer[i]/=10;
 
-        //buffer[i] = exponential_distortion(buffer[i]*5);
+        buffer[i] = exponential_distortion(buffer[i]);
     }
 }
 
