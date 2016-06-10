@@ -83,7 +83,7 @@ inline static float exponential_distortion(float x){
     if(x > 0)
         return 1 - std::exp(-x);
     else
-        return -1 + exp(x);
+        return -1 + std::exp(x);
 }
 
 static float freqFromMidiKey(char key){
