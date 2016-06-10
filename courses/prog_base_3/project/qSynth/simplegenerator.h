@@ -5,6 +5,7 @@
 #include "iaudiocallback.h"
 #include "igenericinput.h"
 #include "spinlock.h"
+#include "lib/midifile/MidiFile.h"
 #include <vector>
 
 namespace qSynth {
@@ -26,6 +27,9 @@ private:
     util::Spinlock input_lock;
     std::vector<GenericInputAction> danger_buffer;
     void dangerProcessInput();
+    MidiEventList m;
+    long currentTick = 0;
+    int midiPos = 0;
 };
 
 } // namespace qSynth
