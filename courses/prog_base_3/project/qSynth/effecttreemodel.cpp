@@ -18,7 +18,7 @@ EffectTreeModel::EffectTreeModel(QObject* parent)
     root->insertChild(0, seq_it);
     EffectTreeItem* dist_it = new EffectTreeItem(EffectTreeItem::Other,
                                                  new Distortion,
-                                                 root);
+                                                 seq_it);
     seq_it->insertChild(0, dist_it);
 }
 
