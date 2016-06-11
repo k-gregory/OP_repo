@@ -23,11 +23,11 @@ public:
     void insertChild(unsigned int index, EffectTreeItem* it);
     EffectTreeItem* child(unsigned int row);
     int row();
+    EffectType type;
+    IAudioEffect* effect;
     EffectTreeItem* parent;
     std::vector<EffectTreeItem*> children;
 private:
-    EffectType type;
-    IAudioEffect* effect;
     bool hasChildren;
 };
 

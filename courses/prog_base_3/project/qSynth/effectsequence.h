@@ -10,6 +10,7 @@ class EffectSequence : public IAudioEffect
 {
 public:
     EffectSequence();
+    QString name() const override;
     void process(float* samples, unsigned long frames) override;
     void removeEffect(unsigned int index);
     void insertEffect(unsigned int index, IAudioEffect *effect);

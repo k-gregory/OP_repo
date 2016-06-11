@@ -2,6 +2,10 @@
 
 namespace qSynth {
 
+QString EffectSequence::name() const{
+    return "Sequence";
+}
+
 EffectSequence::EffectSequence()
 {
 

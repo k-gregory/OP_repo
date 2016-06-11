@@ -1,5 +1,7 @@
 #include "effecttreemodel.h"
 #include "mixer.h"
+#include "effectsequence.h"
+#include "guitargenerator.h"
 #include "distortion.h"
 
 #include <QDebug>
@@ -10,9 +12,14 @@ EffectTreeModel::EffectTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     root = new EffectTreeItem(EffectTreeItem::Mixer,new Mixer);
-    root->insertChild(0, new EffectTreeItem(EffectTreeItem::Other,
-                                            new Distortion,
-                                            root));
+    EffectTreeItem* seq_it = new EffectTreeItem(EffectTreeItem::Sequence,
+                                                new EffectSequence,
+                                                root);
+    root->insertChild(0, seq_it);
+    EffectTreeItem* dist_it = new EffectTreeItem(EffectTreeItem::Other,
+                                                 new Distortion,
+                                                 root);
+    seq_it->insertChild(0, dist_it);
 }
 
 int EffectTreeModel::columnCount(const QModelIndex&) const{
@@ -22,7 +29,7 @@ int EffectTreeModel::columnCount(const QModelIndex&) const{
 QVariant EffectTreeModel::data(const QModelIndex &index, int role) const{
     if(!index.isValid() || role != Qt::DisplayRole) return QVariant();
     EffectTreeItem* it = static_cast<EffectTreeItem*>(index.internalPointer());
-    return "lel";
+    return it->effect->name();
 }
 
 QModelIndex EffectTreeModel::index(int row, int column, const QModelIndex &parent) const{
