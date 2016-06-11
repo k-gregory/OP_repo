@@ -2,6 +2,7 @@
 #define QSYNTH_EFFECTSEQUENCE_H
 
 #include "iaudioeffect.h"
+#include "ieffectconfigurator.h"
 #include <vector>
 
 namespace qSynth {
@@ -15,6 +16,17 @@ public:
     void removeEffect(unsigned int index);
     void insertEffect(unsigned int index, IAudioEffect *effect);
     std::vector<IAudioEffect*> effects;
+};
+
+class EffectSequenceConfigurator : public IEffectConfigurator{
+public:
+    IAudioEffect* createNew() override {
+        return new EffectSequence();
+    }
+
+    bool configure(IAudioEffect *effect) override{
+        return false;
+    }
 };
 
 } // namespace qSynth

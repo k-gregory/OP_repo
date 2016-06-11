@@ -1,5 +1,6 @@
 #include "distortion.h"
 #include <algorithm>
+#include <QInputDialog>
 
 namespace qSynth {
 
@@ -39,6 +40,39 @@ float Distortion::getLimit() const
 void Distortion::setLimit(float value)
 {
     limit = value;
+}
+
+DistortionConfigurator::DistortionConfigurator(QWidget *parent)
+    : parent(parent)
+{
+
+}
+
+IAudioEffect* DistortionConfigurator::createNew(){
+    float limit, coef;
+    bool ok;
+    limit = QInputDialog::getDouble(parent,"Distortion create","Limit:",1,0.001,1,5,&ok);
+    if(!ok) return nullptr;
+    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",1,0.001,1,5,&ok);
+    if(!ok) return nullptr;
+
+    return new Distortion(limit,coef);
+}
+
+bool DistortionConfigurator::configure(IAudioEffect *effect){
+    float limit, coef;
+    bool ok;
+
+    Distortion* ef = dynamic_cast<Distortion*> (effect);
+    if(ef == nullptr) return false;
+
+    limit = QInputDialog::getDouble(parent,"Distortion create","Limit:",ef->limit,0.001,1,5,&ok);
+    if(!ok) return false;
+    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",ef->coef,0.001,1,5,&ok);
+    if(!ok) return false;
+    ef->limit = limit;
+    ef->coef = coef;
+    return true;
 }
 
 } // namespace qSynth

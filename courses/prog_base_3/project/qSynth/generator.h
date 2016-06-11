@@ -18,6 +18,9 @@ private:
     util::Spinlock input_lock;
     std::vector<GenericInputAction> danger_buffer;
     void dangerProcessInput();
+signals:
+    void framesGenerated(unsigned int count);
+
 };
 
 } // namespace qSynth

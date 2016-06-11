@@ -2,8 +2,12 @@
 #define QSYNTH_DISTORTION_H
 
 #include "iaudioeffect.h"
+#include "ieffectconfigurator.h"
+#include <QWidget>
 
 namespace qSynth {
+
+class DistortionConfigurator;
 
 class Distortion : public IAudioEffect
 {
@@ -21,6 +25,16 @@ public:
 private:
     float limit;
     float coef;
+    friend class DistortionConfigurator;
+};
+
+class DistortionConfigurator : public IEffectConfigurator{
+public:
+    DistortionConfigurator(QWidget* parent);
+    IAudioEffect* createNew() override;
+    bool configure(IAudioEffect *effect) override;
+private:
+    QWidget* parent;
 };
 
 } // namespace qSynth

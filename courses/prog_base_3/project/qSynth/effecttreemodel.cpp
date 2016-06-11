@@ -12,14 +12,14 @@ EffectTreeModel::EffectTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     root = new EffectTreeItem(EffectTreeItem::Mixer,new Mixer);
-    EffectTreeItem* seq_it = new EffectTreeItem(EffectTreeItem::Sequence,
+    /*EffectTreeItem* seq_it = new EffectTreeItem(EffectTreeItem::Sequence,
                                                 new EffectSequence,
                                                 root);
     root->insertChild(0, seq_it);
     EffectTreeItem* dist_it = new EffectTreeItem(EffectTreeItem::Other,
                                                  new Distortion,
                                                  seq_it);
-    seq_it->insertChild(0, dist_it);
+    seq_it->insertChild(0, dist_it);*/
 }
 
 int EffectTreeModel::columnCount(const QModelIndex&) const{

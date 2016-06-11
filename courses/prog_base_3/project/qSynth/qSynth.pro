@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     effecttreeitem.cpp \
     mixer.cpp \
     effectsequence.cpp \
-    effecttreemodel.cpp
+    effecttreemodel.cpp \
+    mixerconfigurator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -68,7 +69,10 @@ HEADERS  += mainwindow.h \
     effecttreeitem.h \
     mixer.h \
     effectsequence.h \
-    effecttreemodel.h
+    effecttreemodel.h \
+    ieffectconfigurator.h \
+    mixerconfigurator.h \
+    noparamsconfigurator.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

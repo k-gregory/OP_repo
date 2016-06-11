@@ -22,6 +22,7 @@ void Generator::dangerProcessInput(){
 
 void Generator::fillBuffer(float *buffer, unsigned long frames){
     fill(buffer, buffer+frames, 0.f);
+    emit framesGenerated(frames);
 }
 
 } // namespace qSynth
