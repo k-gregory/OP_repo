@@ -22,11 +22,12 @@ EffectTreeItem* EffectTreeModel::getItem(const QModelIndex &idx) const {
 EffectTreeModel::EffectTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
-    root = new EffectTreeItem(EffectTreeItem::Mixer,new Mixer);
-    /*EffectTreeItem* seq_it = new EffectTreeItem(EffectTreeItem::Sequence,
-                                                new EffectSequence,
+    root = new EffectTreeItem(EffectTreeItem::Sequence,new EffectSequence);
+    EffectTreeItem* mix = new EffectTreeItem(EffectTreeItem::Mixer,
+                                                new Mixer,
                                                 root);
-    root->insertChild(0, seq_it);
+    root->insertChild(0, mix);
+    /*
     EffectTreeItem* dist_it = new EffectTreeItem(EffectTreeItem::Other,
                                                  new Distortion,
                                                  seq_it);

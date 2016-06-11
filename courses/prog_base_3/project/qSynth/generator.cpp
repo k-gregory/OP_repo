@@ -1,5 +1,6 @@
 #include "generator.h"
 #include <algorithm>
+#include <QDebug>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ Generator::Generator(QObject* parent) : QObject(parent)
 
 void Generator::processInput(const std::vector<GenericInputAction> &input){
     input_lock.lock();
+    qDebug()<<input[0].inputName;
     danger_buffer.insert(danger_buffer.end(),input.begin(), input.end());
     input_lock.unlock();
 }

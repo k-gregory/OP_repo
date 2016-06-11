@@ -1,6 +1,7 @@
 #ifndef QSYNTH_GENERICINPUTACTION_H
 #define QSYNTH_GENERICINPUTACTION_H
 
+#include <QString>
 
 namespace qSynth {
 
@@ -14,6 +15,7 @@ struct GenericInputAction
     ActionType type = SpecialAction;
     int key = 0;
     int specialInfo[10] = {0};
+    QString inputName = "";
 };
 
 } // namespace qSynth

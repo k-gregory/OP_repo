@@ -18,10 +18,10 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent) const override;
+    EffectTreeItem* getItem(const QModelIndex& idx) const;
 
     bool insertRow(int row, const QModelIndex &parent);
 private:
-    EffectTreeItem* getItem(const QModelIndex& idx) const;
     EffectTreeItem* root;
 };
 

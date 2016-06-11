@@ -4,6 +4,7 @@
 #include "constants.h"
 
 #include "iaudioeffect.h"
+#include <QString>
 #include <cmath>
 #include <vector>
 

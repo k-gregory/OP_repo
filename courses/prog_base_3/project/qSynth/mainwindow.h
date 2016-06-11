@@ -49,6 +49,7 @@ private slots:
     void on_inputModifyBtn_clicked();
     void on_inputAddBtn_clicked();
     void on_addEffectBtn_clicked();
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H

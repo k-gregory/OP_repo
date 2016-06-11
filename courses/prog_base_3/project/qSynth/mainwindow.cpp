@@ -124,3 +124,12 @@ void MainWindow::on_addEffectBtn_clicked()
     QModelIndex sel = ui->effectsTree->selectionModel()->currentIndex();
     effectTreeModel->addEffect(e,sel);
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    QModelIndex idx = ui->effectsTree->selectionModel()->currentIndex();
+    if(!idx.isValid()) return;
+    EffectTreeItem* i = effectTreeModel->getItem(idx);
+    effectC.value(i->effect->name())->configure(i->effect);
+    //qDebug()<<effectTreeModel->ge
+}

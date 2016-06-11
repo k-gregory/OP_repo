@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     mixer.cpp \
     effectsequence.cpp \
     effecttreemodel.cpp \
-    mixerconfigurator.cpp
+    mixerconfigurator.cpp \
+    noopeffect.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -72,7 +73,8 @@ HEADERS  += mainwindow.h \
     effecttreemodel.h \
     ieffectconfigurator.h \
     mixerconfigurator.h \
-    noparamsconfigurator.h
+    noparamsconfigurator.h \
+    noopeffect.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

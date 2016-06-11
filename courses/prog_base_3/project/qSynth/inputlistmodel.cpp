@@ -44,10 +44,13 @@ std::vector<GenericInputAction> InputListModel::getMultiplexedInput(){
     std::vector<GenericInputAction> multiplexed;
     std::vector<GenericInputAction> to_multiplex;
     for(InputListItem& item : inputs){
+        QString name = item.getName();
         IGenericInput* input = item.getInput();
         if(!input->hasInput()) continue;
         to_multiplex = input->pollInput();
         multiplexed.insert(multiplexed.end(),to_multiplex.begin(),to_multiplex.end());
+        for(GenericInputAction& a : multiplexed)
+            a.inputName = name;
         to_multiplex.clear();
     }
     return multiplexed;
