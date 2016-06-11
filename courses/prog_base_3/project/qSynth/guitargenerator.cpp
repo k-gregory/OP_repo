@@ -7,6 +7,10 @@
 namespace qSynth {
 namespace guitar {
 
+QString GuitarGenerator::name() const{
+    return "Synth guitar";
+}
+
 GuitarGenerator::GuitarGenerator(){
     initStrings();
     precalculateAmplitudes();

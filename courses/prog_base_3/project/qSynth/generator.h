@@ -2,15 +2,22 @@
 #define QSYNTH_GENERATOR_H
 
 #include "iaudiocallback.h"
+#include "spinlock.h"
+#include <QObject>
 
 namespace qSynth {
 
-class Generator : public IAudioCallback
+class Generator : public QObject, public IAudioCallback
 {
+    Q_OBJECT
 public:
-    Generator();
+    explicit Generator(QObject* parent = nullptr);
     void processInput(const std::vector<GenericInputAction>& input) override;
     void fillBuffer(float* buffer, unsigned long frames) override;
+private:
+    util::Spinlock input_lock;
+    std::vector<GenericInputAction> danger_buffer;
+    void dangerProcessInput();
 };
 
 } // namespace qSynth

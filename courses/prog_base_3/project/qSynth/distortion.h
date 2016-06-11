@@ -9,6 +9,7 @@ class Distortion : public IAudioEffect
 {
 public:
     Distortion(float limit = 1, float coef = 1);
+    QString name() const override;
     void process(float* samples, unsigned long samplesCount) override;
 
     float getCoef() const;

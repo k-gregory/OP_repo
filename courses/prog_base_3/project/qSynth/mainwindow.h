@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include "iaudiobackend.h"
-#include "iaudiocallback.h"
+#include "generator.h"
 #include "igenericinput.h"
 #include "inputlistmodel.h"
 #include "inputaddingdialog.h"
+#include "effecttreemodel.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -29,14 +30,16 @@ private:
     void setupIcons();
     void addKeyboardInput();
     void setupInputsModel();
+    void setupEffectsModel();
 
     Ui::MainWindow *ui;
     InputAddingDialog* inputAddingDialog;
     qSynth::IAudioBackend* audio;
-    qSynth::IAudioCallback* cb;
+    qSynth::Generator* cb;
     bool playing = false;
 
     qSynth::InputListModel* inputListModel = nullptr;
+    qSynth::EffectTreeModel* effectTreeModel = nullptr;
     QTimer* input_timer;
 private slots:
     void feedInput();

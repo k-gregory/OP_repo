@@ -3,7 +3,8 @@
 
 namespace qSynth {
 
-InputListModel::InputListModel()
+InputListModel::InputListModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
 }
 

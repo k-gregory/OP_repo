@@ -72,6 +72,7 @@ public:
     void playString(unsigned int string, float freq);
     void playString(unsigned int string);
     void playFree(float freq);
+    QString name() const override;
 private:
     void initStrings();
     void precalculateAmplitudes();

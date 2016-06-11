@@ -46,8 +46,13 @@ void MainWindow::feedInput(){
 }
 
 void MainWindow::setupInputsModel(){
-    inputListModel = new InputListModel;
+    inputListModel = new InputListModel(this);
     ui->inputsList->setModel(inputListModel);
+}
+
+void MainWindow::setupEffectsModel(){
+    effectTreeModel = new EffectTreeModel(this);
+    ui->effectsTree->setModel(effectTreeModel);
 }
 
 void MainWindow::setupIcons(){
@@ -61,10 +66,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setupIcons();
     setupInputsModel();
+    setupEffectsModel();
     addKeyboardInput();
     setupInputCreator();
 
-    cb = new SimpleGenerator();
+    cb = new Generator();
     audio = new PABackend(cb);
 
     setupInputTimer();//After generator created

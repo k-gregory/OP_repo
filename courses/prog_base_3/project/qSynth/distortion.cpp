@@ -3,6 +3,10 @@
 
 namespace qSynth {
 
+QString Distortion::name() const{
+    return "Distortion";
+}
+
 Distortion::Distortion(float limit, float coef)
     : limit(limit), coef(coef)
 {

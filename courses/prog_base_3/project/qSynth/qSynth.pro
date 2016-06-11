@@ -31,7 +31,11 @@ SOURCES += main.cpp\
     lib/midifile/MidiMessage.cpp \
     lib/midifile/Options.cpp \
     distortion.cpp \
-    generator.cpp
+    generator.cpp \
+    effecttreeitem.cpp \
+    mixer.cpp \
+    effectsequence.cpp \
+    effecttreemodel.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -60,7 +64,11 @@ HEADERS  += mainwindow.h \
     lib/midifile/MidiMessage.h \
     lib/midifile/Options.h \
     distortion.h \
-    generator.h
+    generator.h \
+    effecttreeitem.h \
+    mixer.h \
+    effectsequence.h \
+    effecttreemodel.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

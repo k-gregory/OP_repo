@@ -11,8 +11,9 @@ namespace qSynth {
 
 class InputListModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
-    InputListModel();
+    explicit InputListModel(QObject* parent);
     bool addInput(InputListItem& item);
     void modifyItem(const QModelIndex& idx);
     int rowCount(const QModelIndex &parent) const;

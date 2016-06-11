@@ -11,8 +11,8 @@ struct GenericInputAction
         KeyRelease,
         SpecialAction,
     };
-    ActionType type;
-    int key;
+    ActionType type = SpecialAction;
+    int key = 0;
     int specialInfo[10] = {0};
 };
 
