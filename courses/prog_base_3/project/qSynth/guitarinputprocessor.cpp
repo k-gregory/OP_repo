@@ -16,11 +16,12 @@ static float freqFromMidiKey(char key){
 
 void GuitarInputProcessor::process(std::vector<GenericInputAction> input){
     for(GenericInputAction& a : input){
-        qDebug()<<"lel";
         if(a.inputName != acceptName)
-            continue;
-        if(a.type == GenericInputAction::KeyPress)
+            continue;     
+        if(a.type == GenericInputAction::KeyPress){
+            qDebug()<<freqFromMidiKey(a.key);
             guitar->playFree(freqFromMidiKey(a.key));
+        }
     }
 }
 

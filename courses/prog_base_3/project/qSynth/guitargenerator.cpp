@@ -8,7 +8,7 @@ namespace qSynth {
 namespace guitar {
 
 QString GuitarGenerator::name() const{
-    return "Synth guitar";
+    return "Guitar";
 }
 
 GuitarGenerator::GuitarGenerator(){

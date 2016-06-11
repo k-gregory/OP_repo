@@ -1,5 +1,7 @@
 #include "mixer.h"
 #include <algorithm>
+#include <QDebug>
+#include <cmath>
 
 namespace qSynth {
 
@@ -21,8 +23,11 @@ void Mixer::process(float *samples, unsigned long frames){
 
     for(std::size_t i = 0; i < effects.size(); i++){
         effects[i]->process(tmp_buff, frames);
-        for(std::size_t j = 0; j  <frames; j++)
-            samples[j] += tmp_buff[j] * coefs[j];
+        for(std::size_t j = 0; j  <frames; j++){
+            samples[j] += tmp_buff[j] * coefs[i];
+            if(std::isnan(samples[j]))
+                qDebug()<<i<<coefs[i];
+        };
     }
 }
 

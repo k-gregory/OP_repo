@@ -32,12 +32,12 @@ void Generator::dangerProcessInput(){
     danger_buffer.clear();
 }
 
-void Generator::fillBuffer(float *buffer, unsigned long frames){
-    effect->process(buffer,frames);
+void Generator::fillBuffer(float *buffer, unsigned long frames){    
     if(input_lock.try_lock()){
         dangerProcessInput();
         input_lock.unlock();
     }
+    effect->process(buffer,frames);
     emit framesGenerated(frames);
 }
 

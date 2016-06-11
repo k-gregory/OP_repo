@@ -14,11 +14,16 @@ Distortion::Distortion(float limit, float coef)
 
 }
 
+static inline float expDistort(float x){
+    if(x > 0)
+        return 1 - std::exp(-x);
+    else
+        return -1 + std::exp(x);
+}
+
 void Distortion::process(float *samples, unsigned long samplesCount){
     for(unsigned long i = 0; i < samplesCount; i++){
-        samples[i]*= coef;
-        samples[i] = std::min(samples[i], coef);
-        samples[i] = std::max(samples[i], -coef);
+        samples[i] = expDistort(samples[i] * coef);
     }
 }
 
@@ -53,7 +58,7 @@ IAudioEffect* DistortionConfigurator::createNew(){
     bool ok;
     limit = QInputDialog::getDouble(parent,"Distortion create","Limit:",1,0.001,1,5,&ok);
     if(!ok) return nullptr;
-    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",1,0.001,1,5,&ok);
+    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",1,0.001,30,5,&ok);
     if(!ok) return nullptr;
 
     return new Distortion(limit,coef);
@@ -68,7 +73,7 @@ bool DistortionConfigurator::configure(IAudioEffect *effect){
 
     limit = QInputDialog::getDouble(parent,"Distortion create","Limit:",ef->limit,0.001,1,5,&ok);
     if(!ok) return false;
-    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",ef->coef,0.001,1,5,&ok);
+    coef = QInputDialog::getDouble(parent,"Distortion create","Coef:",ef->coef,0.001,30,5,&ok);
     if(!ok) return false;
     ef->limit = limit;
     ef->coef = coef;

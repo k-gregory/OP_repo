@@ -8,8 +8,10 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QStandardItemModel>
+
 #include "inputlistmodel.h"
 #include "udpinputcreator.h"
+#include "midiinputcreator.h"
 
 #include "noparamsconfigurator.h"
 #include "distortion.h"
@@ -23,6 +25,7 @@ using namespace qSynth;
 void MainWindow::setupInputCreator(){
     QSet<IInputCreator*> inputCreators;
     inputCreators.insert(new UDPInputCreator(this));
+    inputCreators.insert(new MidiInputCreator(cb));
     inputAddingDialog = new InputAddingDialog(inputCreators, this);
 }
 
@@ -74,12 +77,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setupIcons();
-    setupInputsModel();
+    setupIcons();    
 
     effectTreeModel = new EffectTreeModel(this);
     ui->effectsTree->setModel(effectTreeModel);
     cb = new Generator(effectTreeModel->getRootEffect());
+
+    setupInputsModel();
     setupEffectsModel();
 
     addKeyboardInput();
@@ -121,6 +125,7 @@ void MainWindow::on_inputAddBtn_clicked()
 void MainWindow::on_addEffectBtn_clicked()
 {
     IAudioEffect* e = effectC.value(ui->effectCb->currentText())->createNew();
+    if(!e) return;
     QModelIndex sel = ui->effectsTree->selectionModel()->currentIndex();
     effectTreeModel->addEffect(e,sel);
 }
@@ -130,6 +135,7 @@ void MainWindow::on_pushButton_clicked()
     QModelIndex idx = ui->effectsTree->selectionModel()->currentIndex();
     if(!idx.isValid()) return;
     EffectTreeItem* i = effectTreeModel->getItem(idx);
+    if(!i) return;
     effectC.value(i->effect->name())->configure(i->effect);
     //qDebug()<<effectTreeModel->ge
 }

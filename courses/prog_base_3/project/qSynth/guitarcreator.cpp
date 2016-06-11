@@ -13,7 +13,7 @@ GuitarCreator::GuitarCreator(QWidget* parent, qSynth::Generator* gen)
 qSynth::IAudioEffect* GuitarCreator::createNew(){
    bool ok;
    QString res;
-   res  = QInputDialog::getText(parent, "Guitar creation","Input name",QLineEdit::Normal,"KeyRead Widget",&ok);
+   res  = QInputDialog::getText(parent, "Guitar creation","Input name",QLineEdit::Normal,"KeyRead widget",&ok);
    if(!ok) return nullptr;
    qSynth::guitar::GuitarGenerator* ret = new qSynth::guitar::GuitarGenerator();
    g->addInputProcessor(new qSynth::GuitarInputProcessor(res,ret));
