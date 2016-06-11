@@ -17,7 +17,7 @@ std::vector<qSynth::GenericInputAction> MidiInput::pollInput(){
     for(auto& x : to_play){
         int& currentTrackPos = x.first;
         MidiEventList& track = x.second;
-        if(track.size() > 1500) continue;//TODO: Hack
+        //if(track.size() > 1500) continue;//TODO: Hack
         while(currentTrackPos < track.size()
               && track[currentTrackPos].tick <= realTick){
             MidiEvent& ev = track[currentTrackPos];

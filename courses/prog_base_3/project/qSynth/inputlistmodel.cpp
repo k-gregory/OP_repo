@@ -1,5 +1,6 @@
 #include "inputlistmodel.h"
 #include <algorithm>
+#include <QDebug>
 
 namespace qSynth {
 
@@ -48,9 +49,11 @@ std::vector<GenericInputAction> InputListModel::getMultiplexedInput(){
         IGenericInput* input = item.getInput();
         if(!input->hasInput()) continue;
         to_multiplex = input->pollInput();
-        multiplexed.insert(multiplexed.end(),to_multiplex.begin(),to_multiplex.end());
-        for(GenericInputAction& a : multiplexed)
+        for(GenericInputAction& a : to_multiplex){
+            qDebug()<<name<<" plays "<<a.key;
             a.inputName = name;
+        }
+        multiplexed.insert(multiplexed.end(),to_multiplex.begin(),to_multiplex.end());
         to_multiplex.clear();
     }
     return multiplexed;
