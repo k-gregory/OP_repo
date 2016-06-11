@@ -22,7 +22,7 @@ void EffectSequence::removeEffect(unsigned int index){
 }
 
 void EffectSequence::insertEffect(unsigned int index, IAudioEffect *effect){
-    if(index >= effects.size()) return;
+    if(index > effects.size()) return;
     effects.insert(effects.begin() + index, effect);
 }
 
