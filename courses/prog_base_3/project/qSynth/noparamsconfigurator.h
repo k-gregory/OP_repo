@@ -6,13 +6,13 @@
 namespace qSynth {
 
 template<typename T>
-class NoParamsConfigurator : IEffectConfigurator
+class NoParamsConfigurator : public IEffectConfigurator
 {
 public:
     IAudioEffect* createNew(){
         return new T;
     }
-    bool configure(IAudioEffect *effect){
+    bool configure(IAudioEffect *){
         return true;
     }
 };

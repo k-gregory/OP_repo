@@ -10,7 +10,7 @@
 namespace qSynth {
 namespace guitar {
 
-class GuitarGenerator :  IAudioEffect
+class GuitarGenerator : public IAudioEffect
 {
     static constexpr auto string_count = 6;
     static constexpr auto string_max_swing_time = 5;

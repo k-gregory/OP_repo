@@ -19,7 +19,7 @@ bool MixerConfigurator::configure(IAudioEffect *effect){
     Mixer* m = dynamic_cast<Mixer*>(effect);
     if(m == nullptr) return false;
     for(unsigned int i = 0;i  < m->effects.size();i++){
-        QString q = QString("Set level %1").arg(i);
+        QString q = QString("Set level of %1").arg(i+1);
         float newValue = QInputDialog::getDouble(parent,"Mixer config",q,m->coefs[i],0.001,100,4,&ok);
         if(!ok) return false;
         m->coefs[i] = newValue;

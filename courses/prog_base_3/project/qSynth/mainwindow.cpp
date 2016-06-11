@@ -11,6 +11,11 @@
 #include "inputlistmodel.h"
 #include "udpinputcreator.h"
 
+#include "noparamsconfigurator.h"
+#include "distortion.h"
+#include "effectsequence.h"
+#include "mixerconfigurator.h"
+
 #include <QDebug>
 
 using namespace qSynth;
@@ -51,7 +56,16 @@ void MainWindow::setupInputsModel(){
 }
 
 void MainWindow::setupEffectsModel(){
+    effectC.insert("Guitar", new NoParamsConfigurator<guitar::GuitarGenerator>);
+    effectC.insert("Distortion", new DistortionConfigurator(this));
+    effectC.insert("Sequence", new NoParamsConfigurator<EffectSequence>);
+    effectC.insert("Mixer", new MixerConfigurator(this));
     effectTreeModel = new EffectTreeModel(this);
+
+    for(auto e: effectC.keys())
+        ui->effectCb->addItem(e);
+
+
     ui->effectsTree->setModel(effectTreeModel);
 }
 
@@ -102,4 +116,11 @@ void MainWindow::on_inputAddBtn_clicked()
     if(ui->newInputNameEdit->text().isEmpty()) return;
     qSynth::InputListItem* new_in = inputAddingDialog->getInput(ui->newInputNameEdit->text());
     if(new_in != nullptr) inputListModel->addInput(*new_in);
+}
+
+void MainWindow::on_addEffectBtn_clicked()
+{
+    IAudioEffect* e = effectC.value(ui->effectCb->currentText())->createNew();
+    QModelIndex sel = ui->effectsTree->selectionModel()->currentIndex();
+    effectTreeModel->addEffect(e,sel);
 }

@@ -24,7 +24,7 @@ public:
         return new EffectSequence();
     }
 
-    bool configure(IAudioEffect *effect) override{
+    bool configure(IAudioEffect *) override{
         return false;
     }
 };

@@ -7,7 +7,9 @@
 #include "inputlistmodel.h"
 #include "inputaddingdialog.h"
 #include "effecttreemodel.h"
+#include "ieffectconfigurator.h"
 #include <QMainWindow>
+#include <QHash>
 
 namespace Ui {
 class MainWindow;
@@ -40,11 +42,13 @@ private:
 
     qSynth::InputListModel* inputListModel = nullptr;
     qSynth::EffectTreeModel* effectTreeModel = nullptr;
+    QHash<QString, qSynth::IEffectConfigurator*> effectC;
     QTimer* input_timer;
 private slots:
     void feedInput();
     void on_inputModifyBtn_clicked();
     void on_inputAddBtn_clicked();
+    void on_addEffectBtn_clicked();
 };
 
 #endif // MAINWINDOW_H
