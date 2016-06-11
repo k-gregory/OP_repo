@@ -56,17 +56,13 @@ void MainWindow::setupInputsModel(){
 }
 
 void MainWindow::setupEffectsModel(){
-    effectC.insert("Guitar", new NoParamsConfigurator<guitar::GuitarGenerator>);
+    effectC.insert("Guitar", new GuitarCreator(this, cb));
     effectC.insert("Distortion", new DistortionConfigurator(this));
     effectC.insert("Sequence", new NoParamsConfigurator<EffectSequence>);
     effectC.insert("Mixer", new MixerConfigurator(this));
-    effectTreeModel = new EffectTreeModel(this);
 
     for(auto e: effectC.keys())
         ui->effectCb->addItem(e);
-
-
-    ui->effectsTree->setModel(effectTreeModel);
 }
 
 void MainWindow::setupIcons(){
@@ -80,11 +76,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setupIcons();
     setupInputsModel();
+
+    effectTreeModel = new EffectTreeModel(this);
+    ui->effectsTree->setModel(effectTreeModel);
+    cb = new Generator(effectTreeModel->getRootEffect());
     setupEffectsModel();
+
     addKeyboardInput();
     setupInputCreator();
 
-    cb = new Generator();
     audio = new PABackend(cb);
 
     setupInputTimer();//After generator created

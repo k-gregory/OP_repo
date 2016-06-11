@@ -19,6 +19,7 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent) const override;
     EffectTreeItem* getItem(const QModelIndex& idx) const;
+    IAudioEffect* getRootEffect();
 
     bool insertRow(int row, const QModelIndex &parent);
 private:

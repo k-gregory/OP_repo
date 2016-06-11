@@ -71,6 +71,10 @@ QVariant EffectTreeModel::data(const QModelIndex &index, int role) const{
     return it->effect->name();
 }
 
+IAudioEffect* EffectTreeModel::getRootEffect(){
+    return root->effect;
+}
+
 QModelIndex EffectTreeModel::index(int row, int column, const QModelIndex &parent) const{
     /*if(!hasIndex(row, column, parent)) return QModelIndex();
     EffectTreeItem* parentItem;

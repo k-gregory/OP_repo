@@ -37,7 +37,9 @@ SOURCES += main.cpp\
     effectsequence.cpp \
     effecttreemodel.cpp \
     mixerconfigurator.cpp \
-    noopeffect.cpp
+    noopeffect.cpp \
+    guitarinputprocessor.cpp \
+    guitarcreator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -74,7 +76,10 @@ HEADERS  += mainwindow.h \
     ieffectconfigurator.h \
     mixerconfigurator.h \
     noparamsconfigurator.h \
-    noopeffect.h
+    noopeffect.h \
+    iinputprocessor.h \
+    guitarinputprocessor.h \
+    guitarcreator.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

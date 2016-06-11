@@ -8,6 +8,7 @@
 #include "inputaddingdialog.h"
 #include "effecttreemodel.h"
 #include "ieffectconfigurator.h"
+#include "guitarcreator.h"
 #include <QMainWindow>
 #include <QHash>
 
