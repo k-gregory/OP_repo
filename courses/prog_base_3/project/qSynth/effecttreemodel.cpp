@@ -34,18 +34,47 @@ EffectTreeModel::EffectTreeModel(QObject* parent)
     seq_it->insertChild(0, dist_it);*/
 }
 
+/*void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
+    typedef EffectTreeItem::EffectType T;
+    T type = T::Other;
+    EffectTreeItem* prev;
+    int after;
+    QModelIndex newIndex;
+
+    prev = getItem(idx);
+    if(prev->type == T::Other){
+        prev = prev->parent;
+        newIndex = idx.parent();
+        after = idx.row();
+    } else {
+        after = 0;
+    }
+    T newType;
+    if(typeid(*e) == typeid(Mixer))
+        newType = T::Mixer;
+    else if(typeid(*e) == typeid(EffectSequence))
+        newType = T::Sequence;
+
+    beginInsertRows(newIndex,after,after+1);
+    prev->insertChild(after, new EffectTreeItem(newType,e,prev));
+    endInsertRows();
+}*/
+
 void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
     typedef EffectTreeItem::EffectType ti;
     ti type = ti::Other;
     EffectTreeItem* parent = getItem(idx);
     int newRow = 0;
+    bool changedParent = false;
+
     QModelIndex newIndex = idx;
 
     if(parent->type == ti::Other) {
         parent = parent->parent;
         newIndex = idx.parent();
         newRow = idx.row() + 1;
-    }
+    } else changedParent = true;
+
     if(typeid(*e) == typeid(Mixer))
         type = ti::Mixer;
     else if(typeid(*e) == typeid(EffectSequence))
@@ -54,6 +83,9 @@ void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
     parent->insertChild(newRow, new EffectTreeItem(type,e,parent));
     //insertRow(idx.row() + 1, idx);
     insertRow(newRow,newIndex);
+
+    if(changedParent)
+        emit dataChanged(newIndex,newIndex);
 }
 
 int EffectTreeModel::columnCount(const QModelIndex&) const{

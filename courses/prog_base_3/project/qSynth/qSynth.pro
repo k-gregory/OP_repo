@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     guitargenerator.cpp \
     inputlistmodel.cpp \
     udpinput.cpp \
-    tc.cpp \
     inputlistitem.cpp \
     inputaddingdialog.cpp \
     udpinputcreator.cpp \
@@ -58,7 +57,6 @@ HEADERS  += mainwindow.h \
     guitargenerator.h \
     inputlistmodel.h \
     udpinput.h \
-    tc.h \
     inputlistitem.h \
     inputaddingdialog.h \
     iinputcreator.h \
