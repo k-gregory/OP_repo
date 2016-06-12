@@ -80,6 +80,19 @@
            </property>
           </widget>
          </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="inputDelBtn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Remove effect</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <layout class="QHBoxLayout" name="inputCreatorLayout">
            <item>
@@ -178,6 +191,19 @@
             </property>
             <property name="text">
              <string>Modify effect</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="effectDelBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Remove effect</string>
             </property>
            </widget>
           </item>

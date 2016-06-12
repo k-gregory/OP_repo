@@ -16,6 +16,7 @@ public:
     explicit InputListModel(QObject* parent);
     bool addInput(InputListItem& item);
     void modifyItem(const QModelIndex& idx);
+    void removeItem(const QModelIndex& idx);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool insertRow(int row, const QModelIndex &parent);

@@ -9,6 +9,7 @@
 #include "effecttreemodel.h"
 #include "ieffectconfigurator.h"
 #include "guitarcreator.h"
+#include "keyboardreaderwidget.h"
 #include <QMainWindow>
 #include <QHash>
 
@@ -42,6 +43,7 @@ private:
     bool playing = false;
 
     qSynth::InputListModel* inputListModel = nullptr;
+    qSynth::KeyboardReaderWidget* krw;
     qSynth::EffectTreeModel* effectTreeModel = nullptr;
     QHash<QString, qSynth::IEffectConfigurator*> effectC;
     QTimer* input_timer;
@@ -51,6 +53,8 @@ private slots:
     void on_inputAddBtn_clicked();
     void on_addEffectBtn_clicked();
     void on_pushButton_clicked();
+    void on_inputDelBtn_clicked();
+    void on_effectDelBtn_clicked();
 };
 
 #endif // MAINWINDOW_H

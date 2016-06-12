@@ -3,7 +3,6 @@
 
 #include "simplegenerator.h"
 #include "pabackend.h"
-#include "keyboardreaderwidget.h"
 
 #include <QTimer>
 #include <QVBoxLayout>
@@ -17,6 +16,7 @@
 #include "distortion.h"
 #include "effectsequence.h"
 #include "mixerconfigurator.h"
+#include "keyreadinputcreator.h"
 
 #include <QDebug>
 
@@ -26,18 +26,16 @@ void MainWindow::setupInputCreator(){
     QSet<IInputCreator*> inputCreators;
     inputCreators.insert(new UDPInputCreator(this));
     inputCreators.insert(new MidiInputCreator(cb));
+    inputCreators.insert(new KeyReadInputCreator(krw));
     inputAddingDialog = new InputAddingDialog(inputCreators, this);
 }
 
 void MainWindow::addKeyboardInput(){
     QVBoxLayout* vbox = new QVBoxLayout;
-    KeyboardReaderWidget* krw = new KeyboardReaderWidget;
+    krw = new KeyboardReaderWidget;
 
     vbox->addWidget(krw);
-    ui->keyboardInputGB->setLayout(vbox);   
-
-    InputListItem newItem("KeyRead widget", krw, this);
-    inputListModel->addInput(newItem);
+    ui->keyboardInputGB->setLayout(vbox);     
 }
 
 void MainWindow::setupInputTimer(){
@@ -138,4 +136,16 @@ void MainWindow::on_pushButton_clicked()
     if(!i) return;
     effectC.value(i->effect->name())->configure(i->effect);
     //qDebug()<<effectTreeModel->ge
+}
+
+void MainWindow::on_inputDelBtn_clicked()
+{
+    QModelIndex sel = ui->inputsList->selectionModel()->currentIndex();
+    inputListModel->removeItem(sel);
+}
+
+void MainWindow::on_effectDelBtn_clicked()
+{
+    QModelIndex idx = ui->effectsTree->selectionModel()->currentIndex();
+    effectTreeModel->removeEffect(idx);
 }

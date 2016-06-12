@@ -13,6 +13,7 @@ public:
     explicit EffectTreeModel(QObject* parent = 0);
 
     void addEffect(IAudioEffect* e, QModelIndex& idx);
+    void removeEffect(QModelIndex& idx);
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;

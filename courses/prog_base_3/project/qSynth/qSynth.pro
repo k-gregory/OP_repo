@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     guitarinputprocessor.cpp \
     guitarcreator.cpp \
     midiinputcreator.cpp \
-    midiinput.cpp
+    midiinput.cpp \
+    keyreadinputcreator.cpp
 
 HEADERS  += mainwindow.h \
     pabackend.h \
@@ -81,7 +82,8 @@ HEADERS  += mainwindow.h \
     guitarinputprocessor.h \
     guitarcreator.h \
     midiinputcreator.h \
-    midiinput.h
+    midiinput.h \
+    keyreadinputcreator.h
 
 FORMS    += mainwindow.ui \
     inputaddingdialog.ui \

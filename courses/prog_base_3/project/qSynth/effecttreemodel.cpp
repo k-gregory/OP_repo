@@ -27,38 +27,7 @@ EffectTreeModel::EffectTreeModel(QObject* parent)
                                                 new Mixer,
                                                 root);
     root->insertChild(0, mix);
-    /*
-    EffectTreeItem* dist_it = new EffectTreeItem(EffectTreeItem::Other,
-                                                 new Distortion,
-                                                 seq_it);
-    seq_it->insertChild(0, dist_it);*/
 }
-
-/*void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
-    typedef EffectTreeItem::EffectType T;
-    T type = T::Other;
-    EffectTreeItem* prev;
-    int after;
-    QModelIndex newIndex;
-
-    prev = getItem(idx);
-    if(prev->type == T::Other){
-        prev = prev->parent;
-        newIndex = idx.parent();
-        after = idx.row();
-    } else {
-        after = 0;
-    }
-    T newType;
-    if(typeid(*e) == typeid(Mixer))
-        newType = T::Mixer;
-    else if(typeid(*e) == typeid(EffectSequence))
-        newType = T::Sequence;
-
-    beginInsertRows(newIndex,after,after+1);
-    prev->insertChild(after, new EffectTreeItem(newType,e,prev));
-    endInsertRows();
-}*/
 
 void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
     typedef EffectTreeItem::EffectType ti;
@@ -81,11 +50,19 @@ void EffectTreeModel::addEffect(IAudioEffect *e, QModelIndex &idx){
         type = ti::Sequence;
 
     parent->insertChild(newRow, new EffectTreeItem(type,e,parent));
-    //insertRow(idx.row() + 1, idx);
     insertRow(newRow,newIndex);
 
     if(changedParent)
         emit dataChanged(newIndex,newIndex);
+}
+
+void EffectTreeModel::removeEffect(QModelIndex &idx){
+    if(!idx.isValid()) return;
+    EffectTreeItem* par = getItem(idx)->parent;
+    if(par == root) return;//Do not remove mixer
+    beginRemoveRows(idx,idx.row(),idx.row()+1);
+    par->takeChild(idx.row());
+    endRemoveRows();
 }
 
 int EffectTreeModel::columnCount(const QModelIndex&) const{

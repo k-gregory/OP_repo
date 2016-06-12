@@ -36,9 +36,16 @@ bool InputListModel::addInput(InputListItem& item){
     return true;
 }
 
-void InputListModel::modifyItem(const QModelIndex &idx){    
+void InputListModel::modifyItem(const QModelIndex &idx){
     if(!idx.isValid()) return;
     inputs.at(idx.row()).modify();
+}
+
+void InputListModel::removeItem(const QModelIndex &idx){
+    if(!idx.isValid()) return;
+    beginRemoveRows(idx,idx.row(),idx.row() + 1);
+    inputs.erase(inputs.begin() + idx.row());
+    endRemoveRows();
 }
 
 std::vector<GenericInputAction> InputListModel::getMultiplexedInput(){
