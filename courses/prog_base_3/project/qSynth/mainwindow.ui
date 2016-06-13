@@ -89,7 +89,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Remove effect</string>
+            <string>Remove input</string>
            </property>
           </widget>
          </item>
