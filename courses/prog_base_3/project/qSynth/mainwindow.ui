@@ -96,7 +96,11 @@
          <item>
           <layout class="QHBoxLayout" name="inputCreatorLayout">
            <item>
-            <widget class="QLineEdit" name="newInputNameEdit"/>
+            <widget class="QLineEdit" name="newInputNameEdit">
+             <property name="text">
+              <string>KeyRead widget</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="inputAddBtn">

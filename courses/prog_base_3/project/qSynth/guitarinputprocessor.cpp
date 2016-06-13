@@ -20,7 +20,8 @@ void GuitarInputProcessor::process(std::vector<GenericInputAction> input){
             continue;     
         if(a.type == GenericInputAction::KeyPress){
             qDebug()<<freqFromMidiKey(a.key);
-            guitar->playFree(freqFromMidiKey(a.key));
+            //guitar->playFree(freqFromMidiKey(a.key));
+            guitar->playFreeMidi(a.key);
         }
     }
 }

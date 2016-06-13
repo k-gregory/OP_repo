@@ -61,7 +61,7 @@ void EffectTreeModel::removeEffect(QModelIndex &idx){
     EffectTreeItem* par = getItem(idx)->parent;
     if(par == root) return;//Do not remove mixer
     beginRemoveRows(idx,idx.row(),idx.row()+1);
-    par->takeChild(idx.row());
+    /*delete*/ par->takeChild(idx.row());
     endRemoveRows();
 }
 

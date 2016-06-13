@@ -13,13 +13,18 @@ namespace guitar {
 
 class GuitarGenerator : public IAudioEffect
 {
+public:
     static constexpr auto string_count = 6;
     static constexpr auto string_max_swing_time = 5;
     static constexpr unsigned long swing_last_pos = string_max_swing_time * SAMPLE_RATE;
     static constexpr float sample_time = 1.f/SAMPLE_RATE;
     static constexpr unsigned int harmAmplitudesCount = 10;
     static constexpr float PI = 3.14159265359;
+    static constexpr unsigned char midiFirstKey = 21;
+    static constexpr unsigned char midiLastKey = 108;
+    static constexpr unsigned char midiKeysNum = midiLastKey - midiFirstKey;
 
+private:
     struct StringInfo{
         float base_freq;
         unsigned long samples_played;
@@ -73,10 +78,12 @@ public:
     void playString(unsigned int string, float freq);
     void playString(unsigned int string);
     void playFree(float freq);
+    void playFreeMidi(unsigned char k);
     QString name() const override;
 private:
     void initStrings();
     void precalculateAmplitudes();
+    void precalculateMidiKeys();
 
     inline float calcStringSample(StringInfo& string){
         if(!string.active) return 0;
@@ -96,10 +103,15 @@ private:
         return sampleVal;
     }
 
-    using arrType = float(*)[harmAmplitudesCount];
-    arrType harmAmplitudes = new float[swing_last_pos+SAMPLE_RATE][harmAmplitudesCount];
+    using pAmplsArrType = float(*)[harmAmplitudesCount];
+    using pKeysArrType = float(*)[swing_last_pos];
+    static pAmplsArrType harmAmplitudes;
+    static pKeysArrType precalculatedMidiKeys;
+    static bool precalculated;
+
     StringInfo strings[string_count];
     std::vector<StringInfo> freeNotes;
+    std::vector<std::pair<unsigned long,unsigned char>> freeMidiKeys;
 };
 
 } // namespace guitar
