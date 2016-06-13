@@ -68,7 +68,7 @@ void GuitarGenerator::playFree(float freq){
 }
 
 void GuitarGenerator::playFreeMidi(unsigned char k){
-    if(k < midiFirstKey || k > midiLastKey) return;
+    if(k > midiLastKey - midiFirstKey) return;
     freeMidiKeys.push_back({0,k});
 }
 
@@ -82,7 +82,7 @@ void GuitarGenerator::precalculateAmplitudes(){
     }
 }
 
-static constexpr float freqFromMidiKey(char key){
+static float freqFromMidiKey(char key){
     constexpr float coef = log(2)/12.f;
     return std::exp((key - 69) * coef)*440;
 }

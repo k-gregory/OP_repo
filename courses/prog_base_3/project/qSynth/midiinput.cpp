@@ -23,7 +23,7 @@ std::vector<qSynth::GenericInputAction> MidiInput::pollInput(){
             if(ev.isNoteOn()){
                 qSynth::GenericInputAction act;
                 act.type = qSynth::GenericInputAction::KeyPress;
-                act.key = ev[1];
+                act.key = ev[1]+21;
                 result.push_back(act);
             }
             currentTrackPos++;
