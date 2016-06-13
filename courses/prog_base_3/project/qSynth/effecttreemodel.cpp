@@ -85,18 +85,6 @@ IAudioEffect* EffectTreeModel::getRootEffect(){
 }
 
 QModelIndex EffectTreeModel::index(int row, int column, const QModelIndex &parent) const{
-    /*if(!hasIndex(row, column, parent)) return QModelIndex();
-    EffectTreeItem* parentItem;
-    if(!parent.isValid())
-        parentItem = root;
-    else
-       parentItem = static_cast<EffectTreeItem*>(parent.internalPointer());
-
-    EffectTreeItem* childItem = parentItem->child(row);
-    if(childItem)
-        return createIndex(row,column,childItem);
-    else return QModelIndex();
-    */
     if(parent.isValid() && parent.column() != 0)
         return QModelIndex();
 
@@ -110,13 +98,6 @@ QModelIndex EffectTreeModel::index(int row, int column, const QModelIndex &paren
 }
 
 QModelIndex EffectTreeModel::parent(const QModelIndex &index) const{
-    /*
-    if(!index.isValid()) return QModelIndex();
-    EffectTreeItem* parentItem =
-            static_cast<EffectTreeItem*>(index.internalPointer())->parent;
-    if(parentItem == root) return QModelIndex();
-    else return createIndex(parentItem->row(), 0, parentItem);
-    */
     if(!index.isValid())
         return QModelIndex();
 
@@ -132,12 +113,6 @@ QModelIndex EffectTreeModel::parent(const QModelIndex &index) const{
 int EffectTreeModel::rowCount(const QModelIndex &parent) const{
     EffectTreeItem* it = getItem(parent);
     return it->children.size();
-
-    /*if(!parent.isValid())
-        it = root;
-    else it = static_cast<EffectTreeItem*>(parent.internalPointer());
-
-    return it->children.size();*/
 }
 
 bool EffectTreeModel::insertRow(int row, const QModelIndex &parent){

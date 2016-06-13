@@ -13,7 +13,7 @@ static constexpr float k = -10.f/end_p;
 
 SimpleGenerator::SimpleGenerator()
 {
-    //guitar_gen.playString(1,196.0);
+    guitar_gen.playString(1,196.0);
     MidiFile f;
     f.read("/tmp/zhuki.mid");
     f.absoluteTicks();

@@ -135,7 +135,6 @@ void MainWindow::on_pushButton_clicked()
     EffectTreeItem* i = effectTreeModel->getItem(idx);
     if(!i) return;
     effectC.value(i->effect->name())->configure(i->effect);
-    //qDebug()<<effectTreeModel->ge
 }
 
 void MainWindow::on_inputDelBtn_clicked()
